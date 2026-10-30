@@ -70,11 +70,6 @@ const NAV: NavItem[] = [
     match: (p) => p.startsWith('/admin/hero-slides'),
   },
   {
-    href: '/admin/category-images',
-    labelKey: 'sidebar.categoryImages',
-    match: (p) => p.startsWith('/admin/category-images'),
-  },
-  {
     href: '/admin/editorial',
     labelKey: 'sidebar.editorial',
     match: (p) => p.startsWith('/admin/editorial'),

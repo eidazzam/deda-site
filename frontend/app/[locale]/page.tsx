@@ -37,58 +37,6 @@ export async function generateMetadata({
 }
 
 // Real Gulf/Middle Eastern abaya photography sourced from Unsplash —
-// each URL was verified by fetching its photo page on unsplash.com to
-// confirm the CDN id resolves. Six categories match the Kuwaiti
-// shopping vocabulary the client uses: Coloured, Black, Snap, Embroidered,
-// Overhead, and Kids.
-const CATEGORY_CARDS = [
-  {
-    cat: 'coloured',
-    // Multicolored abaya dress — pure colour story.
-    image: 'https://images.unsplash.com/photo-1570203543523-57e9dc7ff410?w=800&h=1000&fit=crop&q=85&auto=format',
-  },
-  {
-    cat: 'black',
-    // Woman in black hijab and black abaya — Gulf staple.
-    image: 'https://images.unsplash.com/photo-1613005798967-632017e477c8?w=800&h=1000&fit=crop&q=85&auto=format',
-  },
-  {
-    cat: 'snap',
-    // Three women in everyday modest dress — snap/casual energy.
-    image: 'https://images.unsplash.com/photo-1522219406764-db207f1f7640?w=800&h=1000&fit=crop&q=85&auto=format',
-  },
-  {
-    cat: 'embroidered',
-    // Beige abaya with embroidery — detail piece.
-    image: 'https://images.unsplash.com/photo-1760083545495-b297b1690672?w=800&h=1000&fit=crop&q=85&auto=format',
-  },
-  {
-    cat: 'overhead',
-    // Flowing abaya covering head + shoulders — overhead silhouette.
-    image: 'https://images.unsplash.com/photo-1569245087840-dcf487ddbad5?w=800&h=1000&fit=crop&q=85&auto=format',
-  },
-  {
-    cat: 'kids',
-    // Child wearing a small black abaya — kids collection.
-    image: 'https://images.unsplash.com/photo-1767780441121-d27bfc6c8f0e?w=800&h=1000&fit=crop&q=85&auto=format',
-  },
-  {
-    cat: 'everyday',
-    // Daily-wear abaya, relaxed silhouette — practical / "العملية" pieces.
-    image: 'https://images.unsplash.com/photo-1583846783214-7229a91b20ed?w=800&h=1000&fit=crop&q=85&auto=format',
-  },
-  {
-    cat: 'ready',
-    // In-stock, ships same day — the "جاهزة" ready-to-wear rack.
-    image: 'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=800&h=1000&fit=crop&q=85&auto=format',
-  },
-  {
-    cat: 'winter',
-    // Heavier weaves + warmer palette for cold-weather months — "شتوية".
-    image: 'https://images.unsplash.com/photo-1544441893-675973e31985?w=800&h=1000&fit=crop&q=85&auto=format',
-  },
-] as const;
-
 // Hero slides — fallback only. The homepage now fetches the live list
 // from `/api/hero-slides`; this array is used when the API is
 // unreachable or returns an empty set, so the storefront never renders
@@ -154,25 +102,6 @@ export default async function HomePage({
     }
   } catch {
     // Fallback already populated above. Keep the hero rendering.
-  }
-
-  // Category card overrides — merge the admin-uploaded image (when any)
-  // into the hardcoded list. Each row keyed by Category enum; a missing
-  // row keeps the built-in image so the section never has a blank tile.
-  const categoryCards = CATEGORY_CARDS.map((c) => ({ ...c, image: c.image as string }));
-  try {
-    const overrides = await api.categoryImages.list();
-    if (overrides.length > 0) {
-      const byCategory = new Map(
-        overrides.map((o) => [o.category.toLowerCase(), resolveImageUrl(o.url)]),
-      );
-      for (const card of categoryCards) {
-        const override = byCategory.get(card.cat);
-        if (override) card.image = override;
-      }
-    }
-  } catch {
-    // Fallback already in place. Categories stay on the hardcoded URLs.
   }
 
   // Editorial split overrides — admin-saved copy + image, with hardcoded
@@ -243,55 +172,9 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* Categories */}
-      <section className="max-w-page mx-auto px-6 lg:px-10 mt-24 lg:mt-32">
-        <div className="flex items-end justify-between mb-10">
-          <h2 className="display-xl text-4xl lg:text-5xl">{dict.categories}</h2>
-          <Link
-            href={`/${locale}/shop/all`}
-            className="hidden sm:inline-flex items-center gap-2 text-sm tracking-widest uppercase link-underline"
-          >
-            <span>{dict.discover}</span>
-            <ArrowIcon className={`w-4 h-4 ${isAR ? 'rotate-180' : ''}`} />
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-5">
-          {categoryCards.map((c) => (
-            <Link
-              key={c.cat}
-              href={`/${locale}/shop/${c.cat}`}
-              className="group relative img-zoom aspect-[3/4] bg-subtle overflow-hidden"
-            >
-              <Image
-                src={c.image}
-                alt={dict[c.cat as keyof typeof dict] ?? c.cat}
-                fill
-                sizes="(min-width: 1024px) 22vw, 45vw"
-                className="object-cover"
-                unoptimized={isLocalUpload(c.image)}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent" />
-              <div
-                className={`absolute bottom-5 ${
-                  isAR ? 'right-5' : 'left-5'
-                } text-bg ${isAR ? 'text-right' : 'text-left'}`}
-              >
-                <div className="font-display text-2xl">
-                  {dict[c.cat as keyof typeof dict] ?? c.cat}
-                </div>
-                <div
-                  className={`mt-2 text-xs tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 ${
-                    isAR ? 'flex-row-reverse' : ''
-                  }`}
-                >
-                  <span>{dict.discover}</span>
-                  <ArrowIcon className={`w-3.5 h-3.5 ${isAR ? 'rotate-180' : ''}`} />
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+      {/* Deda doesn't carve the catalogue into categories, so the
+          Rozana-style category grid is replaced with a single CTA
+          dropping visitors straight into the flat product list. */}
 
       {/* Featured + bundles — fetched on the client so the Cloudflare
           Pages edge same-zone DNS issue can't silently swallow the API. */}

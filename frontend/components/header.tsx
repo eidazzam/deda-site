@@ -42,17 +42,13 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
     ? `/${otherLocale(locale)}${pathname.slice(localePrefix.length) || '/'}`
     : `/${otherLocale(locale)}`;
 
+  // Deda ships without categories — the storefront is a flat
+  // product grid. Nav keeps just Home + Shop (all products) + About
+  // so the top bar reads as a brand, not a menu.
   const nav = [
     { href: localePrefix, label: dict.home },
-    { href: `${localePrefix}/shop/coloured`, label: dict.coloured },
-    { href: `${localePrefix}/shop/black`, label: dict.black },
-    { href: `${localePrefix}/shop/snap`, label: dict.snap },
-    { href: `${localePrefix}/shop/embroidered`, label: dict.embroidered },
-    { href: `${localePrefix}/shop/overhead`, label: dict.overhead },
-    { href: `${localePrefix}/shop/everyday`, label: dict.everyday },
-    { href: `${localePrefix}/shop/ready`, label: dict.ready },
-    { href: `${localePrefix}/shop/winter`, label: dict.winter },
-    { href: `${localePrefix}/shop/kids`, label: dict.kids },
+    { href: `${localePrefix}/shop/all`, label: dict.shopCollection },
+    { href: `${localePrefix}/about`, label: dict.about },
   ];
 
   return (

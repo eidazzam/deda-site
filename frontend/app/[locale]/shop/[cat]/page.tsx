@@ -117,17 +117,6 @@ export default async function ShopCategoryPage({
           {dict.shopCollection}
         </div>
         <h1 className="display-xl text-4xl lg:text-6xl">{heading}</h1>
-        {/* Ready-to-ship section gets a shipping promise under the
-            title. Everything else in the catalogue is made-to-order,
-            so this line only reads naturally on /shop/ready. */}
-        {cat === 'ready' ? (
-          <div className="mt-3 inline-flex items-center gap-2 text-sm text-accent">
-            <span aria-hidden="true">✦</span>
-            <span>
-              {isAR ? 'توصيل فى نفس اليوم' : 'Same-day delivery'}
-            </span>
-          </div>
-        ) : null}
         {searchTerm ? (
           <div className="mt-3 text-sm text-muted">
             {isAR ? 'بحث: ' : 'Search: '}

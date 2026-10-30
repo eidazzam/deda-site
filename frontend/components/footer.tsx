@@ -111,48 +111,23 @@ export function Footer({
           </div>
           <ul className="space-y-2 text-sm">
             <li>
-              <Link className="link-underline" href={`${prefix}/shop/coloured`}>
-                {dict.coloured}
+              <Link className="link-underline" href={`${prefix}/shop/all`}>
+                {dict.shopCollection}
               </Link>
             </li>
             <li>
-              <Link className="link-underline" href={`${prefix}/shop/black`}>
-                {dict.black}
+              <Link className="link-underline" href={`${prefix}/about`}>
+                {dict.about}
               </Link>
             </li>
             <li>
-              <Link className="link-underline" href={`${prefix}/shop/snap`}>
-                {dict.snap}
+              <Link className="link-underline" href={`${prefix}/wishlist`}>
+                {dict.wishlist}
               </Link>
             </li>
             <li>
-              <Link className="link-underline" href={`${prefix}/shop/embroidered`}>
-                {dict.embroidered}
-              </Link>
-            </li>
-            <li>
-              <Link className="link-underline" href={`${prefix}/shop/overhead`}>
-                {dict.overhead}
-              </Link>
-            </li>
-            <li>
-              <Link className="link-underline" href={`${prefix}/shop/kids`}>
-                {dict.kids}
-              </Link>
-            </li>
-            <li>
-              <Link className="link-underline" href={`${prefix}/shop/everyday`}>
-                {dict.everyday}
-              </Link>
-            </li>
-            <li>
-              <Link className="link-underline" href={`${prefix}/shop/ready`}>
-                {dict.ready}
-              </Link>
-            </li>
-            <li>
-              <Link className="link-underline" href={`${prefix}/shop/winter`}>
-                {dict.winter}
+              <Link className="link-underline" href={`${prefix}/cart`}>
+                {dict.cart}
               </Link>
             </li>
           </ul>

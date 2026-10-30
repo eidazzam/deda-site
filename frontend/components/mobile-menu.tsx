@@ -38,17 +38,11 @@ export function MobileMenu({ open, onClose, locale, dict }: Props) {
     ? `/${otherLocale(locale)}${pathname.slice(localePrefix.length) || '/'}`
     : `/${otherLocale(locale)}`;
 
+  // Flat catalogue — no category breakdown, so the drawer mirrors
+  // the three-link top nav plus wishlist/cart quick-access below.
   const categories = [
     { href: localePrefix, label: dict.home },
-    { href: `${localePrefix}/shop/coloured`, label: dict.coloured },
-    { href: `${localePrefix}/shop/black`, label: dict.black },
-    { href: `${localePrefix}/shop/snap`, label: dict.snap },
-    { href: `${localePrefix}/shop/embroidered`, label: dict.embroidered },
-    { href: `${localePrefix}/shop/overhead`, label: dict.overhead },
-    { href: `${localePrefix}/shop/kids`, label: dict.kids },
-    { href: `${localePrefix}/shop/everyday`, label: dict.everyday },
-    { href: `${localePrefix}/shop/ready`, label: dict.ready },
-    { href: `${localePrefix}/shop/winter`, label: dict.winter },
+    { href: `${localePrefix}/shop/all`, label: dict.shopCollection },
     { href: `${localePrefix}/about`, label: dict.about },
   ];
 
