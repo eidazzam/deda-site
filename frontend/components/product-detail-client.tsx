@@ -252,6 +252,7 @@ export function ProductDetailClient({ product, locale, dict }: Props) {
             locale={locale}
             egpLabel={dict.egp}
             size="lg"
+            showLimitedBadge
           />
         </div>
         <p className="text-muted leading-relaxed mb-8">{desc}</p>
