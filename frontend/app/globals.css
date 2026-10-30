@@ -1,0 +1,247 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --font-sans used to come from next/font/google's className injection.
+   Since we now self-host Inter via @fontsource, we set the variable
+   here so Tailwind's `font-sans` and the `display-xl` utility keep
+   working with a plain family name. */
+:root {
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+  html,
+  body {
+    background: #faf7f2;
+    color: #1a1a1a;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* optimizeLegibility tells the browser to enable ligatures and
+       contextual alternates — critical for Arabic letter joining when
+       a fallback font is rendering while Tajawal is still loading. */
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Explicit Arabic fallback chain. If the custom font (Tajawal) hasn't
+     loaded yet — or fails to — we want the next fallback to also be an
+     Arabic-aware font. system-ui alone defaults to Latin-first system
+     fonts on some platforms (Linux, older Android) which break the
+     letter connections. The chain below picks the best native Arabic
+     font for each OS:
+       - Apple platforms: SF Arabic (the default Arabic UI face)
+       - Modern Windows: Segoe UI
+       - Older Apple: Geeza Pro
+       - Android: Noto Sans Arabic / Droid Arabic Naskh
+       - Anywhere else: Tahoma (universally shapes Arabic correctly) */
+  [dir='rtl'],
+  [dir='rtl'] * {
+    font-family:
+      'Tajawal',
+      -apple-system,
+      BlinkMacSystemFont,
+      "SF Arabic",
+      "Geeza Pro",
+      "Segoe UI",
+      "Noto Sans Arabic",
+      "Droid Arabic Naskh",
+      Tahoma,
+      system-ui,
+      sans-serif;
+    /* Force common-ligatures + required-ligatures on so Arabic glyphs
+       always join, even under the fallback. Without rlig, some renders
+       drop initial/medial/final forms and the word looks "broken". */
+    font-feature-settings: "kern" 1, "liga" 1, "rlig" 1, "calt" 1;
+    -webkit-font-feature-settings: "kern" 1, "liga" 1, "rlig" 1, "calt" 1;
+    /* The higher-level CSS property — Safari sometimes prefers this
+       over font-feature-settings for ligature control. Belt-and-braces
+       so the joining works on every iOS Safari version. */
+    font-variant-ligatures: common-ligatures contextual;
+    /* CRITICAL: kill letter-spacing on every RTL descendant. Tailwind's
+       tracking-widest / tracking-wider (used liberally for English
+       labels and badges) becomes a 0.1em gap between every Arabic
+       glyph, which on iOS Safari visibly breaks the joins. Pure-Arabic
+       words become "م ت ق ط ع" instead of "متقطع". The !important
+       overrides any utility class applied further down the tree. */
+    letter-spacing: 0 !important;
+    word-spacing: normal !important;
+  }
+
+  /* When a display-class element lives in RTL, swap in Reem Kufi —
+     Tajawal is fine for body but feels underweight at hero scale. */
+  [dir='rtl'] .font-display {
+    font-family:
+      'Reem Kufi',
+      'Tajawal',
+      -apple-system,
+      BlinkMacSystemFont,
+      "SF Arabic",
+      "Geeza Pro",
+      "Segoe UI",
+      "Noto Sans Arabic",
+      Tahoma,
+      system-ui,
+      sans-serif;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  /* Hero display — Inter ExtraLight for Latin, Reem Kufi Medium for
+     Arabic. The two pair quietly without competing for attention. */
+  .display-xl {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-weight: 200;
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+  }
+  [dir='rtl'] .display-xl {
+    font-family:
+      'Reem Kufi',
+      'Tajawal',
+      -apple-system,
+      BlinkMacSystemFont,
+      "SF Arabic",
+      "Geeza Pro",
+      "Segoe UI",
+      "Noto Sans Arabic",
+      Tahoma,
+      system-ui,
+      sans-serif;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  /* Underline-on-hover that grows from the active side. RTL flips origin. */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  [dir='rtl'] .link-underline::after {
+    transform-origin: right;
+  }
+  .link-underline:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* Image hover zoom container — restrained scale (1.04, not 1.1) to
+     match Gulf minimal pacing. */
+  .img-zoom {
+    overflow: hidden;
+  }
+  .img-zoom > img,
+  .img-zoom > picture > img {
+    transition: transform 700ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .img-zoom:hover > img,
+  .img-zoom:hover > picture > img {
+    transform: scale(1.04);
+  }
+
+  /* iOS-only override: iPhone/iPad get SF Arabic (the native Apple
+     Arabic font) instead of Tajawal. iOS CoreText renders the same
+     Tajawal woff2 visibly differently from desktop browsers, so letting
+     the platform's own font take over avoids the inconsistency. Windows,
+     Android and macOS keep the Tajawal-led stack defined above. */
+  html.platform-ios [dir='rtl'],
+  html.platform-ios [dir='rtl'] * {
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      "SF Arabic",
+      "Geeza Pro",
+      system-ui,
+      sans-serif;
+  }
+  html.platform-ios [dir='rtl'] .font-display,
+  html.platform-ios [dir='rtl'] .display-xl {
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      "SF Arabic",
+      "Geeza Pro",
+      system-ui,
+      sans-serif;
+    font-weight: 600;
+  }
+}
+
+/* Hide native scrollbars on horizontal scrollers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Announcement-bar rotation — small fade + rise on each new message.  */
+/* The header re-mounts the inner row via key={index}, which retriggers */
+/* this animation. Keep it brief: 380ms, no bounce, easy to ignore.    */
+/* ------------------------------------------------------------------ */
+@keyframes announcement-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-announcement {
+  animation: announcement-in 380ms cubic-bezier(0.2, 0, 0.2, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-announcement {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Print styles — invoice + order list export                          */
+/* ------------------------------------------------------------------ */
+.print-page {
+  /* Force pure white for print regardless of the cream storefront. */
+  background: #ffffff;
+  color: #111111;
+  min-height: 100vh;
+}
+
+.print-page * {
+  /* Killing transitions keeps the layout stable while the browser
+     captures the page for PDF. */
+  transition: none !important;
+}
+
+@media print {
+  html,
+  body {
+    background: #ffffff !important;
+    color: #111111 !important;
+  }
+  .print-page {
+    margin: 0;
+    box-shadow: none;
+  }
+  /* Anything explicitly marked .no-print is hidden in the print preview
+     (toolbar buttons, etc.). */
+  .no-print {
+    display: none !important;
+  }
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+}

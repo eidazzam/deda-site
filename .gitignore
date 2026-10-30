@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Builds & caches
+.next/
+out/
+dist/
+build/
+.turbo/
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files (keep .env.example only)
+.env
+.env.local
+.env.development
+.env.production
+.env*.local
+
+# Local Docker Compose overrides — per-developer, never deployed.
+docker-compose.override.yml
+docker-compose.override.yaml
+
+# Local dev data — bind-mounted into Postgres/uploads, not for VCS.
+/data/
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Local snapshot of the previous single-file build — never push, kept locally for visual comparison
+legacy-snapshot/
+
+# Uploads — runtime files, live on the VPS
+uploads/
+
+# Database dumps & backups
+backups/
+*.dump
+*.sql.gz
+
+# Prisma
+backend/prisma/migrations/dev.db*

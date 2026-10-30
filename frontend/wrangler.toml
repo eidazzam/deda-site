@@ -1,0 +1,30 @@
+# Cloudflare Pages config for the Deda storefront.
+#
+# `@cloudflare/next-on-pages` builds Next.js into the .vercel/output/static
+# directory; Wrangler/Cloudflare Pages then serves it from there.
+#
+# nodejs_compat is required because Next.js's runtime helpers (Stream,
+# Buffer, crypto) call into a small slice of the Node API on the edge.
+
+name = "deda"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+# Cloudflare Pages requires plaintext build-time env vars to be declared
+# here once a wrangler.toml exists — the dashboard only manages Secrets in
+# that case, and NEXT_PUBLIC_* needs to be available at npm-run-build time
+# so Next can inline it into the client bundle. Secrets (admin passwords,
+# JWT signing keys, etc.) still live in the dashboard.
+[vars]
+# Backend lives on the Hostinger VPS behind Nginx + Let's Encrypt — the
+# storefront calls https://api.dedawomenswear.shop/api/* in the browser.
+NEXT_PUBLIC_API_URL = "https://api.dedawomenswear.shop"
+NEXT_PUBLIC_SITE_URL = "https://dedawomenswear.shop"
+# Mock mode is off in production — the real Fastify API is live. Flip
+# back to "true" if the backend ever needs an emergency outage bypass.
+NEXT_PUBLIC_USE_MOCK = "false"
+# Meta (Facebook) Pixel — used for PageView + commerce event tracking
+# so marketing can retarget through Meta Ads. Public value that ships
+# in the client bundle; not sensitive.
+NEXT_PUBLIC_FB_PIXEL_ID = "1685647715870185"

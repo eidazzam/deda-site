@@ -1,0 +1,228 @@
+'use client';
+
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { useCart, selectCartCount } from '@/lib/stores/cart';
+import { useWishlist } from '@/lib/stores/wishlist';
+import { otherLocale, type Locale } from '@/lib/i18n/config';
+import type { Dictionary } from '@/lib/i18n/dictionaries';
+
+import { AnnouncementBar } from './announcement-bar';
+import {
+  BagIcon,
+  GlobeIcon,
+  HeartIcon,
+  MenuIcon,
+  SearchIcon,
+} from './icon';
+
+type HeaderProps = {
+  locale: Locale;
+  dict: Dictionary;
+  onCartClick: () => void;
+  onMenuClick: () => void;
+};
+
+export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) {
+  const pathname = usePathname();
+  const isAR = locale === 'ar';
+  const localePrefix = `/${locale}`;
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+
+  const cartCount = useCart(selectCartCount);
+  const wishlistCount = useWishlist((s) => s.slugs.length);
+
+  // Build the equivalent URL in the other language by swapping the locale
+  // segment. Falls back to /{other} if the path doesn't start with /{locale}.
+  const otherHref = pathname.startsWith(localePrefix)
+    ? `/${otherLocale(locale)}${pathname.slice(localePrefix.length) || '/'}`
+    : `/${otherLocale(locale)}`;
+
+  const nav = [
+    { href: localePrefix, label: dict.home },
+    { href: `${localePrefix}/shop/coloured`, label: dict.coloured },
+    { href: `${localePrefix}/shop/black`, label: dict.black },
+    { href: `${localePrefix}/shop/snap`, label: dict.snap },
+    { href: `${localePrefix}/shop/embroidered`, label: dict.embroidered },
+    { href: `${localePrefix}/shop/overhead`, label: dict.overhead },
+    { href: `${localePrefix}/shop/everyday`, label: dict.everyday },
+    { href: `${localePrefix}/shop/ready`, label: dict.ready },
+    { href: `${localePrefix}/shop/winter`, label: dict.winter },
+    { href: `${localePrefix}/shop/kids`, label: dict.kids },
+  ];
+
+  return (
+    <header className="bg-bg border-b border-border">
+      {/* Top strip — rotates between the Kuwait identity line and the two
+          shipping promos. Scrolls away with the banner; only the nav row
+          below stays pinned to the top. */}
+      <AnnouncementBar locale={locale} dict={dict} />
+
+      {/* Full-width brand banner. Fixed-step heights per breakpoint so the
+          composition reads cleanly on mobile; the object-position pins
+          the crop to the LEFT edge of the source (where the DEDA
+          lockup lives) about 45% down the frame — right on the R monogram. */}
+      <Link
+        href={localePrefix}
+        aria-label={dict.brand}
+        className="block w-full bg-ink relative h-52 sm:h-80 md:h-80 lg:h-72 xl:h-80 overflow-hidden"
+      >
+        <Image
+          src="/brand/hero-banner.jpg"
+          alt={dict.brand}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+          style={{ objectPosition: '0% 45%' }}
+        />
+      </Link>
+
+      {/* Sticky nav strip — the row that survives scroll. Announcement +
+          banner scroll away above; this stays pinned so the categories
+          and actions cluster are always one thumb away. */}
+      <div className="sticky top-0 z-40 bg-bg/90 backdrop-blur-md border-b border-border">
+      <div className="max-w-page mx-auto px-4 md:px-6 lg:px-10">
+        {/* Nav + actions row. Logo lives in the banner above, so this row
+            is a clean single strip: hamburger on mobile, categories on
+            desktop, actions cluster on the far side. */}
+        <div className="flex items-center justify-between h-14 md:h-16 gap-3 lg:gap-5">
+          {/* Hamburger — visible only below lg, where the inline nav is hidden */}
+          <button
+            type="button"
+            onClick={onMenuClick}
+            aria-label="Open menu"
+            className="xl:hidden p-2 -ml-2 hover:text-accent transition-colors"
+          >
+            <MenuIcon className="w-6 h-6" />
+          </button>
+
+          <nav className="hidden xl:flex items-center gap-4 xl:gap-7 text-xs xl:text-sm tracking-wide">
+            {nav.map((n) => (
+              <Link key={n.href} href={n.href} className="link-underline whitespace-nowrap">
+                {n.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Actions cluster — search + locale + wishlist + bag. */}
+          <div className="flex items-center gap-1.5 md:gap-2.5 lg:gap-3">
+            <div
+              className={`relative hidden xl:flex items-center transition-all duration-300 ${
+                searchFocused ? 'xl:w-72' : 'xl:w-52'
+              }`}
+            >
+              <SearchIcon
+                className={`absolute ${
+                  isAR ? 'right-3' : 'left-3'
+                } w-4 h-4 text-muted pointer-events-none`}
+              />
+              <input
+                type="text"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && searchValue.trim()) {
+                    window.location.href = `${localePrefix}/shop/all?search=${encodeURIComponent(
+                      searchValue.trim(),
+                    )}`;
+                  }
+                }}
+                placeholder={dict.search}
+                className={`w-full bg-subtle/60 ${
+                  isAR ? 'pr-9 pl-3' : 'pl-9 pr-3'
+                } py-2 text-sm border border-transparent focus:border-border focus:bg-bg transition-all rounded-sm outline-none`}
+              />
+            </div>
+
+            <Link
+              href={otherHref}
+              className="flex items-center gap-1.5 text-xs tracking-widest uppercase hover:text-accent transition-colors"
+              prefetch={false}
+            >
+              <GlobeIcon className="w-4 h-4" />
+              <span>{isAR ? 'EN' : 'AR'}</span>
+            </Link>
+
+            <Link
+              href={`${localePrefix}/wishlist`}
+              className="relative p-2 hover:text-accent transition-colors"
+              aria-label={dict.wishlist}
+            >
+              <HeartIcon className="w-5 h-5" />
+              {wishlistCount > 0 && (
+                <span
+                  className={`absolute top-0 ${
+                    isAR ? 'left-0' : 'right-0'
+                  } bg-accent text-bg text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-medium`}
+                >
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
+
+            <button
+              type="button"
+              onClick={onCartClick}
+              className="relative p-2 hover:text-accent transition-colors"
+              aria-label={dict.cart}
+            >
+              <BagIcon className="w-5 h-5" />
+              {cartCount > 0 && (
+                <span
+                  className={`absolute top-0 ${
+                    isAR ? 'left-0' : 'right-0'
+                  } bg-accent text-bg text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-medium`}
+                >
+                  {cartCount}
+                </span>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile + tablet search row — the actions cluster below lg is
+            too tight to host a useful search input alongside the cart /
+            wishlist icons, so we render the bar as a full-width second
+            row below the main header. Hidden at lg+ where the inline
+            search inside the actions cluster takes over. */}
+        <div className="xl:hidden pb-3 pt-1">
+          <div className="relative">
+            <SearchIcon
+              className={`absolute top-1/2 -translate-y-1/2 ${
+                isAR ? 'right-3' : 'left-3'
+              } w-4 h-4 text-muted pointer-events-none`}
+            />
+            <input
+              type="text"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && searchValue.trim()) {
+                  window.location.href = `${localePrefix}/shop/all?search=${encodeURIComponent(
+                    searchValue.trim(),
+                  )}`;
+                }
+              }}
+              placeholder={dict.search}
+              className={`w-full bg-subtle/60 ${
+                isAR ? 'pr-9 pl-3' : 'pl-9 pr-3'
+              } py-2 text-sm border border-transparent focus:border-border focus:bg-bg transition-all rounded-sm outline-none`}
+            />
+          </div>
+        </div>
+      </div>
+      </div>
+    </header>
+  );
+}
+
+// MobileBottomNav was removed — the hamburger + MobileMenu now hold
+// everything that used to live in the bottom bar, and the cart/wishlist
+// icons stay reachable at the top of the screen.

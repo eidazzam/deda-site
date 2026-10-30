@@ -1,0 +1,271 @@
+'use client';
+
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
+import {
+  FacebookIcon,
+  InstagramIcon,
+  SnapchatIcon,
+  TikTokIcon,
+  WhatsAppIcon,
+} from './icon';
+import { PaymentBadges } from './payment-icons';
+
+import { api } from '@/lib/api/client';
+import type { SiteConfig } from '@/lib/api/types';
+import type { Locale } from '@/lib/i18n/config';
+import type { Dictionary } from '@/lib/i18n/dictionaries';
+
+export function Footer({
+  locale,
+  dict,
+  config: initialConfig,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+  config?: SiteConfig | null;
+}) {
+  const isAR = locale === 'ar';
+  const prefix = `/${locale}`;
+
+  // Cloudflare Pages edge can't reach api.dedawomenswear.shop from inside the
+  // same zone, so the SSR config from the layout is often null. Pull
+  // it again from the browser where CORS is wired up.
+  const [config, setConfig] = useState<SiteConfig | null>(initialConfig ?? null);
+
+  useEffect(() => {
+    let cancelled = false;
+    api.siteConfig
+      .get({ cache: 'no-store' })
+      .then((res) => {
+        if (!cancelled) setConfig(res);
+      })
+      .catch(() => {
+        // Keep whatever SSR gave us (likely null) — better to hide the
+        // socials than to render broken links.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // wa.me wants the number without the leading + and without spaces/dashes.
+  const whatsappHref = config?.whatsappNumber
+    ? `https://wa.me/${config.whatsappNumber.replace(/[^0-9]/g, '')}`
+    : null;
+
+  const socials: Array<{
+    href: string;
+    label: string;
+    icon: React.ComponentType<{ className?: string }>;
+  }> = [
+    whatsappHref && {
+      href: whatsappHref,
+      label: 'WhatsApp',
+      icon: WhatsAppIcon,
+    },
+    config?.instagramUrl && {
+      href: config.instagramUrl,
+      label: 'Instagram',
+      icon: InstagramIcon,
+    },
+    // Snapchat ranks alongside Instagram in the Gulf — surface it before
+    // TikTok/Facebook so the order reads native to the market.
+    config?.snapchatUrl && {
+      href: config.snapchatUrl,
+      label: 'Snapchat',
+      icon: SnapchatIcon,
+    },
+    config?.tiktokUrl && {
+      href: config.tiktokUrl,
+      label: 'TikTok',
+      icon: TikTokIcon,
+    },
+    config?.facebookUrl && {
+      href: config.facebookUrl,
+      label: 'Facebook',
+      icon: FacebookIcon,
+    },
+  ].filter(Boolean) as Array<{
+    href: string;
+    label: string;
+    icon: React.ComponentType<{ className?: string }>;
+  }>;
+
+  return (
+    <footer className="border-t border-border mt-24 lg:mt-32 bg-bg">
+      <div className="max-w-page mx-auto px-6 lg:px-10 py-14 grid gap-10 md:grid-cols-5">
+        <div>
+          <div className="font-display text-3xl mb-3">{dict.brand}</div>
+          <p className="text-sm text-muted leading-relaxed">
+            {isAR
+              ? 'عبايات حديثة بحرفية متّزنة، من الكويت.'
+              : 'Modern abayas with restrained craft, from Kuwait.'}
+          </p>
+        </div>
+
+        <div>
+          <div className="text-[11px] tracking-widest uppercase text-muted mb-4">
+            {isAR ? 'تسوّقي' : 'Shop'}
+          </div>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <Link className="link-underline" href={`${prefix}/shop/coloured`}>
+                {dict.coloured}
+              </Link>
+            </li>
+            <li>
+              <Link className="link-underline" href={`${prefix}/shop/black`}>
+                {dict.black}
+              </Link>
+            </li>
+            <li>
+              <Link className="link-underline" href={`${prefix}/shop/snap`}>
+                {dict.snap}
+              </Link>
+            </li>
+            <li>
+              <Link className="link-underline" href={`${prefix}/shop/embroidered`}>
+                {dict.embroidered}
+              </Link>
+            </li>
+            <li>
+              <Link className="link-underline" href={`${prefix}/shop/overhead`}>
+                {dict.overhead}
+              </Link>
+            </li>
+            <li>
+              <Link className="link-underline" href={`${prefix}/shop/kids`}>
+                {dict.kids}
+              </Link>
+            </li>
+            <li>
+              <Link className="link-underline" href={`${prefix}/shop/everyday`}>
+                {dict.everyday}
+              </Link>
+            </li>
+            <li>
+              <Link className="link-underline" href={`${prefix}/shop/ready`}>
+                {dict.ready}
+              </Link>
+            </li>
+            <li>
+              <Link className="link-underline" href={`${prefix}/shop/winter`}>
+                {dict.winter}
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div className="text-[11px] tracking-widest uppercase text-muted mb-4">
+            {isAR ? 'الحساب' : 'Account'}
+          </div>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <Link className="link-underline" href={`${prefix}/about`}>
+                {dict.about}
+              </Link>
+            </li>
+            <li>
+              <Link className="link-underline" href={`${prefix}/wishlist`}>
+                {dict.wishlist}
+              </Link>
+            </li>
+            <li>
+              <Link className="link-underline" href={`${prefix}/cart`}>
+                {dict.cart}
+              </Link>
+            </li>
+            <li>
+              <Link className="link-underline" href={`${prefix}/terms`}>
+                {isAR ? 'الشروط والأحكام' : 'Terms & Conditions'}
+              </Link>
+            </li>
+            <li>
+              <Link className="link-underline" href={`${prefix}/returns`}>
+                {isAR ? 'سياسة الاسترجاع' : 'Returns & Refunds'}
+              </Link>
+            </li>
+            <li>
+              <Link className="link-underline" href={`${prefix}/privacy`}>
+                {isAR ? 'سياسة الخصوصية' : 'Privacy Policy'}
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div className="text-[11px] tracking-widest uppercase text-muted mb-4">
+            {isAR ? 'تواصل' : 'Contact'}
+          </div>
+          <p className="text-sm text-muted leading-relaxed mb-4">
+            {isAR
+              ? 'توصيل إلى جميع محافظات الكويت وإلى كل الوطن العربى. دفع آمن.'
+              : 'Delivery across Kuwait. Secure payment.'}
+          </p>
+          {socials.length > 0 ? (
+            <div className="flex items-center gap-4">
+              {socials.map(({ href, label, icon: Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="text-muted hover:text-accent transition-colors"
+                >
+                  <Icon className="w-6 h-6" />
+                </a>
+              ))}
+            </div>
+          ) : null}
+        </div>
+
+        {/* QR column — click the code to download the PNG so a visitor
+            can print it or share the link out. Same asset that goes on
+            the printed business cards; keeping them identical means the
+            brand mark on the site matches what customers scan offline. */}
+        <div className={`flex flex-col ${isAR ? 'md:items-end' : 'md:items-start'} items-center gap-3`}>
+          <div className="text-[11px] tracking-widest uppercase text-muted">
+            {isAR ? 'زوروا موقعنا' : 'Visit us'}
+          </div>
+          <a
+            href="/brand/qr-code.png"
+            download="deda-qr-code.png"
+            aria-label={isAR ? 'تحميل رمز QR' : 'Download QR code'}
+            className="block p-2 bg-bg border border-border hover:border-accent transition-colors group"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/qr-code.svg"
+              alt={isAR ? 'رمز QR لموقع ديدا' : 'Deda site QR code'}
+              width={100}
+              height={100}
+              className="w-[100px] h-[100px]"
+            />
+          </a>
+          <span className="text-[10px] text-muted text-center">
+            {isAR ? 'امسحي للزيارة' : 'Scan to visit'}
+          </span>
+        </div>
+      </div>
+
+      <div className="border-t border-border/60">
+        <div className="max-w-page mx-auto px-6 lg:px-10 py-5 flex flex-col items-center gap-3 md:flex-row md:justify-between">
+          <div className="flex flex-col items-center md:items-start gap-1.5">
+            <span className="text-[10px] tracking-widest uppercase text-muted">
+              {isAR ? 'وسائل الدفع المقبولة' : 'We accept'}
+            </span>
+            <PaymentBadges />
+          </div>
+          <div className="text-[11px] tracking-widest uppercase text-muted text-center md:text-end">
+            © {new Date().getFullYear()} {dict.brand} ·{' '}
+            {isAR ? 'كل الحقوق محفوظة' : 'All rights reserved'}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}

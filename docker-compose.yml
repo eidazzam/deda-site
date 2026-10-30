@@ -1,0 +1,107 @@
+# Production stack for Deda.
+#
+# Lives on the Hostinger VPS at /opt/deda/repo. The host's Nginx
+# terminates SSL on dedawomenswear.shop and proxies to the api + web
+# services via the loopback ports below. Postgres + uploads + backups
+# are bind-mounted to /opt/deda/* so they survive image rebuilds.
+#
+# Port allocation (chosen to not collide with the other projects on
+# this VPS — hindam, tecnosystem, egytrans, n8n):
+#   5433  postgres (5432 belongs to hindam_postgres)
+#   3010  web      (next.js)
+#   3011  api      (fastify)
+
+name: deda
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: deda_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5434:5432"
+    networks: [deda]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./backend
+    container_name: deda_api
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      API_PORT: 3001
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      UPLOAD_DIR: /app/uploads
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      # Tap Payments — optional. If empty the checkout falls back to COD.
+      TAP_SECRET_KEY: ${TAP_SECRET_KEY:-}
+      TAP_WEBHOOK_SECRET: ${TAP_WEBHOOK_SECRET:-}
+      TAP_BASE_URL: ${TAP_BASE_URL:-https://api.tap.company}
+      PUBLIC_SITE_URL: ${PUBLIC_SITE_URL:-http://localhost:3020}
+      # Separate API host because the storefront is served by Cloudflare
+      # Pages (no /api/* route) while the backend lives on api.dedawomenswear.shop.
+      # Tap calls this host directly for webhooks.
+      PUBLIC_API_URL: ${PUBLIC_API_URL:-}
+      # Set TAP_MOCK_MODE=true on a dev machine to skip the real Tap API
+      # and hand the customer off to /checkout/mock-tap instead. Never on
+      # production.
+      TAP_MOCK_MODE: ${TAP_MOCK_MODE:-}
+      # Temporary: dump computed vs incoming HMAC inputs to logs so we
+      # can pin down signature mismatches. Turn off once webhooks verify.
+      TAP_DEBUG_SIG: ${TAP_DEBUG_SIG:-}
+    volumes:
+      # Shared uploads directory — Nginx serves the same path read-only
+      # from the host so files land in one place.
+      - /opt/deda/uploads:/app/uploads
+    ports:
+      - "127.0.0.1:3021:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [deda]
+
+  web:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+        NEXT_PUBLIC_FB_PIXEL_ID: ${NEXT_PUBLIC_FB_PIXEL_ID:-}
+        NEXT_PUBLIC_TIKTOK_PIXEL_ID: ${NEXT_PUBLIC_TIKTOK_PIXEL_ID:-}
+    container_name: deda_web
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      # Public env is baked at build time; we still set runtime values so
+      # the sitemap.ts server route can reach the api from within the
+      # docker network.
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+      # Server-side only — used by api/client.ts when running inside the
+      # Next.js node process to skip the round-trip through Nginx and
+      # talk straight to the api container. Browser code never sees this.
+      NEXT_INTERNAL_API_URL: http://api:3001
+    ports:
+      - "127.0.0.1:3020:3000"
+    depends_on:
+      - api
+    networks: [deda]
+
+networks:
+  deda:
+    driver: bridge
