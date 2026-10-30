@@ -13,27 +13,17 @@ import { registerAuth } from './plugins/auth.js';
 import { healthRoutes } from './routes/health.js';
 import { productRoutes } from './routes/products.js';
 import { governorateRoutes } from './routes/governorates.js';
-import { countryRoutes } from './routes/countries.js';
-import { bundleRoutes } from './routes/bundles.js';
-import { couponRoutes } from './routes/coupons.js';
 import { orderRoutes } from './routes/orders.js';
-import { leadRoutes } from './routes/leads.js';
 import { siteConfigRoutes } from './routes/site-config.js';
-import { heroSlideRoutes } from './routes/hero-slides.js';
 import { categoryImageRoutes } from './routes/category-images.js';
 import { adminLoginRoutes } from './routes/admin/login.js';
 import { adminOrderRoutes } from './routes/admin/orders.js';
-import { adminLeadRoutes } from './routes/admin/leads.js';
 import { adminProductRoutes } from './routes/admin/products.js';
 import { adminUploadRoutes } from './routes/admin/uploads.js';
-import { adminCouponRoutes } from './routes/admin/coupons.js';
 import { adminGovernorateRoutes } from './routes/admin/governorates.js';
-import { adminCountryRoutes } from './routes/admin/countries.js';
 import { adminStatsRoutes } from './routes/admin/stats.js';
 import { adminSiteConfigRoutes } from './routes/admin/site-config.js';
-import { adminHeroSlideRoutes } from './routes/admin/hero-slides.js';
 import { adminCategoryImageRoutes } from './routes/admin/category-images.js';
-import { adminBundleRoutes } from './routes/admin/bundles.js';
 
 const app = Fastify({
   logger:
@@ -83,13 +73,8 @@ await app.register(
     await api.register(healthRoutes);
     await api.register(productRoutes);
     await api.register(governorateRoutes);
-    await api.register(countryRoutes);
-    await api.register(bundleRoutes);
-    await api.register(couponRoutes);
     await api.register(orderRoutes);
-    await api.register(leadRoutes);
     await api.register(siteConfigRoutes);
-    await api.register(heroSlideRoutes);
     await api.register(categoryImageRoutes);
   },
   { prefix: '/api' },
@@ -110,17 +95,12 @@ await app.register(
   async (admin) => {
     admin.addHook('preHandler', app.authenticate);
     await admin.register(adminOrderRoutes);
-    await admin.register(adminLeadRoutes);
     await admin.register(adminProductRoutes);
     await admin.register(adminUploadRoutes);
-    await admin.register(adminCouponRoutes);
     await admin.register(adminGovernorateRoutes);
-    await admin.register(adminCountryRoutes);
     await admin.register(adminStatsRoutes);
     await admin.register(adminSiteConfigRoutes);
-    await admin.register(adminHeroSlideRoutes);
     await admin.register(adminCategoryImageRoutes);
-    await admin.register(adminBundleRoutes);
   },
   { prefix: '/api/admin' },
 );

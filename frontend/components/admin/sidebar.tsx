@@ -15,18 +15,12 @@ type NavItem = {
   labelKey:
     | 'sidebar.dashboard'
     | 'sidebar.orders'
-    | 'sidebar.leads'
     | 'sidebar.products'
-    | 'sidebar.bundles'
-    | 'sidebar.coupons'
     | 'sidebar.governorates'
-    | 'sidebar.countries'
     | 'sidebar.heroSlides'
     | 'sidebar.categoryImages'
-    | 'sidebar.editorial'
     | 'sidebar.settings';
   match: (p: string) => boolean;
-  badgeKey?: 'orders' | 'leads';
 };
 
 const NAV: NavItem[] = [
@@ -38,10 +32,6 @@ const NAV: NavItem[] = [
     badgeKey: 'orders',
   },
   {
-    href: '/admin/leads',
-    labelKey: 'sidebar.leads',
-    match: (p) => p.startsWith('/admin/leads'),
-    badgeKey: 'leads',
   },
   {
     href: '/admin/products',
@@ -49,30 +39,18 @@ const NAV: NavItem[] = [
     match: (p) => p.startsWith('/admin/products'),
   },
   {
-    href: '/admin/bundles',
-    labelKey: 'sidebar.bundles',
-    match: (p) => p.startsWith('/admin/bundles'),
   },
-  { href: '/admin/coupons', labelKey: 'sidebar.coupons', match: (p) => p.startsWith('/admin/coupons') },
   {
     href: '/admin/governorates',
     labelKey: 'sidebar.governorates',
     match: (p) => p.startsWith('/admin/governorates'),
   },
   {
-    href: '/admin/countries',
-    labelKey: 'sidebar.countries',
-    match: (p) => p.startsWith('/admin/countries'),
   },
   {
-    href: '/admin/hero-slides',
     labelKey: 'sidebar.heroSlides',
-    match: (p) => p.startsWith('/admin/hero-slides'),
   },
   {
-    href: '/admin/editorial',
-    labelKey: 'sidebar.editorial',
-    match: (p) => p.startsWith('/admin/editorial'),
   },
   {
     href: '/admin/settings',
@@ -88,9 +66,7 @@ export function AdminSidebar() {
   const router = useRouter();
   const { locale, setLocale, t } = useAdminI18n();
   const [username, setUsername] = useState<string | null>(null);
-  const [counts, setCounts] = useState<{ orders: number; leads: number }>({
     orders: 0,
-    leads: 0,
   });
 
   // Read the logged-in username from localStorage once on mount.
@@ -98,7 +74,6 @@ export function AdminSidebar() {
     setUsername(getAdminUsername());
   }, []);
 
-  // Poll unread counts for the orders + leads badges. The endpoint is
   // cheap (single SQL count) so 30s is fine.
   useEffect(() => {
     let cancelled = false;
@@ -107,9 +82,7 @@ export function AdminSidebar() {
       try {
         const [o, l] = await Promise.all([
           adminApi.orders.unreadCount(),
-          adminApi.leads.unreadCount(),
         ]);
-        if (!cancelled) setCounts({ orders: o.count, leads: l.count });
       } catch {
         // Silent — 401s already redirect us out, anything else is noise.
       }
