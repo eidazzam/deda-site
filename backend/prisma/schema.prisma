@@ -89,6 +89,10 @@ model Product {
   descriptionAr String
   basePrice     Int
   discount      Int?
+  // Size-chart image URL — admin uploads one JPEG/PNG per product with
+  // the measurements table. Shown as a modal on the product detail page.
+  // Null hides the "size guide" link altogether.
+  sizeChartUrl  String?
   category      Category
   status        SaleStatus @default(IN_SALE)
   isFeatured    Boolean    @default(false)

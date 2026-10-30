@@ -1,42 +1,17 @@
 // Size system shared across the storefront, admin uploader, and product
-// detail. Lengths are in centimetres — the standard Gulf abaya measure.
-// Keep these arrays the single source of truth so the dropdowns and the
-// size guide stay in sync.
+// detail. Deda sells women's wear in standard letter sizes (S–XL) rather
+// than the cm-based Gulf abaya scale the fork started from — single
+// source of truth so dropdowns, admin, and the size guide stay in sync.
 
-/** Standard adult abaya lengths (cm). Full Gulf range — every cm
- * 50–60, plus 62 for taller fits. */
-export const ABAYA_SIZES = [
-  '50',
-  '51',
-  '52',
-  '53',
-  '54',
-  '55',
-  '56',
-  '57',
-  '58',
-  '59',
-  '60',
-  '62',
-] as const;
+/** Letter sizes for Deda garments. Covers S through XL — the four
+ * standard sizes stocked for every piece. */
+export const GARMENT_SIZES = ['S', 'M', 'L', 'XL'] as const;
 
-/** Kids' abaya lengths (cm). Standard Gulf children range in 2-cm
- * steps from 24 up to 48 — covers ~2 years old through pre-teen. */
-export const KIDS_SIZES = [
-  '24',
-  '26',
-  '28',
-  '30',
-  '32',
-  '34',
-  '36',
-  '38',
-  '40',
-  '42',
-  '44',
-  '46',
-  '48',
-] as const;
+/** Alias kept so the (currently few) upstream imports named
+ * `ABAYA_SIZES` keep compiling — behaviour is identical, every
+ * product uses the same letter range. */
+export const ABAYA_SIZES = GARMENT_SIZES;
+export const KIDS_SIZES = GARMENT_SIZES;
 
 /**
  * Sentinel value used in the product detail UI to mark the "make me
@@ -46,9 +21,10 @@ export const KIDS_SIZES = [
  */
 export const CUSTOM_SIZE = 'CUSTOM' as const;
 
-export type AbayaSize = (typeof ABAYA_SIZES)[number];
-export type KidsSize = (typeof KIDS_SIZES)[number];
-export type SizeValue = AbayaSize | KidsSize | typeof CUSTOM_SIZE | string;
+export type GarmentSize = (typeof GARMENT_SIZES)[number];
+export type AbayaSize = GarmentSize;
+export type KidsSize = GarmentSize;
+export type SizeValue = GarmentSize | typeof CUSTOM_SIZE | string;
 
 /**
  * Shape the customer fills in when they pick "Custom size". Numeric
@@ -66,9 +42,8 @@ export type CustomSizeInput = {
   notes?: string;
 };
 
-/** Picks the right size list to suggest based on the product category. */
-export function suggestedSizesFor(category: string | undefined): readonly string[] {
-  if (!category) return ABAYA_SIZES;
-  if (category.toLowerCase() === 'kids') return KIDS_SIZES;
-  return ABAYA_SIZES;
+/** Every product shares the same S–XL list, so the category hint from
+ * the caller is ignored. Kept for API compatibility with Rozana. */
+export function suggestedSizesFor(_category: string | undefined): readonly string[] {
+  return GARMENT_SIZES;
 }

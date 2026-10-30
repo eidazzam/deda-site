@@ -70,23 +70,11 @@ const COUNTRIES: Array<{
 }> = [];
 
 // ---------------------------------------------------------------------------
-// Size standards — kept in sync with frontend/lib/sizes.ts.
+// Size standards — kept in sync with frontend/lib/sizes.ts. Deda carries
+// standard women's letter sizes across every product.
 // ---------------------------------------------------------------------------
-const ABAYA_SIZES = [
-  '50',
-  '51',
-  '52',
-  '53',
-  '54',
-  '55',
-  '56',
-  '57',
-  '58',
-  '59',
-  '60',
-  '62',
-];
-const KIDS_SIZES = ['28', '30', '32'];
+const ABAYA_SIZES = ['S', 'M', 'L', 'XL'];
+const KIDS_SIZES = ['S', 'M', 'L', 'XL'];
 
 // ---------------------------------------------------------------------------
 // Product catalog
