@@ -43,7 +43,7 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
   const [phone2, setPhone2] = useState('');
   // Country defaults to Kuwait — most visitors. Switching to anything else
   // hides the governorate dropdown and uses the country's flat fee instead.
-  const [countryCode, setCountryCode] = useState('KW');
+  const [countryCode, setCountryCode] = useState('EG');
   const [govName, setGovName] = useState('');
   const [address, setAddress] = useState('');
   const [notes, setNotes] = useState('');

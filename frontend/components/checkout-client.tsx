@@ -29,7 +29,7 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
   const [name, setName] = useState('');
   const [phone1, setPhone1] = useState('');
   const [phone2, setPhone2] = useState('');
-  const [countryCode, setCountryCode] = useState('KW');
+  const [countryCode, setCountryCode] = useState('EG');
   const [govName, setGovName] = useState('');
   const [address, setAddress] = useState('');
   const [notes, setNotes] = useState('');

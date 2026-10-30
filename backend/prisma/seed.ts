@@ -19,41 +19,55 @@ import { PrismaClient, Category, ColorGroup, CouponType, SaleStatus } from '@pri
 const prisma = new PrismaClient();
 
 // ---------------------------------------------------------------------------
-// Governorates — the six administrative regions of Kuwait. Shipping fees
-// are in piastres (1500 piastres = 1.500 EGP), tuned roughly by distance from the
-// Capital where the atelier is.
+// Governorates — the 27 administrative regions of Egypt. Shipping fees
+// are in piastres (7000 = 70 EGP, 10000 = 100 EGP). Cairo + Giza get
+// the discounted rate because they're next door to the courier hub;
+// everywhere else pays the standard 100 EGP flat.
 // ---------------------------------------------------------------------------
-// Flat 2 EGP (= 2000 piastres) across all Kuwaiti governorates.
-const LOCAL_SHIPPING_FEE = 2000;
+const CAIRO_GIZA_SHIPPING_FEE = 7000;    // 70 EGP
+const OTHER_GOVERNORATE_SHIPPING = 10000; // 100 EGP
+
 const GOVERNORATES = [
-  { nameEn: 'Capital', nameAr: 'العاصمة', shippingFee: LOCAL_SHIPPING_FEE, sortOrder: 1 },
-  { nameEn: 'Hawalli', nameAr: 'حولي', shippingFee: LOCAL_SHIPPING_FEE, sortOrder: 2 },
-  { nameEn: 'Farwaniya', nameAr: 'الفروانية', shippingFee: LOCAL_SHIPPING_FEE, sortOrder: 3 },
-  { nameEn: 'Mubarak Al-Kabeer', nameAr: 'مبارك الكبير', shippingFee: LOCAL_SHIPPING_FEE, sortOrder: 4 },
-  { nameEn: 'Ahmadi', nameAr: 'الأحمدي', shippingFee: LOCAL_SHIPPING_FEE, sortOrder: 5 },
-  { nameEn: 'Jahra', nameAr: 'الجهراء', shippingFee: LOCAL_SHIPPING_FEE, sortOrder: 6 },
+  // Discounted Cairo/Giza pair first so they top the dropdown.
+  { nameEn: 'Cairo', nameAr: 'القاهرة', shippingFee: CAIRO_GIZA_SHIPPING_FEE, sortOrder: 1 },
+  { nameEn: 'Giza', nameAr: 'الجيزة', shippingFee: CAIRO_GIZA_SHIPPING_FEE, sortOrder: 2 },
+  { nameEn: 'Alexandria', nameAr: 'الإسكندرية', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 3 },
+  { nameEn: 'Qalyubia', nameAr: 'القليوبية', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 4 },
+  { nameEn: 'Dakahlia', nameAr: 'الدقهلية', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 5 },
+  { nameEn: 'Sharqia', nameAr: 'الشرقية', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 6 },
+  { nameEn: 'Gharbia', nameAr: 'الغربية', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 7 },
+  { nameEn: 'Monufia', nameAr: 'المنوفية', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 8 },
+  { nameEn: 'Kafr El Sheikh', nameAr: 'كفر الشيخ', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 9 },
+  { nameEn: 'Beheira', nameAr: 'البحيرة', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 10 },
+  { nameEn: 'Damietta', nameAr: 'دمياط', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 11 },
+  { nameEn: 'Port Said', nameAr: 'بورسعيد', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 12 },
+  { nameEn: 'Ismailia', nameAr: 'الإسماعيلية', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 13 },
+  { nameEn: 'Suez', nameAr: 'السويس', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 14 },
+  { nameEn: 'North Sinai', nameAr: 'شمال سيناء', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 15 },
+  { nameEn: 'South Sinai', nameAr: 'جنوب سيناء', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 16 },
+  { nameEn: 'Red Sea', nameAr: 'البحر الأحمر', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 17 },
+  { nameEn: 'Matrouh', nameAr: 'مطروح', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 18 },
+  { nameEn: 'Fayoum', nameAr: 'الفيوم', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 19 },
+  { nameEn: 'Beni Suef', nameAr: 'بني سويف', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 20 },
+  { nameEn: 'Minya', nameAr: 'المنيا', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 21 },
+  { nameEn: 'Assiut', nameAr: 'أسيوط', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 22 },
+  { nameEn: 'Sohag', nameAr: 'سوهاج', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 23 },
+  { nameEn: 'Qena', nameAr: 'قنا', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 24 },
+  { nameEn: 'Luxor', nameAr: 'الأقصر', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 25 },
+  { nameEn: 'Aswan', nameAr: 'أسوان', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 26 },
+  { nameEn: 'New Valley', nameAr: 'الوادي الجديد', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 27 },
 ];
 
-// International destinations — flat 7 EGP (= 7000 piastres) for now. Free
-// shipping kicks in at 100 EGP subtotal (enforced in routes/orders.ts).
-const INTL_SHIPPING_FEE = 7000;
-const COUNTRIES = [
-  { code: 'EG', nameEn: 'Egypt', nameAr: 'مصر', shippingFee: INTL_SHIPPING_FEE, sortOrder: 1 },
-  { code: 'SA', nameEn: 'Saudi Arabia', nameAr: 'السعودية', shippingFee: INTL_SHIPPING_FEE, sortOrder: 2 },
-  { code: 'AE', nameEn: 'United Arab Emirates', nameAr: 'الإمارات', shippingFee: INTL_SHIPPING_FEE, sortOrder: 3 },
-  { code: 'QA', nameEn: 'Qatar', nameAr: 'قطر', shippingFee: INTL_SHIPPING_FEE, sortOrder: 4 },
-  { code: 'BH', nameEn: 'Bahrain', nameAr: 'البحرين', shippingFee: INTL_SHIPPING_FEE, sortOrder: 5 },
-  { code: 'OM', nameEn: 'Oman', nameAr: 'عُمان', shippingFee: INTL_SHIPPING_FEE, sortOrder: 6 },
-  { code: 'JO', nameEn: 'Jordan', nameAr: 'الأردن', shippingFee: INTL_SHIPPING_FEE, sortOrder: 7 },
-  { code: 'IQ', nameEn: 'Iraq', nameAr: 'العراق', shippingFee: INTL_SHIPPING_FEE, sortOrder: 8 },
-  { code: 'SY', nameEn: 'Syria', nameAr: 'سوريا', shippingFee: INTL_SHIPPING_FEE, sortOrder: 9 },
-  { code: 'LB', nameEn: 'Lebanon', nameAr: 'لبنان', shippingFee: INTL_SHIPPING_FEE, sortOrder: 10 },
-  { code: 'YE', nameEn: 'Yemen', nameAr: 'اليمن', shippingFee: INTL_SHIPPING_FEE, sortOrder: 11 },
-  { code: 'LY', nameEn: 'Libya', nameAr: 'ليبيا', shippingFee: INTL_SHIPPING_FEE, sortOrder: 12 },
-  { code: 'TN', nameEn: 'Tunisia', nameAr: 'تونس', shippingFee: INTL_SHIPPING_FEE, sortOrder: 13 },
-  { code: 'DZ', nameEn: 'Algeria', nameAr: 'الجزائر', shippingFee: INTL_SHIPPING_FEE, sortOrder: 14 },
-  { code: 'MA', nameEn: 'Morocco', nameAr: 'المغرب', shippingFee: INTL_SHIPPING_FEE, sortOrder: 15 },
-];
+// International shipping is retired — Deda ships inside Egypt only.
+// The Country table stays in schema for potential future expansion but
+// starts empty. If re-enabled later, add rows here.
+const COUNTRIES: Array<{
+  code: string;
+  nameEn: string;
+  nameAr: string;
+  shippingFee: number;
+  sortOrder: number;
+}> = [];
 
 // ---------------------------------------------------------------------------
 // Size standards — kept in sync with frontend/lib/sizes.ts.
@@ -388,7 +402,7 @@ function placeholderImage(ref: string): string {
 // Main
 // ---------------------------------------------------------------------------
 async function main() {
-  console.log('Seeding Kuwait governorates…');
+  console.log('Seeding Egypt governorates…');
   for (const g of GOVERNORATES) {
     await prisma.governorate.upsert({
       where: { nameEn: g.nameEn },

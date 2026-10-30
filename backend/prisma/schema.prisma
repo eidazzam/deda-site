@@ -230,7 +230,7 @@ model Order {
   phone2          String?
   // ISO country code — "KW" for local Kuwait orders, anything else for
   // international destinations seeded in the Country table.
-  countryCode     String         @default("KW")
+  countryCode     String         @default("EG")
   // Only set when countryCode == "KW". Null for international orders.
   governorateName String?
   // Payment is cash-on-delivery across the board. paymentStatus goes

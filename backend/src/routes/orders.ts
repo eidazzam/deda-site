@@ -11,7 +11,7 @@ import { formatOrderNumber } from '../lib/order-number.js';
 // Stored in piastres to match every other money field in the codebase.
 const FREE_SHIPPING_LOCAL_PIASTRES = 30_000;   // Kuwait orders → 30 EGP
 const FREE_SHIPPING_INTL_PIASTRES  = 100_000;  // International   → 100 EGP
-const KUWAIT_CODE = 'KW';
+const EGYPT_CODE = 'EG';
 
 const orderItemSchema = z.object({
   productSlug: z.string().min(1),
@@ -42,7 +42,7 @@ const createOrderSchema = z.object({
   phone2: z.string().trim().min(8).max(20).optional().nullable(),
   // ISO-2 country code. Defaults to Kuwait when the client doesn't send
   // one — keeps older builds of the storefront working during rollout.
-  countryCode: z.string().trim().toUpperCase().length(2).default(KUWAIT_CODE),
+  countryCode: z.string().trim().toUpperCase().length(2).default(EGYPT_CODE),
   // Required only when countryCode === KW; validated inside the handler.
   governorateName: z.string().min(1).optional().nullable(),
   address: z.string().trim().min(5).max(500),
@@ -140,7 +140,7 @@ export const orderRoutes: FastifyPluginAsync = async (app) => {
       let baseShippingFee = 0;
       let governorateName: string | null = null;
 
-      if (input.countryCode === KUWAIT_CODE) {
+      if (input.countryCode === EGYPT_CODE) {
         if (!input.governorateName) {
           throw badRequest(
             'GOVERNORATE_REQUIRED',
@@ -185,7 +185,7 @@ export const orderRoutes: FastifyPluginAsync = async (app) => {
       // logic can be restored quickly if the promo returns.
       void FREE_SHIPPING_LOCAL_PIASTRES;
       void FREE_SHIPPING_INTL_PIASTRES;
-      void KUWAIT_CODE;
+      void EGYPT_CODE;
       const shippingFee = baseShippingFee;
       const total = subtotal + shippingFee - discount;
 
