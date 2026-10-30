@@ -33,10 +33,8 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
   const [govName, setGovName] = useState('');
   const [address, setAddress] = useState('');
   const [notes, setNotes] = useState('');
-  // Customer picks between online payment (Tap-hosted checkout) and
-  // cash on delivery. TAP flows through initTap → hosted page; COD
-  // skips payment entirely and lands on /checkout/success.
-  const [paymentMethod, setPaymentMethod] = useState<CheckoutPaymentMethod>('TAP');
+  // Deda is cash-on-delivery only — no radio, no state.
+  const paymentMethod: CheckoutPaymentMethod = 'COD';
   const [coupon, setCoupon] = useState('');
   const [couponDiscount, setCouponDiscount] = useState<number | null>(null);
   const [couponMessage, setCouponMessage] = useState<string | null>(null);
@@ -118,12 +116,8 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
         })),
       });
 
-      if (order.requiresPayment) {
-        const { redirectUrl } = await api.checkout.initTap(order.id, locale);
-        window.location.assign(redirectUrl);
-        return;
-      }
-
+      // COD-only — no payment-gateway hop. Fire the pixel, clear the
+      // cart, land on the success page.
       trackPurchase({ orderNumber: order.orderNumber, totalValue: order.total });
       clearCart();
       router.push(`/${locale}/checkout/success?n=${order.orderNumber}`);
@@ -247,72 +241,22 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
           </div>
         </div>
 
-        {/* Online-only checkout — pure info row so the customer knows
-            what to expect after clicking "Place order". The Tap hosted
-            page handles KNET / Card / Apple Pay selection. */}
+        {/* Payment is COD-only — single informational row, no choice
+            to make. The order lands as PENDING in the admin and the
+            courier collects cash on delivery. */}
         <div>
           <div className="text-xs tracking-widest uppercase mb-5 pb-3 border-b border-border">
             {isAR ? 'طريقة الدفع' : 'Payment method'}
           </div>
-          <div className="space-y-3">
-            {/* Online — Tap hosted page. Selected by default. */}
-            <label
-              className={`flex items-start gap-3 border px-4 py-3 cursor-pointer transition-colors ${
-                paymentMethod === 'TAP'
-                  ? 'border-ink bg-subtle/60'
-                  : 'border-border bg-bg hover:border-ink/50'
-              }`}
-            >
-              <input
-                type="radio"
-                name="paymentMethod"
-                value="TAP"
-                checked={paymentMethod === 'TAP'}
-                onChange={() => setPaymentMethod('TAP')}
-                className="mt-1"
-              />
-              <div className="flex-1">
-                <div className="text-sm font-medium">
-                  💳 {isAR
-                    ? 'الدفع الإلكتروني (KNET / بطاقة / Apple Pay)'
-                    : 'Online payment (KNET / Card / Apple Pay)'}
-                </div>
-                <p className="text-xs text-muted mt-1">
-                  {isAR
-                    ? 'سيتم تحويلك لصفحة الدفع الآمنة بعد تأكيد الطلب.'
-                    : 'You will be redirected to a secure payment page after placing the order.'}
-                </p>
-              </div>
-            </label>
-
-            {/* Cash on delivery — no online payment, order lands as
-                PENDING for the admin to fulfil against cash on arrival. */}
-            <label
-              className={`flex items-start gap-3 border px-4 py-3 cursor-pointer transition-colors ${
-                paymentMethod === 'COD'
-                  ? 'border-ink bg-subtle/60'
-                  : 'border-border bg-bg hover:border-ink/50'
-              }`}
-            >
-              <input
-                type="radio"
-                name="paymentMethod"
-                value="COD"
-                checked={paymentMethod === 'COD'}
-                onChange={() => setPaymentMethod('COD')}
-                className="mt-1"
-              />
-              <div className="flex-1">
-                <div className="text-sm font-medium">
-                  💵 {isAR ? 'الدفع عند الاستلام' : 'Cash on delivery'}
-                </div>
-                <p className="text-xs text-muted mt-1">
-                  {isAR
-                    ? 'ادفع نقداً للمندوب عند وصول الطلب.'
-                    : 'Pay cash to the courier when your order arrives.'}
-                </p>
-              </div>
-            </label>
+          <div className="border border-border bg-subtle/40 px-4 py-3">
+            <div className="text-sm font-medium">
+              💵 {isAR ? 'الدفع عند الاستلام' : 'Cash on delivery'}
+            </div>
+            <p className="text-xs text-muted mt-1">
+              {isAR
+                ? 'ادفع نقداً للمندوب عند وصول الطلب.'
+                : 'Pay cash to the courier when your order arrives.'}
+            </p>
           </div>
         </div>
       </div>

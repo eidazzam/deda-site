@@ -8,7 +8,6 @@ import type {
   Governorate,
   HeroSlide,
   LeadInput,
-  OrderStatusSnapshot,
   Pagination,
   ProductCard,
   ProductDetail,
@@ -202,61 +201,6 @@ export const api = {
       });
     },
 
-    // Polled by /checkout/return after a Tap redirect to detect when the
-    // webhook has flipped the payment status.
-    status: async (orderId: number) => {
-      if (USE_MOCK) {
-        // In mock mode the order never goes through Tap, so just claim
-        // success — the success page renders the cart's last snapshot.
-        return {
-          id: orderId,
-          orderNumber: `RZ-MOCK-${orderId}`,
-          status: 'PENDING' as const,
-          paymentMethod: 'COD' as const,
-          paymentStatus: null,
-          total: 0,
-        };
-      }
-      return request<OrderStatusSnapshot>(`/api/orders/${orderId}/status`, {
-        cache: 'no-store',
-      });
-    },
-  },
-
-  checkout: {
-    // Asks the API to create a Tap charge for an order that was just
-    // submitted with paymentMethod=TAP. Returns the hosted-page URL the
-    // storefront sends the customer to.
-    initTap: async (orderId: number, locale: 'ar' | 'en') => {
-      if (USE_MOCK) {
-        // Mock mode pretends the redirect happens but stays on-site.
-        return { redirectUrl: `/${locale}/checkout/return?o=${orderId}&mock=1` };
-      }
-      return request<{ redirectUrl: string }>('/api/checkout/tap/init', {
-        method: 'POST',
-        body: JSON.stringify({ orderId, locale }),
-        cache: 'no-store',
-      });
-    },
-
-    // Backend-driven mock simulator — only works when the API is started
-    // with TAP_MOCK_MODE=true. Flips Payment + Order.paymentStatus to
-    // the chosen outcome so the rest of the flow runs as if a real Tap
-    // webhook had landed.
-    mockSimulate: async (
-      orderId: number,
-      outcome: 'CAPTURED' | 'FAILED' | 'CANCELLED',
-      method: 'KNET' | 'CARD' | 'APPLE_PAY' = 'KNET',
-    ) => {
-      return request<{ ok: true; status: string }>(
-        '/api/checkout/tap/mock-simulate',
-        {
-          method: 'POST',
-          body: JSON.stringify({ orderId, outcome, method }),
-          cache: 'no-store',
-        },
-      );
-    },
   },
 
   leads: {

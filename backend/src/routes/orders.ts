@@ -32,10 +32,9 @@ function isCustomSize(size: string): boolean {
   return CUSTOM_SIZE_PREFIXES.some((p) => size.startsWith(p));
 }
 
-// Only COD + TAP are user-selectable from the storefront. The rest of
-// PaymentMethod (KNET, CARD, ...) are filled in by the webhook once Tap
-// tells us how the customer actually paid.
-const checkoutMethodSchema = z.enum(['COD', 'TAP']).default('COD');
+// Deda is cash-on-delivery only. Kept as a one-value enum so the
+// schema shape stays stable if a payment gateway is ever added.
+const checkoutMethodSchema = z.enum(['COD']).default('COD');
 
 const createOrderSchema = z.object({
   customerName: z.string().trim().min(2).max(100),
@@ -205,14 +204,10 @@ export const orderRoutes: FastifyPluginAsync = async (app) => {
           discount,
           total,
           couponCode: appliedCouponCode,
-          // For TAP orders we persist the chosen method up-front; the
-          // payment row + Tap charge are created later via the dedicated
-          // /api/checkout/tap/init route so the order survives even if
-          // the customer abandons before reaching Tap.
-          paymentMethod: input.paymentMethod === 'TAP'
-            ? PaymentMethod.CARD // placeholder — Tap webhook overwrites with the real method
-            : PaymentMethod.COD,
-          paymentStatus: input.paymentMethod === 'TAP' ? 'INITIATED' : null,
+          // Deda is cash-on-delivery only — payment is collected by the
+          // courier on arrival, so there's never a parallel Payment row.
+          paymentMethod: PaymentMethod.COD,
+          paymentStatus: null,
           items: { create: lineItems },
         },
         include: { items: true },
@@ -239,10 +234,6 @@ export const orderRoutes: FastifyPluginAsync = async (app) => {
         status: order.status,
         paymentMethod: order.paymentMethod,
         paymentStatus: order.paymentStatus,
-        // Tells the storefront whether it still needs to hand the
-        // customer off to Tap. Lets the frontend keep its existing
-        // success-redirect flow intact for COD.
-        requiresPayment: order.paymentMethod !== PaymentMethod.COD,
         createdAt: order.createdAt.toISOString(),
       },
     });

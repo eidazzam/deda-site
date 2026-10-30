@@ -48,10 +48,8 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
   const [address, setAddress] = useState('');
   const [notes, setNotes] = useState('');
 
-  // Customer picks between online payment (Tap-hosted checkout) and
-  // cash on delivery. TAP flows through initTap → hosted page; COD
-  // skips payment entirely and lands on /checkout/success.
-  const [paymentMethod, setPaymentMethod] = useState<CheckoutPaymentMethod>('TAP');
+  // Deda is cash-on-delivery only — no radio, no state.
+  const paymentMethod: CheckoutPaymentMethod = 'COD';
 
   const [coupon, setCoupon] = useState('');
   const [couponDiscount, setCouponDiscount] = useState<number | null>(null);
@@ -176,15 +174,8 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
         })),
       });
 
-      // Tap orders: ask the API for the hosted page URL and bounce the
-      // customer there. The pixel + clearCart fire only after we're sure
-      // payment succeeded (on /checkout/return → /checkout/success).
-      if (order.requiresPayment) {
-        const { redirectUrl } = await api.checkout.initTap(order.id, locale);
-        window.location.assign(redirectUrl);
-        return;
-      }
-
+      // COD-only — no payment-gateway hop. Pixel fires immediately,
+      // cart is cleared, customer lands on the success page.
       trackPurchase({ orderNumber: order.orderNumber, totalValue: order.total });
       clearCart();
       onClose();
@@ -453,50 +444,13 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
                       className={`${inputCls} resize-none`}
                     />
 
-                    {/* Payment method — radios for online (Tap) vs cash
-                        on delivery. Tap's hosted page still handles the
-                        KNET / card / Apple Pay sub-choice when online. */}
-                    <div className="pt-3 space-y-2">
-                      <label
-                        className={`flex items-start gap-2 border px-3 py-2.5 text-sm cursor-pointer transition-colors ${
-                          paymentMethod === 'TAP'
-                            ? 'border-ink bg-subtle/60'
-                            : 'border-border bg-bg hover:border-ink/50'
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="drawer-payment"
-                          value="TAP"
-                          checked={paymentMethod === 'TAP'}
-                          onChange={() => setPaymentMethod('TAP')}
-                          className="mt-1"
-                        />
-                        <span>
-                          💳 {isAR
-                            ? 'الدفع الإلكتروني (KNET / بطاقة / Apple Pay)'
-                            : 'Online payment (KNET / Card / Apple Pay)'}
-                        </span>
-                      </label>
-                      <label
-                        className={`flex items-start gap-2 border px-3 py-2.5 text-sm cursor-pointer transition-colors ${
-                          paymentMethod === 'COD'
-                            ? 'border-ink bg-subtle/60'
-                            : 'border-border bg-bg hover:border-ink/50'
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="drawer-payment"
-                          value="COD"
-                          checked={paymentMethod === 'COD'}
-                          onChange={() => setPaymentMethod('COD')}
-                          className="mt-1"
-                        />
-                        <span>
-                          💵 {isAR ? 'الدفع عند الاستلام' : 'Cash on delivery'}
-                        </span>
-                      </label>
+                    {/* Payment is COD-only — single informational row,
+                        no choice to make. Keeps the layout honest about
+                        what the customer is agreeing to on submit. */}
+                    <div className="pt-3 border border-border bg-subtle/40 px-3 py-2.5 text-sm">
+                      💵 {isAR
+                        ? 'الدفع عند الاستلام نقداً للمندوب'
+                        : 'Cash on delivery — pay the courier on arrival'}
                     </div>
                   </div>
                 </div>

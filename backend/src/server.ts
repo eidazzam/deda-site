@@ -21,9 +21,6 @@ import { leadRoutes } from './routes/leads.js';
 import { siteConfigRoutes } from './routes/site-config.js';
 import { heroSlideRoutes } from './routes/hero-slides.js';
 import { categoryImageRoutes } from './routes/category-images.js';
-import { checkoutTapRoutes } from './routes/checkout-tap.js';
-import { webhooksTapRoutes } from './routes/webhooks-tap.js';
-
 import { adminLoginRoutes } from './routes/admin/login.js';
 import { adminOrderRoutes } from './routes/admin/orders.js';
 import { adminLeadRoutes } from './routes/admin/leads.js';
@@ -61,12 +58,11 @@ await app.register(cors, { origin: corsOrigins, credentials: true });
 // routes can override with tighter caps via `config.rateLimit` (see
 // admin/login for the login-attempt lockout).
 //
-// Webhook path is skipped because Tap can (and does) burst-deliver
-// retries after transient failures, and we don't want to reject those.
+// Deda is cash-on-delivery only — no payment-gateway webhooks to let
+// through, so the allow-list is just the empty default.
 await app.register(rateLimit, {
   max: 200,
   timeWindow: '1 minute',
-  allowList: (req) => req.url.startsWith('/api/webhooks/'),
   keyGenerator: (req) => (req.headers['x-real-ip'] as string) || req.ip,
 });
 
@@ -95,8 +91,6 @@ await app.register(
     await api.register(siteConfigRoutes);
     await api.register(heroSlideRoutes);
     await api.register(categoryImageRoutes);
-    await api.register(checkoutTapRoutes);
-    await api.register(webhooksTapRoutes);
   },
   { prefix: '/api' },
 );

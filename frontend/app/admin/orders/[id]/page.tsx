@@ -177,10 +177,9 @@ export default function AdminOrderDetailPage() {
             {order.notes ? <Row label="Notes" value={order.notes} multiline /> : null}
           </section>
 
-          {/* Payment — visible for every order. COD just shows the
-              method; TAP-driven orders surface the Tap charge ID and
-              live status so the admin can cross-check on Tap's
-              dashboard without leaving this page. */}
+          {/* Payment — Deda is cash-on-delivery, so the only moving
+              part here is the paymentStatus the admin flips once the
+              courier confirms collection or a refund is issued. */}
           <section className="border border-border p-5">
             <div className="text-[10px] tracking-widest uppercase text-muted mb-4">
               Payment
@@ -188,21 +187,6 @@ export default function AdminOrderDetailPage() {
             <Row label="Method" value={paymentMethodLabel(order.paymentMethod)} />
             {order.paymentStatus ? (
               <Row label="Status" value={paymentStatusLabel(order.paymentStatus)} />
-            ) : null}
-            {order.payment ? (
-              <>
-                <Row label="Charge ID" value={order.payment.tapChargeId} />
-                <Row
-                  label="Amount paid"
-                  value={`${formatPrice(order.payment.amount, 'en')} KWD`}
-                />
-                {order.payment.refundedAmount > 0 ? (
-                  <Row
-                    label="Refunded"
-                    value={`${formatPrice(order.payment.refundedAmount, 'en')} KWD`}
-                  />
-                ) : null}
-              </>
             ) : null}
           </section>
 

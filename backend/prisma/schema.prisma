@@ -64,29 +64,15 @@ enum CouponType {
   FIXED
 }
 
-// Payment-related enums. Kept separate from the order status workflow on
-// purpose — payment is asynchronous (Tap webhook lands seconds after the
-// redirect) and the admin still drives the PENDING → CONFIRMED → SHIPPED
-// progression by hand.
-enum PaymentProvider {
-  TAP
-}
-
+// Deda is cash-on-delivery only — these enums stay narrow and leave
+// space to grow later if a card gateway is ever added. PaymentStatus
+// is nullable on COD orders (nothing captures until the courier does).
 enum PaymentMethod {
   COD
-  CARD
-  KNET
-  APPLE_PAY
-  GOOGLE_PAY
-  MADA
-  BENEFIT
 }
 
 enum PaymentStatus {
-  INITIATED
   CAPTURED
-  FAILED
-  CANCELLED
   REFUNDED
 }
 
@@ -247,11 +233,10 @@ model Order {
   countryCode     String         @default("KW")
   // Only set when countryCode == "KW". Null for international orders.
   governorateName String?
-  // How the customer chose to pay. COD orders don't talk to Tap at all;
-  // online orders go through the Payment table to track the Tap charge.
+  // Payment is cash-on-delivery across the board. paymentStatus goes
+  // from null → CAPTURED when the courier confirms collection, and
+  // → REFUNDED if the admin issues one back.
   paymentMethod   PaymentMethod  @default(COD)
-  // Mirror of the live Payment.status for fast filtering / list views.
-  // Null for COD orders since they never have a payment row.
   paymentStatus   PaymentStatus?
   address         String
   notes           String?
@@ -267,41 +252,10 @@ model Order {
   updatedAt       DateTime    @updatedAt
 
   items   OrderItem[]
-  payment Payment?
 
   @@index([status, createdAt])
   @@index([viewedAt])
   @@index([paymentStatus])
-}
-
-// One payment per order — the relationship is 1:1 by design. Refunds and
-// retries reuse the same row (status + refundedAmount move forward).
-model Payment {
-  id            Int             @id @default(autoincrement())
-  orderId       Int             @unique
-  provider      PaymentProvider @default(TAP)
-  // Tap's chg_xxx identifier. Marked unique so a duplicate webhook can't
-  // create a second payment row by accident.
-  tapChargeId   String          @unique
-  status        PaymentStatus   @default(INITIATED)
-  // The actual method the customer ended up using — only known after the
-  // Tap webhook lands, so it's nullable on create.
-  method        PaymentMethod?
-  // Amount stored in fils (1 KWD = 1000 fils) to match every other money
-  // field in the codebase. Tap itself receives the major-unit amount.
-  amount        Int
-  // The hosted-page URL we redirected the user to. Kept around so an
-  // abandoned checkout can pick up where it left off.
-  redirectUrl   String?
-  refundedAmount Int            @default(0)
-  // Last raw payload from Tap (webhook OR poll) for audit + debugging.
-  rawPayload    Json?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-
-  order         Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
-
-  @@index([status])
 }
 
 // Snapshot product names and prices at the time of order so historical

@@ -37,9 +37,10 @@ export type PaymentStatus =
   | 'CANCELLED'
   | 'REFUNDED';
 
-// What the customer picks on the checkout — server fills in CARD/KNET/...
-// from the Tap webhook after the redirect.
-export type CheckoutPaymentMethod = 'COD' | 'TAP';
+// Deda is COD-only — kept as a named type so the backend contract stays
+// explicit and we have a single spot to extend later if a payment
+// gateway is ever added.
+export type CheckoutPaymentMethod = 'COD';
 export type ColorGroup =
   | 'WHITE'
   | 'BLACK'
@@ -181,18 +182,7 @@ export type CreatedOrder = {
   status: OrderStatus;
   paymentMethod: PaymentMethod;
   paymentStatus: PaymentStatus | null;
-  // True when the storefront still has to hand the customer off to Tap.
-  requiresPayment: boolean;
   createdAt: string;
-};
-
-export type OrderStatusSnapshot = {
-  id: number;
-  orderNumber: string;
-  status: OrderStatus;
-  paymentMethod: PaymentMethod;
-  paymentStatus: PaymentStatus | null;
-  total: number;
 };
 
 export type LeadInput = {

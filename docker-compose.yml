@@ -48,22 +48,13 @@ services:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       UPLOAD_DIR: /app/uploads
       CORS_ORIGINS: ${CORS_ORIGINS}
-      # Tap Payments — optional. If empty the checkout falls back to COD.
-      TAP_SECRET_KEY: ${TAP_SECRET_KEY:-}
-      TAP_WEBHOOK_SECRET: ${TAP_WEBHOOK_SECRET:-}
-      TAP_BASE_URL: ${TAP_BASE_URL:-https://api.tap.company}
       PUBLIC_SITE_URL: ${PUBLIC_SITE_URL:-http://localhost:3020}
-      # Separate API host because the storefront is served by Cloudflare
       # Pages (no /api/* route) while the backend lives on api.dedawomenswear.shop.
       # Tap calls this host directly for webhooks.
-      PUBLIC_API_URL: ${PUBLIC_API_URL:-}
-      # Set TAP_MOCK_MODE=true on a dev machine to skip the real Tap API
       # and hand the customer off to /checkout/mock-tap instead. Never on
       # production.
-      TAP_MOCK_MODE: ${TAP_MOCK_MODE:-}
       # Temporary: dump computed vs incoming HMAC inputs to logs so we
       # can pin down signature mismatches. Turn off once webhooks verify.
-      TAP_DEBUG_SIG: ${TAP_DEBUG_SIG:-}
     volumes:
       # Shared uploads directory — Nginx serves the same path read-only
       # from the host so files land in one place.
@@ -79,7 +70,6 @@ services:
     build:
       context: ./frontend
       args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
         NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
         NEXT_PUBLIC_FB_PIXEL_ID: ${NEXT_PUBLIC_FB_PIXEL_ID:-}
         NEXT_PUBLIC_TIKTOK_PIXEL_ID: ${NEXT_PUBLIC_TIKTOK_PIXEL_ID:-}
@@ -90,7 +80,6 @@ services:
       # Public env is baked at build time; we still set runtime values so
       # the sitemap.ts server route can reach the api from within the
       # docker network.
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
       # Server-side only — used by api/client.ts when running inside the
       # Next.js node process to skip the round-trip through Nginx and

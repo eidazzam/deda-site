@@ -634,7 +634,6 @@ export function mockCreateOrder(input: CreateOrderInput): CreatedOrder {
     status: 'PENDING',
     paymentMethod: 'COD',
     paymentStatus: null,
-    requiresPayment: false,
     createdAt: now.toISOString(),
   };
 }
