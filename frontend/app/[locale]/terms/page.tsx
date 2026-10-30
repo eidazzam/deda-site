@@ -60,7 +60,7 @@ function ContentAR() {
 
       <Section title="٣. الأسعار والدفع">
         <ul className="list-disc ms-6 space-y-2">
-          <li>جميع الأسعار بالدينار الكويتى (د.ك) وتشمل ضريبة القيمة المضافة عند انطباقها.</li>
+          <li>جميع الأسعار بالدينار الكويتى (جنيه) وتشمل ضريبة القيمة المضافة عند انطباقها.</li>
           <li>الدفع متاح إلكترونياً عبر KNET وApple Pay وVisa وMastercard وtabby، عبر بوابة Tap الآمنة.</li>
           <li>يحتفظ الموقع بالحق فى رفض أو إلغاء أى طلب فى حال الاشتباه فى احتيال أو خطأ فى السعر.</li>
         </ul>
@@ -158,7 +158,7 @@ function ContentEN() {
 
       <Section title="3. Pricing & payment">
         <ul className="list-disc ml-6 space-y-2">
-          <li>All prices are in Kuwaiti Dinar (KWD) and include VAT where applicable.</li>
+          <li>All prices are in Kuwaiti Dinar (EGP) and include VAT where applicable.</li>
           <li>
             Payment is accepted electronically via KNET, Apple Pay, Visa,
             Mastercard, and tabby through the secure Tap gateway.

@@ -29,15 +29,15 @@ const createCouponSchema = z.object({
 
 const updateCouponSchema = createCouponSchema.omit({ code: true }).partial();
 
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+const ONE_DAY_MS = 24 * 60 * 60 * 100;
 
 // Coupon expiry must be at least tomorrow and at most one week away.
 // 12-hour grace either side so timezone offsets don't reject a valid date.
 function assertExpiryInRange(iso: string) {
   const expiry = new Date(iso).getTime();
   const now = Date.now();
-  const minMs = now + ONE_DAY_MS - 12 * 60 * 60 * 1000;
-  const maxMs = now + 7 * ONE_DAY_MS + 12 * 60 * 60 * 1000;
+  const minMs = now + ONE_DAY_MS - 12 * 60 * 60 * 100;
+  const maxMs = now + 7 * ONE_DAY_MS + 12 * 60 * 60 * 100;
   if (expiry < minMs || expiry > maxMs) {
     throw badRequest(
       'EXPIRY_OUT_OF_RANGE',

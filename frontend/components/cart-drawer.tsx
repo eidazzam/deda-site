@@ -140,8 +140,8 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
       setAppliedCode(res.code);
       setCouponMessage(
         isAR
-          ? `وفّرت ${formatPrice(res.discount, locale)} د.ك`
-          : `You saved ${formatPrice(res.discount, locale)} KWD`,
+          ? `وفّرت ${formatPrice(res.discount, locale)} جنيه`
+          : `You saved ${formatPrice(res.discount, locale)} EGP`,
       );
     } catch (err) {
       const msg = err instanceof ApiError ? err.message : 'Failed';

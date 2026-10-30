@@ -7,9 +7,9 @@ import { useAdminI18n } from '@/lib/admin/i18n';
 import type { AdminCoupon } from '@/lib/admin/types';
 import { formatPrice } from '@/lib/format';
 
-// Admin enters KWD; the API stores fils. Conversion lives at the form
-// boundary so the rest of the component can stay in KWD-shaped numbers.
-const kwdToFils = (kwd: string) => Math.round(Number(kwd) * 1000);
+// Admin enters EGP; the API stores piastres. Conversion lives at the form
+// boundary so the rest of the component can stay in EGP-shaped numbers.
+const kwdToFils = (kwd: string) => Math.round(Number(kwd) * 100);
 
 // Coupons run between 1 and 7 days. Returns YYYY-MM-DD for HTML date inputs.
 const addDays = (n: number) => {
@@ -71,8 +71,8 @@ export default function AdminCouponsPage() {
       const body = {
         code: draft.code.trim().toUpperCase(),
         type: draft.type,
-        // PERCENT value is a 1–100 percentage; FIXED value is a KWD
-        // amount that we persist as fils.
+        // PERCENT value is a 1–100 percentage; FIXED value is a EGP
+        // amount that we persist as piastres.
         value: draft.type === 'FIXED' ? kwdToFils(draft.value) : Number(draft.value),
         minOrderAmount:
           draft.minOrderAmount === '' ? null : kwdToFils(draft.minOrderAmount),
@@ -154,7 +154,7 @@ export default function AdminCouponsPage() {
               className="w-full bg-bg border border-border px-3 py-2 text-sm"
             >
               <option value="PERCENT">Percent (%)</option>
-              <option value="FIXED">Fixed (KWD)</option>
+              <option value="FIXED">Fixed (EGP)</option>
             </select>
           </Field>
           <Field label="Value" required>
@@ -257,7 +257,7 @@ export default function AdminCouponsPage() {
                   <td className="px-4 py-3">
                     {c.type === 'PERCENT'
                       ? `${c.value}%`
-                      : `${formatPrice(c.value, 'en')} KWD`}
+                      : `${formatPrice(c.value, 'en')} EGP`}
                   </td>
                   <td className="px-4 py-3 text-xs text-muted">
                     {c.minOrderAmount !== null

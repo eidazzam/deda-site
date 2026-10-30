@@ -61,7 +61,7 @@ export default function OrdersExportPrintPage() {
     return <div className="print-page p-8 text-red-600">{error}</div>;
   }
 
-  const currency = isAR ? 'د.ك' : 'KWD';
+  const currency = isAR ? 'جنيه' : 'EGP';
   const filterLabel =
     status && status !== 'ALL'
       ? t(`orders.status.${status.toLowerCase()}` as Parameters<typeof t>[0])

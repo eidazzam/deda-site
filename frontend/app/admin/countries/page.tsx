@@ -35,9 +35,9 @@ export default function AdminCountriesPage() {
     };
   }, []);
 
-  // Admin enters the fee in KWD; we persist as fils (1 KWD = 1000 fils).
+  // Admin enters the fee in EGP; we persist as piastres (1 EGP = 1000 piastres).
   const updateFee = async (country: AdminCountry, newFeeKwd: number) => {
-    const newFee = Math.round(newFeeKwd * 1000);
+    const newFee = Math.round(newFeeKwd * 100);
     if (newFee === country.shippingFee) return;
     setSavingId(country.id);
     try {
@@ -73,7 +73,7 @@ export default function AdminCountriesPage() {
         <h1 className="font-display text-4xl">{t('countries.title')}</h1>
         <p className="text-sm text-muted mt-2">
           Per-country shipping fees for orders outside Kuwait. Free shipping
-          kicks in at 100 KWD subtotal. Toggle off to remove a country from
+          kicks in at 100 EGP subtotal. Toggle off to remove a country from
           the checkout dropdown.
         </p>
       </div>
@@ -85,7 +85,7 @@ export default function AdminCountriesPage() {
           <thead className="bg-subtle/50 border-b border-border">
             <tr className="text-[10px] tracking-widest uppercase text-muted">
               <th className="px-4 py-3 text-left">Country</th>
-              <th className="px-4 py-3 text-right">Fee (KWD)</th>
+              <th className="px-4 py-3 text-right">Fee (EGP)</th>
               <th className="px-4 py-3 text-center">Active</th>
             </tr>
           </thead>
@@ -112,7 +112,7 @@ export default function AdminCountriesPage() {
                       type="number"
                       min={0}
                       step={0.001}
-                      defaultValue={c.shippingFee / 1000}
+                      defaultValue={c.shippingFee / 100}
                       onBlur={(e) => updateFee(c, Number(e.target.value))}
                       disabled={savingId === c.id}
                       className="w-24 text-right bg-bg border border-border px-2 py-1"

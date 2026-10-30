@@ -5,7 +5,7 @@ import { prisma } from '../../lib/prisma.js';
 import { notFound } from '../../lib/errors.js';
 
 const updateSchema = z.object({
-  // Fees up to 100 KWD (= 100_000 fils) to leave headroom for distant
+  // Fees up to 100 EGP (= 100_000 piastres) to leave headroom for distant
   // destinations without inviting accidental typos.
   shippingFee: z.number().int().nonnegative().max(100_000).optional(),
   isActive: z.boolean().optional(),

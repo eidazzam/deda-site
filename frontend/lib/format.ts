@@ -1,10 +1,10 @@
 import type { Locale } from './i18n/config';
 
 /**
- * Converts a price stored as fils (1 KWD = 1000 fils) to a KWD string
- * using Latin digits. Kuwait conventionally shows up to 3 fraction
- * digits, but we trim trailing zeros so 22000 fils reads as "22" not
- * "22.000".
+ * Converts a price stored as piastres (1 EGP = 100 piastres) to an EGP
+ * string using Latin digits. Egypt conventionally shows up to 2 fraction
+ * digits — we trim trailing zeros so 29900 piastres reads as "299" not
+ * "299.00", and 29950 piastres reads as "299.5".
  *
  * The `locale` parameter is kept for API compatibility but ignored —
  * prices always render in Latin digits (0–9) because the merchant
@@ -14,10 +14,10 @@ import type { Locale } from './i18n/config';
  * it removes any ambiguity for couriers reading the printed PDF.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function formatPrice(fils: number, _locale: Locale): string {
-  const kwd = fils / 1000;
-  return kwd.toLocaleString('en-US', {
+export function formatPrice(piastres: number, _locale: Locale): string {
+  const egp = piastres / 100;
+  return egp.toLocaleString('en-US', {
     minimumFractionDigits: 0,
-    maximumFractionDigits: 3,
+    maximumFractionDigits: 2,
   });
 }

@@ -233,10 +233,10 @@ export default function OrderInvoicePage() {
                   </td>
                   <td className="py-3 text-center font-medium">{it.quantity}</td>
                   <td className="py-3 text-end">
-                    {formatPrice(it.unitPrice, locale)} {isAR ? 'د.ك' : 'KWD'}
+                    {formatPrice(it.unitPrice, locale)} {isAR ? 'جنيه' : 'EGP'}
                   </td>
                   <td className="py-3 text-end font-medium">
-                    {formatPrice(it.subtotal, locale)} {isAR ? 'د.ك' : 'KWD'}
+                    {formatPrice(it.subtotal, locale)} {isAR ? 'جنيه' : 'EGP'}
                   </td>
                 </tr>
               ))}
@@ -249,26 +249,26 @@ export default function OrderInvoicePage() {
           <div className="w-80 space-y-1.5">
             <Row
               label={t('invoice.subtotal')}
-              value={`${formatPrice(order.subtotal, locale)} ${isAR ? 'د.ك' : 'KWD'}`}
+              value={`${formatPrice(order.subtotal, locale)} ${isAR ? 'جنيه' : 'EGP'}`}
             />
             <Row
               label={t('invoice.shipping')}
               value={
                 order.shippingFee === 0
                   ? t('invoice.shippingFree')
-                  : `${formatPrice(order.shippingFee, locale)} ${isAR ? 'د.ك' : 'KWD'}`
+                  : `${formatPrice(order.shippingFee, locale)} ${isAR ? 'جنيه' : 'EGP'}`
               }
             />
             {order.discount > 0 ? (
               <Row
                 label={`${t('invoice.discount')}${order.couponCode ? ` (${order.couponCode})` : ''}`}
-                value={`−${formatPrice(order.discount, locale)} ${isAR ? 'د.ك' : 'KWD'}`}
+                value={`−${formatPrice(order.discount, locale)} ${isAR ? 'جنيه' : 'EGP'}`}
               />
             ) : null}
             <div className="flex justify-between border-t-2 border-gray-700 pt-3 mt-3 font-medium text-lg">
               <span>{t('invoice.total')}</span>
               <span>
-                {formatPrice(order.total, locale)} {isAR ? 'د.ك' : 'KWD'}
+                {formatPrice(order.total, locale)} {isAR ? 'جنيه' : 'EGP'}
               </span>
             </div>
           </div>

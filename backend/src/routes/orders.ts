@@ -8,9 +8,9 @@ import { unitPriceOf, validateCoupon } from '../lib/pricing.js';
 import { formatOrderNumber } from '../lib/order-number.js';
 
 // Free shipping kicks in once the cart subtotal reaches these thresholds.
-// Stored in fils to match every other money field in the codebase.
-const FREE_SHIPPING_LOCAL_FILS = 30_000;   // Kuwait orders → 30 KWD
-const FREE_SHIPPING_INTL_FILS  = 100_000;  // International   → 100 KWD
+// Stored in piastres to match every other money field in the codebase.
+const FREE_SHIPPING_LOCAL_PIASTRES = 30_000;   // Kuwait orders → 30 EGP
+const FREE_SHIPPING_INTL_PIASTRES  = 100_000;  // International   → 100 EGP
 const KUWAIT_CODE = 'KW';
 
 const orderItemSchema = z.object({
@@ -183,8 +183,8 @@ export const orderRoutes: FastifyPluginAsync = async (app) => {
       // Free-shipping promo retired — shipping is always billed at the
       // destination's rate. Threshold constants are kept above so the
       // logic can be restored quickly if the promo returns.
-      void FREE_SHIPPING_LOCAL_FILS;
-      void FREE_SHIPPING_INTL_FILS;
+      void FREE_SHIPPING_LOCAL_PIASTRES;
+      void FREE_SHIPPING_INTL_PIASTRES;
       void KUWAIT_CODE;
       const shippingFee = baseShippingFee;
       const total = subtotal + shippingFee - discount;

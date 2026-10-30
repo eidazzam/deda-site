@@ -70,9 +70,9 @@ export function ProductJsonLd({
         offers: {
           '@type': 'Offer',
           url: canonical,
-          priceCurrency: 'KWD',
-          // Prices are stored as fils in the DB; schema.org expects the
-          // major currency unit (KWD).
+          priceCurrency: 'EGP',
+          // Prices are stored as piastres in the DB; schema.org expects the
+          // major currency unit (EGP).
           price: (price / 1000).toFixed(3),
           availability,
           itemCondition: 'https://schema.org/NewCondition',

@@ -171,7 +171,7 @@ model Country {
   code        String  @unique  // ISO 3166-1 alpha-2: EG, SA, AE...
   nameEn      String  @unique
   nameAr      String
-  shippingFee Int     // fils
+  shippingFee Int     // piastres
   isActive    Boolean @default(true)
   sortOrder   Int     @default(0)
 }

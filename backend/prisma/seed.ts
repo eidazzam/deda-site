@@ -1,6 +1,6 @@
 /**
  * Seed script — populates a fresh database with:
- *   - 6 Kuwaiti governorates and their shipping fees (in fils — 1 KWD = 1000 fils)
+ *   - 6 Kuwaiti governorates and their shipping fees (in piastres — 1 EGP = 1000 piastres)
  *   - A starter catalog of abaya products across the 6 Kuwaiti categories
  *     (Coloured, Black, Snap, Embroidered, Overhead, Kids) with colour
  *     variants and standard abaya size lists (52–62 for adults, 28–32
@@ -8,7 +8,7 @@
  *   - A pair of bundles
  *   - The launch coupon DEDA10 (10% off)
  *
- * Prices are stored in fils so the integer columns avoid float drift.
+ * Prices are stored in piastres so the integer columns avoid float drift.
  * The frontend formatter divides by 1000 and renders 3 decimal places.
  *
  * Re-running this script is safe: it upserts by unique key and clears
@@ -20,10 +20,10 @@ const prisma = new PrismaClient();
 
 // ---------------------------------------------------------------------------
 // Governorates — the six administrative regions of Kuwait. Shipping fees
-// are in fils (1500 fils = 1.500 KWD), tuned roughly by distance from the
+// are in piastres (1500 piastres = 1.500 EGP), tuned roughly by distance from the
 // Capital where the atelier is.
 // ---------------------------------------------------------------------------
-// Flat 2 KWD (= 2000 fils) across all Kuwaiti governorates.
+// Flat 2 EGP (= 2000 piastres) across all Kuwaiti governorates.
 const LOCAL_SHIPPING_FEE = 2000;
 const GOVERNORATES = [
   { nameEn: 'Capital', nameAr: 'العاصمة', shippingFee: LOCAL_SHIPPING_FEE, sortOrder: 1 },
@@ -34,8 +34,8 @@ const GOVERNORATES = [
   { nameEn: 'Jahra', nameAr: 'الجهراء', shippingFee: LOCAL_SHIPPING_FEE, sortOrder: 6 },
 ];
 
-// International destinations — flat 7 KWD (= 7000 fils) for now. Free
-// shipping kicks in at 100 KWD subtotal (enforced in routes/orders.ts).
+// International destinations — flat 7 EGP (= 7000 piastres) for now. Free
+// shipping kicks in at 100 EGP subtotal (enforced in routes/orders.ts).
 const INTL_SHIPPING_FEE = 7000;
 const COUNTRIES = [
   { code: 'EG', nameEn: 'Egypt', nameAr: 'مصر', shippingFee: INTL_SHIPPING_FEE, sortOrder: 1 },
@@ -90,7 +90,7 @@ type SeedProduct = {
   nameAr: string;
   descriptionEn: string;
   descriptionAr: string;
-  /** Price in fils (1000 fils = 1 KWD). */
+  /** Price in piastres (1000 piastres = 1 EGP). */
   basePrice: number;
   discount?: number;
   category: Category;

@@ -115,7 +115,7 @@ export default function AdminBundlesPage() {
                   <span>{b.productsCount} {t('bundles.products')}</span>
                   <span>·</span>
                   <span>
-                    {formatPrice(b.bundlePrice, 'en')} KWD{' '}
+                    {formatPrice(b.bundlePrice, 'en')} EGP{' '}
                     <span className="line-through opacity-60 ml-1">
                       {formatPrice(b.originalPrice, 'en')}
                     </span>

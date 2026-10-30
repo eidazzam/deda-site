@@ -66,11 +66,11 @@ export default function AdminDashboardPage() {
             />
             <StatCard
               label={t('dashboard.revenue')}
-              value={`${formatPrice(stats.totalRevenue, 'en')} KWD`}
+              value={`${formatPrice(stats.totalRevenue, 'en')} EGP`}
             />
             <StatCard
               label={t('dashboard.avgOrder')}
-              value={`${formatPrice(stats.averageOrderValue, 'en')} KWD`}
+              value={`${formatPrice(stats.averageOrderValue, 'en')} EGP`}
             />
           </div>
 
@@ -93,7 +93,7 @@ export default function AdminDashboardPage() {
                   <div
                     key={d.day}
                     className="flex-1 group relative"
-                    title={`${d.day}: ${d.orders} orders · ${formatPrice(d.revenue, 'en')} KWD`}
+                    title={`${d.day}: ${d.orders} orders · ${formatPrice(d.revenue, 'en')} EGP`}
                   >
                     <div
                       className="w-full bg-accent/30 hover:bg-accent transition-colors"

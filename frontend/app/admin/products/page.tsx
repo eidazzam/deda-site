@@ -168,14 +168,14 @@ export default function AdminProductsPage() {
                     {p.discount !== null && p.discount < p.basePrice ? (
                       <>
                         <div className="text-accent font-medium">
-                          {formatPrice(p.discount, 'en')} KWD
+                          {formatPrice(p.discount, 'en')} EGP
                         </div>
                         <div className="text-xs text-muted line-through">
                           {formatPrice(p.basePrice, 'en')}
                         </div>
                       </>
                     ) : (
-                      <div className="font-medium">{formatPrice(p.basePrice, 'en')} KWD</div>
+                      <div className="font-medium">{formatPrice(p.basePrice, 'en')} EGP</div>
                     )}
                   </div>
                 </div>

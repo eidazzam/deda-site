@@ -211,7 +211,7 @@ export default function AdminOrderDetailPage() {
                     </td>
                     <td className="px-5 py-3 text-center w-20">×{it.quantity}</td>
                     <td className="px-5 py-3 text-right w-32 font-medium">
-                      {formatPrice(it.subtotal, 'en')} KWD
+                      {formatPrice(it.subtotal, 'en')} EGP
                     </td>
                   </tr>
                 ))}
@@ -246,22 +246,22 @@ export default function AdminOrderDetailPage() {
           <div className="bg-subtle/40 p-5 space-y-3 text-sm">
             <div className="flex justify-between">
               <span className="text-muted">Subtotal</span>
-              <span>{formatPrice(order.subtotal, 'en')} KWD</span>
+              <span>{formatPrice(order.subtotal, 'en')} EGP</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted">Shipping</span>
-              <span>{formatPrice(order.shippingFee, 'en')} KWD</span>
+              <span>{formatPrice(order.shippingFee, 'en')} EGP</span>
             </div>
             {order.discount > 0 ? (
               <div className="flex justify-between text-accent">
                 <span>Discount {order.couponCode ? `(${order.couponCode})` : ''}</span>
-                <span>−{formatPrice(order.discount, 'en')} KWD</span>
+                <span>−{formatPrice(order.discount, 'en')} EGP</span>
               </div>
             ) : null}
             <div className="flex justify-between pt-3 border-t border-border font-medium text-base">
               <span>Total</span>
               <span className="font-display text-lg">
-                {formatPrice(order.total, 'en')} KWD
+                {formatPrice(order.total, 'en')} EGP
               </span>
             </div>
           </div>

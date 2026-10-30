@@ -80,7 +80,7 @@ export default function AdminOrdersPage() {
 
   const csvHref = useMemo(() => {
     const rows = [
-      ['Order', 'Customer', 'Phone', 'Governorate', 'Items', 'Total KWD', 'Status', 'Created'].join(','),
+      ['Order', 'Customer', 'Phone', 'Governorate', 'Items', 'Total EGP', 'Status', 'Created'].join(','),
       ...items.map((o) =>
         [
           o.orderNumber,
@@ -204,7 +204,7 @@ export default function AdminOrdersPage() {
                   </td>
                   <td className="px-4 py-3 text-right">{o.itemsCount}</td>
                   <td className="px-4 py-3 text-right font-medium">
-                    {formatPrice(o.total, 'en')} KWD
+                    {formatPrice(o.total, 'en')} EGP
                   </td>
                   <td className="px-4 py-3">
                     <span

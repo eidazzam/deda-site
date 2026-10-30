@@ -25,7 +25,7 @@ ALTER TABLE "Order"
 ALTER TABLE "Order"
   ALTER COLUMN "governorateName" DROP NOT NULL;
 
--- 3. Seed the 15 Arab destinations with a flat 7 KWD (= 7000 fils) fee.
+-- 3. Seed the 15 Arab destinations with a flat 7 EGP (= 7000 piastres) fee.
 INSERT INTO "Country" ("code", "nameEn", "nameAr", "shippingFee", "sortOrder") VALUES
   ('EG', 'Egypt',                 'مصر',       7000,  1),
   ('SA', 'Saudi Arabia',          'السعودية',  7000,  2),

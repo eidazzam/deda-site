@@ -87,13 +87,13 @@ export function ProductForm({ mode, initial, onSubmit, submitting, error }: Prop
   const [nameAr, setNameAr] = useState(initial?.nameAr ?? '');
   const [descriptionEn, setDescriptionEn] = useState(initial?.descriptionEn ?? '');
   const [descriptionAr, setDescriptionAr] = useState(initial?.descriptionAr ?? '');
-  // Prices are stored as fils (1 KWD = 1000 fils); the form deals in KWD
-  // so the admin types familiar amounts. We convert back to fils on submit.
+  // Prices are stored as piastres (1 EGP = 1000 piastres); the form deals in EGP
+  // so the admin types familiar amounts. We convert back to piastres on submit.
   const [basePrice, setBasePrice] = useState<number | ''>(
-    initial ? initial.basePrice / 1000 : '',
+    initial ? initial.basePrice / 100 : '',
   );
   const [discount, setDiscount] = useState<number | ''>(
-    initial?.discount != null ? initial.discount / 1000 : '',
+    initial?.discount != null ? initial.discount / 100 : '',
   );
   const [category, setCategory] = useState<Category>(initial?.category ?? 'COLOURED');
   const [status, setStatus] = useState<SaleStatus>(initial?.status ?? 'IN_SALE');
@@ -123,8 +123,8 @@ export function ProductForm({ mode, initial, onSubmit, submitting, error }: Prop
       nameAr: nameAr.trim(),
       descriptionEn: descriptionEn.trim(),
       descriptionAr: descriptionAr.trim(),
-      basePrice: Math.round(Number(basePrice) * 1000),
-      discount: discount === '' ? null : Math.round(Number(discount) * 1000),
+      basePrice: Math.round(Number(basePrice) * 100),
+      discount: discount === '' ? null : Math.round(Number(discount) * 100),
       category,
       status,
       isFeatured,
@@ -213,7 +213,7 @@ export function ProductForm({ mode, initial, onSubmit, submitting, error }: Prop
 
       <Section title="Pricing & flags">
         <Grid>
-          <Field label="Base price (KWD)" required>
+          <Field label="Base price (EGP)" required>
             <input
               type="number"
               min={0}

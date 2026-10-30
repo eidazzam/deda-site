@@ -275,7 +275,7 @@ export function BundleForm({ mode, initial, onSaved }: Props) {
             dir="rtl"
           />
         </Field>
-        <Field label="Bundle price (fils)" hint="1 KWD = 1000 fils.">
+        <Field label="Bundle price (piastres)" hint="1 EGP = 1000 piastres.">
           <input
             type="number"
             value={bundlePrice}
@@ -285,7 +285,7 @@ export function BundleForm({ mode, initial, onSaved }: Props) {
           />
         </Field>
         <Field
-          label="Original price (fils)"
+          label="Original price (piastres)"
           hint="Shown crossed-out. Set higher than bundle price for a saving badge."
         >
           <input

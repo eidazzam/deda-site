@@ -601,8 +601,8 @@ export function mockCreateOrder(input: CreateOrderInput): CreatedOrder {
     if (!p) continue;
     subtotal += (p.discount ?? p.basePrice) * item.quantity;
   }
-  // Mirror the backend: Kuwait uses governorate fees + 30 KWD free
-  // threshold, everywhere else uses a flat country fee + 100 KWD threshold.
+  // Mirror the backend: Kuwait uses governorate fees + 30 EGP free
+  // threshold, everywhere else uses a flat country fee + 100 EGP threshold.
   const isKuwait = (input.countryCode ?? 'KW') === 'KW';
   let baseShippingFee = 2000;
   if (isKuwait) {

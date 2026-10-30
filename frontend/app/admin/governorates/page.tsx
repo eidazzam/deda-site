@@ -35,9 +35,9 @@ export default function AdminGovernoratesPage() {
     };
   }, []);
 
-  // Admin enters the fee in KWD; we persist as fils (1 KWD = 1000 fils).
+  // Admin enters the fee in EGP; we persist as piastres (1 EGP = 1000 piastres).
   const updateFee = async (gov: AdminGovernorate, newFeeKwd: number) => {
-    const newFee = Math.round(newFeeKwd * 1000);
+    const newFee = Math.round(newFeeKwd * 100);
     if (newFee === gov.shippingFee) return;
     setSavingId(gov.id);
     try {
@@ -84,7 +84,7 @@ export default function AdminGovernoratesPage() {
           <thead className="bg-subtle/50 border-b border-border">
             <tr className="text-[10px] tracking-widest uppercase text-muted">
               <th className="px-4 py-3 text-left">Name</th>
-              <th className="px-4 py-3 text-right">Fee (KWD)</th>
+              <th className="px-4 py-3 text-right">Fee (EGP)</th>
               <th className="px-4 py-3 text-center">Active</th>
             </tr>
           </thead>
@@ -108,7 +108,7 @@ export default function AdminGovernoratesPage() {
                       type="number"
                       min={0}
                       step={0.001}
-                      defaultValue={g.shippingFee / 1000}
+                      defaultValue={g.shippingFee / 100}
                       onBlur={(e) => updateFee(g, Number(e.target.value))}
                       disabled={savingId === g.id}
                       className="w-24 text-right bg-bg border border-border px-2 py-1"

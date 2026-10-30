@@ -14,11 +14,11 @@ declare global {
   }
 }
 
-const CURRENCY = 'KWD';
+const CURRENCY = 'EGP';
 
-// Pixel values come in as fils (the unit prices live as in the DB).
+// Pixel values come in as piastres (the unit prices live as in the DB).
 // FB/TikTok expect the value in the major currency unit.
-const toMajor = (fils: number) => fils / 1000;
+const toMajor = (piastres: number) => piastres / 1000;
 
 export function trackViewContent(payload: {
   productSlug: string;
