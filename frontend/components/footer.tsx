@@ -174,8 +174,8 @@ export function Footer({
           </div>
           <p className="text-sm text-muted leading-relaxed mb-4">
             {isAR
-              ? 'توصيل إلى جميع محافظات مصر وإلى كل الوطن العربى. دفع آمن.'
-              : 'Delivery across Egypt. Secure payment.'}
+              ? 'توصيل إلى جميع محافظات مصر'
+              : 'Delivery across Egypt'}
           </p>
           {socials.length > 0 ? (
             <div className="flex items-center gap-4">
