@@ -82,21 +82,36 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
           </button>
 
           {/* Brand logo — click returns to the home page in the current
-              locale. Uses the committed /brand/logo.png (dark-on-cream
-              lockup); scales down on mobile so the row stays compact. */}
+              locale. The source /brand/logo.png is actually a
+              1600x926 JPEG with the DEDA mark centred and heavy black
+              padding on every side (plus partial mirror repeats on the
+              far edges). Rendering it with `object-contain` would show
+              all that padding and squash the mark down to ~40px wide.
+              So we size the container to the mark's own aspect ratio
+              (~1.3) and use `object-cover` to zoom past the padding
+              onto the mark itself. */}
           <Link
             href={localePrefix}
             aria-label={dict.brand}
-            className="shrink-0 flex items-center"
+            className="shrink-0"
           >
-            <Image
-              src="/brand/logo.png"
-              alt={dict.brand}
-              width={160}
-              height={56}
-              priority
-              className="h-10 md:h-12 w-auto object-contain"
-            />
+            <div className="relative h-11 md:h-14 w-16 md:w-20 overflow-hidden bg-ink">
+              <Image
+                src="/brand/logo.png"
+                alt={dict.brand}
+                fill
+                priority
+                sizes="80px"
+                className="object-cover"
+                style={{
+                  objectPosition: 'center',
+                  // Scale the image up so the central DEDA mark fills
+                  // the box and the partial mirror repeats on the far
+                  // left/right edges get cropped out entirely.
+                  transform: 'scale(1.9)',
+                }}
+              />
+            </div>
           </Link>
 
           <nav className="hidden xl:flex items-center gap-4 xl:gap-7 text-xs xl:text-sm tracking-wide">
