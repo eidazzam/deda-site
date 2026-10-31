@@ -12,9 +12,9 @@
     "pages:preview": "npx wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat"
   },
   "dependencies": {
+    "@fontsource/cairo": "^5.1.0",
+    "@fontsource/el-messiri": "^5.1.0",
     "@fontsource/inter": "^5.1.0",
-    "@fontsource/reem-kufi": "^5.1.0",
-    "@fontsource/tajawal": "^5.1.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.15.0",
     "next": "^15.1.4",

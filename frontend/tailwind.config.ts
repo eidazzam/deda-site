@@ -33,7 +33,7 @@ const config: Config = {
         green: '#5a8a5a',
       },
       fontFamily: {
-        // Inter for both display + body in Latin context. Reem Kufi takes
+        // Inter for both display + body in Latin context. El Messiri takes
         // over for Arabic display via the RTL override in globals.css.
         display: ['var(--font-sans)', 'system-ui', 'sans-serif'],
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],

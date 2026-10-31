@@ -8,6 +8,8 @@
    working with a plain family name. */
 :root {
   --font-sans: 'Inter', system-ui, sans-serif;
+  --font-ar: 'Cairo', system-ui, sans-serif;
+  --font-ar-display: 'El Messiri', 'Cairo', system-ui, sans-serif;
 }
 
 @layer base {
@@ -19,11 +21,11 @@
     -moz-osx-font-smoothing: grayscale;
     /* optimizeLegibility tells the browser to enable ligatures and
        contextual alternates — critical for Arabic letter joining when
-       a fallback font is rendering while Tajawal is still loading. */
+       a fallback font is rendering while Cairo is still loading. */
     text-rendering: optimizeLegibility;
   }
 
-  /* Explicit Arabic fallback chain. If the custom font (Tajawal) hasn't
+  /* Explicit Arabic fallback chain. If the custom font (Cairo) hasn't
      loaded yet — or fails to — we want the next fallback to also be an
      Arabic-aware font. system-ui alone defaults to Latin-first system
      fonts on some platforms (Linux, older Android) which break the
@@ -37,7 +39,7 @@
   [dir='rtl'],
   [dir='rtl'] * {
     font-family:
-      'Tajawal',
+      'Cairo',
       -apple-system,
       BlinkMacSystemFont,
       "SF Arabic",
@@ -67,12 +69,13 @@
     word-spacing: normal !important;
   }
 
-  /* When a display-class element lives in RTL, swap in Reem Kufi —
-     Tajawal is fine for body but feels underweight at hero scale. */
+  /* When a display-class element lives in RTL, swap in El Messiri —
+     Cairo is fine for body but feels underweight at hero scale, and
+     El Messiri's Egyptian decorative strokes carry the brand voice. */
   [dir='rtl'] .font-display {
     font-family:
-      'Reem Kufi',
-      'Tajawal',
+      'El Messiri',
+      'Cairo',
       -apple-system,
       BlinkMacSystemFont,
       "SF Arabic",
@@ -86,7 +89,7 @@
     letter-spacing: 0;
   }
 
-  /* Hero display — Inter ExtraLight for Latin, Reem Kufi Medium for
+  /* Hero display — Inter ExtraLight for Latin, El Messiri Medium for
      Arabic. The two pair quietly without competing for attention. */
   .display-xl {
     font-family: var(--font-sans), system-ui, sans-serif;
@@ -96,8 +99,8 @@
   }
   [dir='rtl'] .display-xl {
     font-family:
-      'Reem Kufi',
-      'Tajawal',
+      'El Messiri',
+      'Cairo',
       -apple-system,
       BlinkMacSystemFont,
       "SF Arabic",
@@ -149,10 +152,10 @@
   }
 
   /* iOS-only override: iPhone/iPad get SF Arabic (the native Apple
-     Arabic font) instead of Tajawal. iOS CoreText renders the same
-     Tajawal woff2 visibly differently from desktop browsers, so letting
-     the platform's own font take over avoids the inconsistency. Windows,
-     Android and macOS keep the Tajawal-led stack defined above. */
+     Arabic font) instead of Cairo. iOS CoreText renders the same Cairo
+     woff2 visibly differently from desktop browsers, so letting the
+     platform's own font take over avoids the inconsistency. Windows,
+     Android and macOS keep the Cairo-led stack defined above. */
   html.platform-ios [dir='rtl'],
   html.platform-ios [dir='rtl'] * {
     font-family:

@@ -7,21 +7,25 @@ import { Toaster } from 'react-hot-toast';
 // from the same origin as the HTML — no Google Fonts CDN hop during
 // build (which used to break Cloudflare Pages when Google throttled
 // us), no iOS Safari caching quirks, identical bytes on every device.
-// Inter covers Latin display + body; Tajawal + Reem Kufi handle Arabic.
+// Inter covers Latin display + body; Cairo + El Messiri handle Arabic.
+// Cairo is the modern geometric Egyptian sans (named after the city);
+// El Messiri is an Egyptian decorative display face for the hero/
+// display headings. Both replace the earlier Tajawal + Reem Kufi pair,
+// which read more Gulf-modernist than Egyptian.
 import '@fontsource/inter/200.css';
 import '@fontsource/inter/300.css';
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
-import '@fontsource/tajawal/arabic-300.css';
-import '@fontsource/tajawal/arabic-400.css';
-import '@fontsource/tajawal/arabic-500.css';
-import '@fontsource/tajawal/arabic-700.css';
-import '@fontsource/reem-kufi/arabic-400.css';
-import '@fontsource/reem-kufi/arabic-500.css';
-import '@fontsource/reem-kufi/arabic-600.css';
-import '@fontsource/reem-kufi/arabic-700.css';
+import '@fontsource/cairo/arabic-300.css';
+import '@fontsource/cairo/arabic-400.css';
+import '@fontsource/cairo/arabic-500.css';
+import '@fontsource/cairo/arabic-700.css';
+import '@fontsource/el-messiri/arabic-400.css';
+import '@fontsource/el-messiri/arabic-500.css';
+import '@fontsource/el-messiri/arabic-600.css';
+import '@fontsource/el-messiri/arabic-700.css';
 
 import { HydrateStores } from '@/components/hydrate-stores';
 import { Pixels } from '@/components/pixels';
@@ -60,8 +64,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       {/* Platform detector — tags <html> with `platform-ios` so the
           CSS in globals.css can serve SF Arabic to iPhones/iPads (where
-          Tajawal renders differently from desktop) and keep Tajawal as
-          the brand font on every other platform. Runs inline before the
+          Cairo renders differently from desktop) and keep Cairo as the
+          brand font on every other platform. Runs inline before the
           first paint so there's no flash. */}
       <head>
         <script

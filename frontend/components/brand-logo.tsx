@@ -19,7 +19,7 @@ export function BrandLogo({ className, compact = false }: Props) {
       aria-label="Deda"
       className={className}
     >
-      {/* Arabic display — Reem Kufi via the CSS variable on <html>. */}
+      {/* Arabic display — El Messiri via the CSS variable on <html>. */}
       <text
         x="140"
         y={compact ? '60' : '50'}
