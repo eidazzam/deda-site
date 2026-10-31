@@ -37,29 +37,29 @@ export async function generateMetadata({
 
 // Fallback hero slides — used when the admin hasn't uploaded any
 // hero images from /admin/settings yet, or when the siteConfig fetch
-// fails. The storefront reads up to four heroImage{1..4}Url columns
-// off SiteConfig and prefers those; anything null falls through to
-// the hardcoded editorial frames below so the hero never collapses.
+// fails. Points at the Deda launch catalog photos committed under
+// frontend/public/products/ so even a fresh install shows the brand's
+// own imagery instead of stock editorial.
 const FALLBACK_HERO_SLIDES = [
   {
-    url: 'https://images.unsplash.com/photo-1613005798967-632017e477c8?w=1400&h=1700&fit=crop&q=85&auto=format',
-    altAr: 'إطلالة افتتاحية بعباية سوداء',
-    altEn: 'Opening look in black abaya',
+    url: '/products/cherry-abaya.webp',
+    altAr: 'عباية صلاة بطبعة كرز',
+    altEn: 'Cherry print prayer abaya',
   },
   {
-    url: 'https://images.unsplash.com/photo-1570203543523-57e9dc7ff410?w=1400&h=1700&fit=crop&q=85&auto=format',
-    altAr: 'عباية ملوّنة بألوان دافئة',
-    altEn: 'A coloured abaya in warm tones',
+    url: '/products/leopard-abaya.webp',
+    altAr: 'عباية صلاة بطبعة نمر',
+    altEn: 'Leopard print prayer abaya',
   },
   {
-    url: 'https://images.unsplash.com/photo-1760083545495-b297b1690672?w=1400&h=1700&fit=crop&q=85&auto=format',
-    altAr: 'تطريز هادئ على عباية بيج',
-    altEn: 'Quiet embroidery on a beige abaya',
+    url: '/products/skirt-set-1.webp',
+    altAr: 'طقم بلوزة بيضاء وتنورة بنى',
+    altEn: 'White blouse with brown skirt set',
   },
   {
-    url: 'https://images.unsplash.com/photo-1736342182213-6c037467cb38?w=1400&h=1700&fit=crop&q=85&auto=format',
-    altAr: 'لحظة جماعية بإطلالات تقليدية',
-    altEn: 'A shared moment, dressed in tradition',
+    url: '/products/skirt-set-2.webp',
+    altAr: 'طقم بلوزة بيضاء وتنورة بنى — لقطة ثانية',
+    altEn: 'White blouse with brown skirt — second look',
   },
 ];
 
