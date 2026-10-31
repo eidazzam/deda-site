@@ -28,6 +28,10 @@ export const siteConfigRoutes: FastifyPluginAsync = async (app) => {
         editorialBodyEn:     config.editorialBodyEn,
         editorialBodyAr:     config.editorialBodyAr,
         editorialImageUrl:   config.editorialImageUrl,
+        heroImage1Url:       config.heroImage1Url,
+        heroImage2Url:       config.heroImage2Url,
+        heroImage3Url:       config.heroImage3Url,
+        heroImage4Url:       config.heroImage4Url,
       },
     };
   });

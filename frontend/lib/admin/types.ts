@@ -309,5 +309,9 @@ export type AdminSiteConfig = {
   editorialBodyEn: string | null;
   editorialBodyAr: string | null;
   editorialImageUrl: string | null;
+  heroImage1Url: string | null;
+  heroImage2Url: string | null;
+  heroImage3Url: string | null;
+  heroImage4Url: string | null;
   updatedAt: string;
 };

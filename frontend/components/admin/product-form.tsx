@@ -243,7 +243,7 @@ export function ProductForm({ mode, initial, onSubmit, submitting, error }: Prop
               className="w-full bg-bg border border-border px-3 py-2 text-sm"
             >
               <option value="IN_SALE">In sale</option>
-              <option value="OUT_OF_STOCK">Hidden</option>
+              <option value="OUT_OF_STOCK">Out of stock</option>
             </select>
           </Field>
           <Field label="Sort order">

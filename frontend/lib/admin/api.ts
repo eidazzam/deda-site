@@ -349,5 +349,17 @@ export const adminApi = {
     },
     removeEditorialImage: () =>
       request<void>('/api/admin/site-config/editorial-image', { method: 'DELETE' }),
+    uploadHeroImage: (slot: 1 | 2 | 3 | 4, file: File) => {
+      const form = new FormData();
+      form.append('file', file);
+      return request<AdminSiteConfig>(
+        `/api/admin/site-config/hero-image/${slot}`,
+        { method: 'POST', body: form },
+      );
+    },
+    removeHeroImage: (slot: 1 | 2 | 3 | 4) =>
+      request<void>(`/api/admin/site-config/hero-image/${slot}`, {
+        method: 'DELETE',
+      }),
   },
 };

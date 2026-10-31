@@ -224,4 +224,11 @@ export type SiteConfig = {
   editorialBodyEn?: string | null;
   editorialBodyAr?: string | null;
   editorialImageUrl?: string | null;
+  // Hero slider images — up to four slots the admin uploads from
+  // /admin/settings. Any null slot falls through to the hardcoded
+  // fallback list in the homepage.
+  heroImage1Url?: string | null;
+  heroImage2Url?: string | null;
+  heroImage3Url?: string | null;
+  heroImage4Url?: string | null;
 };

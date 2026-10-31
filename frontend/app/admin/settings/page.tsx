@@ -1,11 +1,34 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { adminApi, AdminApiError } from '@/lib/admin/api';
 import { useAdminI18n } from '@/lib/admin/i18n';
 import type { AdminSiteConfig } from '@/lib/admin/types';
+
+type HeroSlot = 1 | 2 | 3 | 4;
+const HERO_SLOTS: HeroSlot[] = [1, 2, 3, 4];
+
+function heroUrlFor(config: AdminSiteConfig, slot: HeroSlot): string | null {
+  switch (slot) {
+    case 1: return config.heroImage1Url;
+    case 2: return config.heroImage2Url;
+    case 3: return config.heroImage3Url;
+    case 4: return config.heroImage4Url;
+  }
+}
+
+// Admin images come back as /uploads/… — relative to the API host, not
+// the storefront. Build the absolute URL so <img> loads correctly.
+const UPLOAD_BASE =
+  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') ??
+  'https://api.dedawomenswear.shop';
+function resolveUploadUrl(url: string): string {
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  if (url.startsWith('/uploads/')) return `${UPLOAD_BASE}${url}`;
+  return url;
+}
 
 export default function AdminSettingsPage() {
   const { t } = useAdminI18n();
@@ -13,6 +36,7 @@ export default function AdminSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [heroBusySlot, setHeroBusySlot] = useState<HeroSlot | null>(null);
 
   const [whatsapp, setWhatsapp] = useState('');
   const [facebook, setFacebook] = useState('');
@@ -133,6 +157,129 @@ export default function AdminSettingsPage() {
           </button>
         </form>
       )}
+
+      {config ? (
+        <div className="mt-12 pt-10 border-t border-border">
+          <div className="mb-5">
+            <h2 className="font-display text-2xl">Hero slider images</h2>
+            <p className="text-sm text-muted mt-1">
+              Up to four images that rotate on the homepage hero. Each slot
+              is independent — slots you leave empty fall back to the
+              built-in editorial frames.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {HERO_SLOTS.map((slot) => (
+              <HeroSlotCard
+                key={slot}
+                slot={slot}
+                url={heroUrlFor(config, slot)}
+                busy={heroBusySlot === slot}
+                onUpload={async (file) => {
+                  setHeroBusySlot(slot);
+                  try {
+                    const updated = await adminApi.siteConfig.uploadHeroImage(slot, file);
+                    setConfig(updated);
+                    toast.success(`Hero ${slot} saved`);
+                  } catch (err) {
+                    toast.error(
+                      err instanceof AdminApiError ? err.message : 'Upload failed',
+                    );
+                  } finally {
+                    setHeroBusySlot(null);
+                  }
+                }}
+                onRemove={async () => {
+                  if (!confirm(`Remove hero image ${slot}?`)) return;
+                  setHeroBusySlot(slot);
+                  try {
+                    await adminApi.siteConfig.removeHeroImage(slot);
+                    const next = await adminApi.siteConfig.get();
+                    setConfig(next);
+                    toast.success(`Hero ${slot} cleared`);
+                  } catch (err) {
+                    toast.error(
+                      err instanceof AdminApiError ? err.message : 'Remove failed',
+                    );
+                  } finally {
+                    setHeroBusySlot(null);
+                  }
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function HeroSlotCard({
+  slot,
+  url,
+  busy,
+  onUpload,
+  onRemove,
+}: {
+  slot: HeroSlot;
+  url: string | null;
+  busy: boolean;
+  onUpload: (file: File) => void | Promise<void>;
+  onRemove: () => void | Promise<void>;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  return (
+    <div className="border border-border bg-bg">
+      <div className="aspect-[7/10] bg-subtle relative overflow-hidden">
+        {url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={resolveUploadUrl(url)}
+            alt={`Hero ${slot}`}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 grid place-items-center text-[11px] text-muted tracking-widest uppercase">
+            Slot {slot} · empty
+          </div>
+        )}
+        {busy ? (
+          <div className="absolute inset-0 bg-ink/60 grid place-items-center text-bg text-xs tracking-widest uppercase">
+            Working…
+          </div>
+        ) : null}
+      </div>
+      <div className="p-3 flex items-center justify-between gap-2">
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) void onUpload(file);
+            e.target.value = '';
+          }}
+        />
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => inputRef.current?.click()}
+          className="text-[10px] tracking-widest uppercase bg-ink text-bg px-3 py-1.5 hover:bg-accent transition-colors disabled:opacity-50"
+        >
+          {url ? 'Replace' : 'Upload'}
+        </button>
+        {url ? (
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => void onRemove()}
+            className="text-[10px] tracking-widest uppercase text-muted hover:text-accent transition-colors disabled:opacity-50"
+          >
+            Remove
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }

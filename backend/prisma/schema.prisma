@@ -249,5 +249,12 @@ model SiteConfig {
   editorialBodyEn      String?
   editorialBodyAr      String?
   editorialImageUrl    String?
+  // Hero slider — up to four admin-uploaded images that replace the
+  // hardcoded FALLBACK_HERO_SLIDES on the homepage. Null slots fall
+  // through to the fallback list in order.
+  heroImage1Url        String?
+  heroImage2Url        String?
+  heroImage3Url        String?
+  heroImage4Url        String?
   updatedAt            DateTime @updatedAt
 }

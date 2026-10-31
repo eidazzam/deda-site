@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -8,7 +7,7 @@ import { HomeDataSection } from '@/components/home-data-section';
 import { ArrowIcon } from '@/components/icon';
 import { OrganizationJsonLd } from '@/components/json-ld';
 import { api } from '@/lib/api/client';
-import { isLocalUpload, resolveImageUrl } from '@/lib/image';
+import { resolveImageUrl } from '@/lib/image';
 import { isLocale, type Locale } from '@/lib/i18n/config';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { buildMetadata } from '@/lib/seo';
@@ -36,41 +35,33 @@ export async function generateMetadata({
   });
 }
 
-// Real Gulf/Middle Eastern abaya photography sourced from Unsplash —
-// Hero slides — fallback only. The homepage now fetches the live list
-// from `/api/hero-slides`; this array is used when the API is
-// unreachable or returns an empty set, so the storefront never renders
-// a blank hero. Keep at least one entry here.
+// Fallback hero slides — used when the admin hasn't uploaded any
+// hero images from /admin/settings yet, or when the siteConfig fetch
+// fails. The storefront reads up to four heroImage{1..4}Url columns
+// off SiteConfig and prefers those; anything null falls through to
+// the hardcoded editorial frames below so the hero never collapses.
 const FALLBACK_HERO_SLIDES = [
   {
-    // Woman in black hijab and black abaya — strongest opener.
     url: 'https://images.unsplash.com/photo-1613005798967-632017e477c8?w=1400&h=1700&fit=crop&q=85&auto=format',
     altAr: 'إطلالة افتتاحية بعباية سوداء',
     altEn: 'Opening look in black abaya',
   },
   {
-    // Multicoloured abaya — colour story.
     url: 'https://images.unsplash.com/photo-1570203543523-57e9dc7ff410?w=1400&h=1700&fit=crop&q=85&auto=format',
     altAr: 'عباية ملوّنة بألوان دافئة',
     altEn: 'A coloured abaya in warm tones',
   },
   {
-    // Beige embroidered abaya — detail variation.
     url: 'https://images.unsplash.com/photo-1760083545495-b297b1690672?w=1400&h=1700&fit=crop&q=85&auto=format',
     altAr: 'تطريز هادئ على عباية بيج',
     altEn: 'Quiet embroidery on a beige abaya',
   },
   {
-    // Group of women in traditional dress — cultural framing.
     url: 'https://images.unsplash.com/photo-1736342182213-6c037467cb38?w=1400&h=1700&fit=crop&q=85&auto=format',
     altAr: 'لحظة جماعية بإطلالات تقليدية',
     altEn: 'A shared moment, dressed in tradition',
   },
 ];
-
-const EDITORIAL_IMAGE =
-  // Seated portrait — used for the craft / editorial split below.
-  'https://images.unsplash.com/photo-1627378228978-a62f71edff15?w=1000&h=1250&fit=crop&q=85&auto=format';
 
 export default async function HomePage({
   params,
@@ -82,38 +73,33 @@ export default async function HomePage({
   const dict = getDictionary(locale as Locale);
   const isAR = locale === 'ar';
 
-  // Hero slides come from the hardcoded editorial frames. The Rozana-era
-  // admin CMS for hero slides was dropped during the schema prune.
-  const heroSlides = FALLBACK_HERO_SLIDES.map((s) => ({
+  // Hero slides — the admin can upload up to four custom hero images
+  // from /admin/settings; whatever is set overrides the matching slot
+  // from the hardcoded fallback. We read the config over the browser-
+  // side API, so a Cloudflare edge-DNS hiccup lands us on the fallback
+  // rather than a blank hero.
+  let heroSlides = FALLBACK_HERO_SLIDES.map((s) => ({
     url: s.url,
     altAr: s.altAr,
     altEn: s.altEn,
   }));
-
-  // Editorial split overrides — admin-saved copy + image, with hardcoded
-  // defaults as the safety net for fresh installs / API failures.
-  const editorial = {
-    eyebrowEn: 'Craft',
-    eyebrowAr: 'حرفية',
-    headlineEn: "Every piece carries a maker's hand.",
-    headlineAr: 'كل قطعة تحمل أثر .',
-    bodyEn:
-      'We work with small ateliers from Egypt across the Gulf, choose considered fabrics, and measure success by the details only the wearer notices.',
-    bodyAr:
-      'نعمل مع ورش صغيرة من مصر إلى الخليج، نختار خامات راقية ونقيس النجاح بتفاصيل لا يراها أحد إلا من تلبسها.',
-    imageUrl: EDITORIAL_IMAGE,
-  };
   try {
     const cfg = await api.siteConfig.get();
-    if (cfg.editorialEyebrowEn) editorial.eyebrowEn = cfg.editorialEyebrowEn;
-    if (cfg.editorialEyebrowAr) editorial.eyebrowAr = cfg.editorialEyebrowAr;
-    if (cfg.editorialHeadlineEn) editorial.headlineEn = cfg.editorialHeadlineEn;
-    if (cfg.editorialHeadlineAr) editorial.headlineAr = cfg.editorialHeadlineAr;
-    if (cfg.editorialBodyEn) editorial.bodyEn = cfg.editorialBodyEn;
-    if (cfg.editorialBodyAr) editorial.bodyAr = cfg.editorialBodyAr;
-    if (cfg.editorialImageUrl) editorial.imageUrl = resolveImageUrl(cfg.editorialImageUrl);
+    const custom = [
+      cfg.heroImage1Url,
+      cfg.heroImage2Url,
+      cfg.heroImage3Url,
+      cfg.heroImage4Url,
+    ]
+      .filter((u): u is string => Boolean(u))
+      .map((url) => ({
+        url: resolveImageUrl(url),
+        altAr: '',
+        altEn: '',
+      }));
+    if (custom.length > 0) heroSlides = custom;
   } catch {
-    // Editorial section stays on its built-in defaults.
+    // Keep the fallback hero rendering.
   }
 
   return (
@@ -162,37 +148,9 @@ export default async function HomePage({
           Rozana-style category grid is replaced with a single CTA
           dropping visitors straight into the flat product list. */}
 
-      {/* Featured + bundles — fetched on the client so the Cloudflare
+      {/* Featured strip — fetched on the client so the Cloudflare
           Pages edge same-zone DNS issue can't silently swallow the API. */}
       <HomeDataSection locale={locale as Locale} dict={dict} />
-
-      {/* Editorial split — admin-editable copy + image, falls back to
-          the hardcoded defaults above when the API is unreachable. */}
-      <section className="max-w-page mx-auto px-6 lg:px-10 mt-24 lg:mt-32">
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-          <div className="img-zoom aspect-[4/5] bg-subtle overflow-hidden relative">
-            <Image
-              src={editorial.imageUrl}
-              alt=""
-              fill
-              sizes="(min-width: 1024px) 45vw, 90vw"
-              className="object-cover"
-              unoptimized={isLocalUpload(editorial.imageUrl)}
-            />
-          </div>
-          <div className={`lg:px-8 ${isAR ? 'lg:text-right' : ''}`}>
-            <div className="text-xs tracking-widest uppercase text-accent mb-6">
-              {isAR ? editorial.eyebrowAr : editorial.eyebrowEn}
-            </div>
-            <h2 className="display-xl text-4xl lg:text-6xl mb-6 leading-[0.95]">
-              {isAR ? editorial.headlineAr : editorial.headlineEn}
-            </h2>
-            <p className="text-muted leading-relaxed text-lg whitespace-pre-line">
-              {isAR ? editorial.bodyAr : editorial.bodyEn}
-            </p>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
