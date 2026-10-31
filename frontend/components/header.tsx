@@ -85,20 +85,19 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
               locale. The source /brand/logo.png is a 1600x926 JPEG
               with the DEDA mark centred over a solid black background
               (plus partial mirror repeats on the far left/right).
-              We scale into the central mark via `object-cover` +
-              transform, and lift the black background off using
-              `mix-blend-mode: screen` — which keeps every pixel
-              lighter than the cream page and drops everything darker,
-              so the gold-and-white DEDA mark reads straight on the
-              page as if it were a transparent PNG. Replace this with
-              a real transparent-background logo file to drop the
-              blend hack. */}
+              We size the container to the mark's own aspect ratio
+              (~1.3) and use `object-cover` + a scale transform to
+              zoom past the padding onto the mark itself. The box
+              keeps `bg-ink` so the mark's own black background reads
+              as one continuous dark card. Drop the hack and switch to
+              `object-contain` once a transparent-background logo
+              file lands under /brand/. */}
           <Link
             href={localePrefix}
             aria-label={dict.brand}
             className="shrink-0"
           >
-            <div className="relative h-11 md:h-14 w-16 md:w-20 overflow-hidden">
+            <div className="relative h-11 md:h-14 w-16 md:w-20 overflow-hidden bg-ink">
               <Image
                 src="/brand/logo.png"
                 alt={dict.brand}
@@ -109,7 +108,6 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
                 style={{
                   objectPosition: 'center',
                   transform: 'scale(1.9)',
-                  mixBlendMode: 'screen',
                 }}
               />
             </div>
