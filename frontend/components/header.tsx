@@ -82,35 +82,23 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
           </button>
 
           {/* Brand logo — click returns to the home page in the current
-              locale. The source /brand/logo.png is a 1600x926 JPEG
-              with the DEDA mark centred over a solid black background
-              (plus partial mirror repeats on the far left/right).
-              We size the container to the mark's own aspect ratio
-              (~1.3) and use `object-cover` + a scale transform to
-              zoom past the padding onto the mark itself. The box
-              keeps `bg-ink` so the mark's own black background reads
-              as one continuous dark card. Drop the hack and switch to
-              `object-contain` once a transparent-background logo
-              file lands under /brand/. */}
+              locale. The /brand/logo.png file is a 657x380
+              transparent PNG of the DEDA mark, so it reads straight
+              onto the cream page without any blend-mode or black-box
+              workaround. */}
           <Link
             href={localePrefix}
             aria-label={dict.brand}
-            className="shrink-0"
+            className="shrink-0 flex items-center"
           >
-            <div className="relative h-11 md:h-14 w-16 md:w-20 overflow-hidden bg-ink">
-              <Image
-                src="/brand/logo.png"
-                alt={dict.brand}
-                fill
-                priority
-                sizes="80px"
-                className="object-cover"
-                style={{
-                  objectPosition: 'center',
-                  transform: 'scale(1.9)',
-                }}
-              />
-            </div>
+            <Image
+              src="/brand/logo.png"
+              alt={dict.brand}
+              width={657}
+              height={380}
+              priority
+              className="h-12 md:h-16 w-auto object-contain"
+            />
           </Link>
 
           <nav className="hidden xl:flex items-center gap-4 xl:gap-7 text-xs xl:text-sm tracking-wide">
