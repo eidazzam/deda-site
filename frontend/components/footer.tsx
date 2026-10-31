@@ -53,6 +53,7 @@ export function Footer({
   // browser-side fetch quietly fails). Admin overrides take priority.
   const DEDA_WHATSAPP = '+201200724809';
   const DEDA_FACEBOOK = 'https://www.facebook.com/dwomenswear/';
+  const DEDA_INSTAGRAM = 'https://www.instagram.com/dwomenswear';
 
   // wa.me wants the number without the leading + and without spaces/dashes.
   const whatsappRaw = config?.whatsappNumber ?? DEDA_WHATSAPP;
@@ -68,8 +69,8 @@ export function Footer({
       label: 'WhatsApp',
       icon: WhatsAppIcon,
     },
-    config?.instagramUrl && {
-      href: config.instagramUrl,
+    {
+      href: config?.instagramUrl ?? DEDA_INSTAGRAM,
       label: 'Instagram',
       icon: InstagramIcon,
     },
