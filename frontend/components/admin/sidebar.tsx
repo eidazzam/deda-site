@@ -68,7 +68,7 @@ export function AdminSidebar() {
     const tick = async () => {
       try {
         const o = await adminApi.orders.unreadCount();
-        if (!cancelled) setCounts({ orders: o.data.count });
+        if (!cancelled) setCounts({ orders: o.count });
       } catch {
         // Silent — 401s already redirect us out, anything else is noise.
       }
