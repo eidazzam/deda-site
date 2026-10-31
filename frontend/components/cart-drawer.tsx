@@ -98,7 +98,7 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
     });
   }, [open]);
 
-  const isEgypt = countryCode === 'KW';
+  const isEgypt = countryCode === 'EG';
   const gov = useMemo(
     () => (isEgypt ? governorates?.find((g) => g.nameEn === govName) ?? null : null),
     [governorates, govName, isEgypt],
@@ -393,13 +393,13 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
                       value={countryCode}
                       onChange={(e) => {
                         setCountryCode(e.target.value);
-                        // Reset governorate if switching to a non-KW country.
-                        if (e.target.value !== 'KW') setGovName('');
+                        // Reset governorate if switching away from Egypt.
+                        if (e.target.value !== 'EG') setGovName('');
                       }}
                       required
                       className={inputCls}
                     >
-                      <option value="KW">
+                      <option value="EG">
                         {isAR ? 'مصر' : 'Egypt'}
                       </option>
                       {countries?.map((c) => (

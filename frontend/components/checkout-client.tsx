@@ -41,7 +41,7 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
   const [appliedCode, setAppliedCode] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const isEgypt = countryCode === 'KW';
+  const isEgypt = countryCode === 'EG';
   const gov = isEgypt ? governorates.find((g) => g.nameEn === govName) ?? null : null;
   const country = !isEgypt ? countries.find((c) => c.code === countryCode) ?? null : null;
 
@@ -189,12 +189,12 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
                 value={countryCode}
                 onChange={(e) => {
                   setCountryCode(e.target.value);
-                  if (e.target.value !== 'KW') setGovName('');
+                  if (e.target.value !== 'EG') setGovName('');
                 }}
                 className={inputCls}
                 required
               >
-                <option value="KW">{isAR ? 'مصر' : 'Egypt'}</option>
+                <option value="EG">{isAR ? 'مصر' : 'Egypt'}</option>
                 {countries.map((c) => (
                   <option key={c.code} value={c.code}>
                     {isAR ? c.nameAr : c.nameEn} ({formatPrice(c.shippingFee, locale)} {dict.egp})
