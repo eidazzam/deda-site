@@ -14,7 +14,7 @@
  * Re-running this script is safe: it upserts by unique key and clears
  * variants/images of existing products before re-inserting them.
  */
-import { PrismaClient, Category, ColorGroup, CouponType, SaleStatus } from '@prisma/client';
+import { PrismaClient, Category, ColorGroup, SaleStatus } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -58,16 +58,9 @@ const GOVERNORATES = [
   { nameEn: 'New Valley', nameAr: 'الوادي الجديد', shippingFee: OTHER_GOVERNORATE_SHIPPING, sortOrder: 27 },
 ];
 
-// International shipping is retired — Deda ships inside Egypt only.
-// The Country table stays in schema for potential future expansion but
-// starts empty. If re-enabled later, add rows here.
-const COUNTRIES: Array<{
-  code: string;
-  nameEn: string;
-  nameAr: string;
-  shippingFee: number;
-  sortOrder: number;
-}> = [];
+// International shipping, bundles and coupons were retired alongside
+// the Rozana-era tables they lived in. Deda ships Egypt-only, flat
+// pricing, no promo codes.
 
 // ---------------------------------------------------------------------------
 // Size standards — kept in sync with frontend/lib/sizes.ts. Deda carries
@@ -350,36 +343,6 @@ const PRODUCTS: SeedProduct[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Bundles — curated sets the storefront highlights at a single price.
-// ---------------------------------------------------------------------------
-const BUNDLES = [
-  {
-    slug: 'mother-daughter-set',
-    nameEn: 'Mother & Daughter Set',
-    nameAr: ' الأم والبنت',
-    descriptionEn:
-      'The Midnight Classic for her and the Mini Classic for the little one — quiet pairing for everyday.',
-    descriptionAr:
-      'مجموعة مناسبة لكِ و لطفلتك — تناغم هادئ للاستخدام اليومي.',
-    bundlePrice: 60000,
-    originalPrice: 67000,
-    productSlugs: ['midnight-classic-abaya', 'mini-classic-kids-abaya'],
-  },
-  {
-    slug: 'occasion-edit',
-    nameEn: 'The Occasion Edit',
-    nameAr: 'المناسبات',
-    descriptionEn:
-      'A coloured emerald with a hand-threaded gold piece — two looks that take you from afternoon to evening.',
-    descriptionAr:
-      'عباية ملوّنة مع قطعة تطريز ذهبي يدوي — إطلالتان تنقلانك من المساء للسهرة.',
-    bundlePrice: 150000,
-    originalPrice: 160000,
-    productSlugs: ['emerald-whisper-abaya', 'hand-threaded-gold-abaya'],
-  },
-];
-
-// ---------------------------------------------------------------------------
 // Placeholder image URL builder — used until the studio photoshoot lands.
 // ---------------------------------------------------------------------------
 function placeholderImage(ref: string): string {
@@ -396,20 +359,6 @@ async function main() {
       where: { nameEn: g.nameEn },
       update: { nameAr: g.nameAr, shippingFee: g.shippingFee, sortOrder: g.sortOrder },
       create: g,
-    });
-  }
-
-  console.log('Seeding international countries…');
-  for (const c of COUNTRIES) {
-    await prisma.country.upsert({
-      where: { code: c.code },
-      update: {
-        nameEn: c.nameEn,
-        nameAr: c.nameAr,
-        shippingFee: c.shippingFee,
-        sortOrder: c.sortOrder,
-      },
-      create: c,
     });
   }
 
@@ -498,57 +447,6 @@ async function main() {
       });
     }
   }
-
-  console.log('Seeding bundles…');
-  for (let i = 0; i < BUNDLES.length; i++) {
-    const b = BUNDLES[i]!;
-    const bundle = await prisma.bundle.upsert({
-      where: { slug: b.slug },
-      update: {
-        nameEn: b.nameEn,
-        nameAr: b.nameAr,
-        descriptionEn: b.descriptionEn,
-        descriptionAr: b.descriptionAr,
-        bundlePrice: b.bundlePrice,
-        originalPrice: b.originalPrice,
-        sortOrder: i,
-      },
-      create: {
-        slug: b.slug,
-        nameEn: b.nameEn,
-        nameAr: b.nameAr,
-        descriptionEn: b.descriptionEn,
-        descriptionAr: b.descriptionAr,
-        bundlePrice: b.bundlePrice,
-        originalPrice: b.originalPrice,
-        sortOrder: i,
-      },
-    });
-
-    await prisma.bundleProduct.deleteMany({ where: { bundleId: bundle.id } });
-    for (let j = 0; j < b.productSlugs.length; j++) {
-      const product = await prisma.product.findUnique({ where: { slug: b.productSlugs[j]! } });
-      if (!product) {
-        console.warn(`  skipping bundle item — product not found: ${b.productSlugs[j]}`);
-        continue;
-      }
-      await prisma.bundleProduct.create({
-        data: { bundleId: bundle.id, productId: product.id, sortOrder: j },
-      });
-    }
-  }
-
-  console.log('Seeding launch coupon…');
-  await prisma.coupon.upsert({
-    where: { code: 'DEDA10' },
-    update: { isActive: true },
-    create: {
-      code: 'DEDA10',
-      type: CouponType.PERCENT,
-      value: 10,
-      isActive: true,
-    },
-  });
 
   console.log('Done.');
 }

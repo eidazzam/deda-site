@@ -7,7 +7,6 @@ import toast from 'react-hot-toast';
 
 import { ColorSwatches } from './color-swatch';
 import { HeartIcon } from './icon';
-import { OutOfStockForm } from './out-of-stock-form';
 import { PriceTag } from './price-tag';
 
 import type { ProductDetail } from '@/lib/api/types';
@@ -410,14 +409,15 @@ export function ProductDetailClient({ product, locale, dict }: Props) {
             </div>
           </>
         ) : (
-          <div className="mt-8">
-            <OutOfStockForm
-              locale={locale}
-              dict={dict}
-              productSlug={product.slug}
-              colorName={variant ? (isAR ? variant.colorNameAr : variant.colorNameEn) : undefined}
-              size={size ?? undefined}
-            />
+          <div className="mt-8 border border-border p-6 text-center">
+            <div className="text-xs tracking-widest uppercase text-muted mb-2">
+              {isAR ? 'نفذت الكمية' : 'Out of stock'}
+            </div>
+            <p className="text-sm text-muted">
+              {isAR
+                ? 'هذه القطعة غير متوفرة حالياً. تابعينا للجديد.'
+                : 'This piece is unavailable right now. Follow us for restocks.'}
+            </p>
           </div>
         )}
 

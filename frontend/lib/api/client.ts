@@ -16,15 +16,9 @@ import type {
 import {
   mockCreateOrder,
   mockGetProductBySlug,
-  mockListBundles,
-  mockListCategoryImages,
-  mockListCountries,
   mockListGovernorates,
-  mockListHeroSlides,
   mockListProducts,
-  mockNotifyOutOfStock,
   mockSiteConfig,
-  mockValidateCoupon,
 } from './mock';
 
 // Cloudflare Pages edge functions don't have access to the Docker-internal
@@ -152,42 +146,30 @@ export const api = {
     },
   },
 
+  // International countries, bundles, hero-slide CMS, category-image CMS,
+  // and coupon validation were retired alongside their backend tables.
+  // The methods below are kept as empty stubs so existing callers (cart
+  // drawer, checkout, product pages) keep compiling until each one is
+  // trimmed to the Deda-only shape (Egypt-only shipping, no coupons).
   countries: {
-    list: async (opts?: FetchOptions) => {
-      if (USE_MOCK) return mockListCountries();
-      return request<Country[]>('/api/countries', opts);
-    },
+    list: async (_opts?: FetchOptions): Promise<Country[]> => [],
   },
 
   bundles: {
-    list: async (opts?: FetchOptions) => {
-      if (USE_MOCK) return mockListBundles();
-      return request<Bundle[]>('/api/bundles', opts);
-    },
+    list: async (_opts?: FetchOptions): Promise<Bundle[]> => [],
   },
 
   heroSlides: {
-    list: async (opts?: FetchOptions) => {
-      if (USE_MOCK) return mockListHeroSlides();
-      return request<HeroSlide[]>('/api/hero-slides', opts);
-    },
+    list: async (_opts?: FetchOptions): Promise<HeroSlide[]> => [],
   },
 
   categoryImages: {
-    list: async (opts?: FetchOptions) => {
-      if (USE_MOCK) return mockListCategoryImages();
-      return request<CategoryImage[]>('/api/category-images', opts);
-    },
+    list: async (_opts?: FetchOptions): Promise<CategoryImage[]> => [],
   },
 
   coupons: {
-    validate: async (code: string, subtotal: number) => {
-      if (USE_MOCK) return mockValidateCoupon(code, subtotal);
-      return request<CouponValidation>('/api/coupons/validate', {
-        method: 'POST',
-        body: JSON.stringify({ code, subtotal }),
-        cache: 'no-store',
-      });
+    validate: async (_code: string, _subtotal: number): Promise<CouponValidation> => {
+      throw new ApiError('COUPONS_RETIRED', 'Coupons are not supported', 400);
     },
   },
 
@@ -204,13 +186,9 @@ export const api = {
   },
 
   leads: {
-    notifyOutOfStock: async (input: LeadInput) => {
-      if (USE_MOCK) return mockNotifyOutOfStock();
-      return request<{ ok: true }>('/api/leads/out-of-stock', {
-        method: 'POST',
-        body: JSON.stringify(input),
-        cache: 'no-store',
-      });
+    notifyOutOfStock: async (_input: LeadInput): Promise<{ ok: true }> => {
+      // Back-in-stock leads were retired alongside the Lead table.
+      return { ok: true };
     },
   },
 

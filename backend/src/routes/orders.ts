@@ -135,35 +135,28 @@ export const orderRoutes: FastifyPluginAsync = async (app) => {
       }
 
       // ----- 3. Destination + base shipping fee --------------------------
-      // Two branches: Egypt uses the Governorate table; everywhere else
-      // uses the Country table with a single flat per-country fee.
-      let baseShippingFee = 0;
-      let governorateName: string | null = null;
-
-      if (input.countryCode === EGYPT_CODE) {
-        if (!input.governorateName) {
-          throw badRequest(
-            'GOVERNORATE_REQUIRED',
-            'Governorate is required for Egypt orders',
-          );
-        }
-        const gov = await tx.governorate.findUnique({
-          where: { nameEn: input.governorateName },
-        });
-        if (!gov || !gov.isActive) {
-          throw badRequest('INVALID_GOVERNORATE', 'Selected governorate is not valid');
-        }
-        baseShippingFee = gov.shippingFee;
-        governorateName = gov.nameEn;
-      } else {
-        const country = await tx.country.findUnique({
-          where: { code: input.countryCode },
-        });
-        if (!country || !country.isActive) {
-          throw badRequest('INVALID_COUNTRY', 'Selected country is not valid');
-        }
-        baseShippingFee = country.shippingFee;
+      // Deda is Egypt-only. International shipping was retired alongside
+      // the Country table in the schema prune.
+      if (input.countryCode !== EGYPT_CODE) {
+        throw badRequest(
+          'INTERNATIONAL_NOT_SUPPORTED',
+          'Only Egypt orders are supported',
+        );
       }
+      if (!input.governorateName) {
+        throw badRequest(
+          'GOVERNORATE_REQUIRED',
+          'Governorate is required for Egypt orders',
+        );
+      }
+      const gov = await tx.governorate.findUnique({
+        where: { nameEn: input.governorateName },
+      });
+      if (!gov || !gov.isActive) {
+        throw badRequest('INVALID_GOVERNORATE', 'Selected governorate is not valid');
+      }
+      const baseShippingFee = gov.shippingFee;
+      const governorateName: string | null = gov.nameEn;
 
       // Coupons retired — the Coupon table is gone, discount is always
       // zero. Shipping is billed flat per governorate (no free-shipping

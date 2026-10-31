@@ -14,9 +14,7 @@ export const adminStatsRoutes: FastifyPluginAsync = async (app) => {
       newOrdersCount,
       revenueAgg,
       ordersLast30d,
-      unreadLeads,
       productsCount,
-      activeCoupons,
     ] = await Promise.all([
       prisma.order.count(),
       prisma.order.count({ where: { status: OrderStatus.PENDING } }),
@@ -37,9 +35,7 @@ export const adminStatsRoutes: FastifyPluginAsync = async (app) => {
         GROUP BY day
         ORDER BY day ASC
       `,
-      prisma.lead.count({ where: { viewedAt: null } }),
       prisma.product.count(),
-      prisma.coupon.count({ where: { isActive: true } }),
     ]);
 
     const totalRevenue = revenueAgg._sum.total ?? 0;
@@ -51,12 +47,14 @@ export const adminStatsRoutes: FastifyPluginAsync = async (app) => {
         totalOrders,
         pendingOrders,
         newOrdersCount,
-        unreadLeads,
+        // Lead/coupon counts retired alongside their tables — kept at 0
+        // so the admin dashboard's existing UI doesn't need to branch.
+        unreadLeads: 0,
         totalRevenue,
         averageOrderValue: aov,
         productsCount,
-        activeCoupons,
-        last30Days: ordersLast30d.map((row) => ({
+        activeCoupons: 0,
+        last30Days: ordersLast30d.map((row: { day: Date; count: bigint; revenue: bigint }) => ({
           day: row.day.toISOString().slice(0, 10),
           orders: Number(row.count),
           revenue: Number(row.revenue),

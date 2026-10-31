@@ -143,7 +143,6 @@ export const adminOrderRoutes: FastifyPluginAsync = async (app) => {
       where: { id },
       include: {
         items: { orderBy: { id: 'asc' } },
-        payment: true,
       },
     });
     if (!order) throw notFound('ORDER_NOT_FOUND', 'Order not found');
@@ -176,17 +175,6 @@ export const adminOrderRoutes: FastifyPluginAsync = async (app) => {
         paymentMethod: order.paymentMethod,
         paymentStatus: order.paymentStatus,
         adminNotes: order.adminNotes,
-        payment: order.payment
-          ? {
-              tapChargeId: order.payment.tapChargeId,
-              status: order.payment.status,
-              method: order.payment.method,
-              amount: order.payment.amount,
-              refundedAmount: order.payment.refundedAmount,
-              createdAt: order.payment.createdAt.toISOString(),
-              updatedAt: order.payment.updatedAt.toISOString(),
-            }
-          : null,
         items: order.items.map((it) => ({
           productSlug: it.productSlug,
           productNameEn: it.productNameEn,
@@ -225,7 +213,6 @@ export const adminOrderRoutes: FastifyPluginAsync = async (app) => {
       },
       include: {
         items: { orderBy: { id: 'asc' } },
-        payment: true,
       },
     });
 
@@ -249,17 +236,6 @@ export const adminOrderRoutes: FastifyPluginAsync = async (app) => {
         paymentMethod: order.paymentMethod,
         paymentStatus: order.paymentStatus,
         adminNotes: order.adminNotes,
-        payment: order.payment
-          ? {
-              tapChargeId: order.payment.tapChargeId,
-              status: order.payment.status,
-              method: order.payment.method,
-              amount: order.payment.amount,
-              refundedAmount: order.payment.refundedAmount,
-              createdAt: order.payment.createdAt.toISOString(),
-              updatedAt: order.payment.updatedAt.toISOString(),
-            }
-          : null,
         items: order.items.map((it) => ({
           productSlug: it.productSlug,
           productNameEn: it.productNameEn,

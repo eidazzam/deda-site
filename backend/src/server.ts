@@ -15,7 +15,6 @@ import { productRoutes } from './routes/products.js';
 import { governorateRoutes } from './routes/governorates.js';
 import { orderRoutes } from './routes/orders.js';
 import { siteConfigRoutes } from './routes/site-config.js';
-import { categoryImageRoutes } from './routes/category-images.js';
 import { adminLoginRoutes } from './routes/admin/login.js';
 import { adminOrderRoutes } from './routes/admin/orders.js';
 import { adminProductRoutes } from './routes/admin/products.js';
@@ -23,7 +22,6 @@ import { adminUploadRoutes } from './routes/admin/uploads.js';
 import { adminGovernorateRoutes } from './routes/admin/governorates.js';
 import { adminStatsRoutes } from './routes/admin/stats.js';
 import { adminSiteConfigRoutes } from './routes/admin/site-config.js';
-import { adminCategoryImageRoutes } from './routes/admin/category-images.js';
 
 const app = Fastify({
   logger:
@@ -75,7 +73,6 @@ await app.register(
     await api.register(governorateRoutes);
     await api.register(orderRoutes);
     await api.register(siteConfigRoutes);
-    await api.register(categoryImageRoutes);
   },
   { prefix: '/api' },
 );
@@ -100,7 +97,6 @@ await app.register(
     await admin.register(adminGovernorateRoutes);
     await admin.register(adminStatsRoutes);
     await admin.register(adminSiteConfigRoutes);
-    await admin.register(adminCategoryImageRoutes);
   },
   { prefix: '/api/admin' },
 );

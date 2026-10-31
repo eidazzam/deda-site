@@ -82,27 +82,13 @@ export default async function HomePage({
   const dict = getDictionary(locale as Locale);
   const isAR = locale === 'ar';
 
-  // Live hero slides from the DB. If the API is unreachable or returns
-  // an empty list (e.g. fresh deploy before the admin has added any),
-  // fall back to the four hardcoded editorial frames so the hero never
-  // collapses to a blank box.
-  let heroSlides = FALLBACK_HERO_SLIDES.map((s) => ({
+  // Hero slides come from the hardcoded editorial frames. The Rozana-era
+  // admin CMS for hero slides was dropped during the schema prune.
+  const heroSlides = FALLBACK_HERO_SLIDES.map((s) => ({
     url: s.url,
     altAr: s.altAr,
     altEn: s.altEn,
   }));
-  try {
-    const live = await api.heroSlides.list();
-    if (live.length > 0) {
-      heroSlides = live.map((s) => ({
-        url: resolveImageUrl(s.url),
-        altAr: s.altAr ?? '',
-        altEn: s.altEn ?? '',
-      }));
-    }
-  } catch {
-    // Fallback already populated above. Keep the hero rendering.
-  }
 
   // Editorial split overrides — admin-saved copy + image, with hardcoded
   // defaults as the safety net for fresh installs / API failures.

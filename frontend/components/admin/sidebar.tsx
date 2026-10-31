@@ -10,17 +10,18 @@ import { adminApi } from '@/lib/admin/api';
 import { clearAdminSession, getAdminUsername } from '@/lib/admin/auth';
 import { useAdminI18n } from '@/lib/admin/i18n';
 
+type LabelKey =
+  | 'sidebar.dashboard'
+  | 'sidebar.orders'
+  | 'sidebar.products'
+  | 'sidebar.governorates'
+  | 'sidebar.settings';
+
 type NavItem = {
   href: string;
-  labelKey:
-    | 'sidebar.dashboard'
-    | 'sidebar.orders'
-    | 'sidebar.products'
-    | 'sidebar.governorates'
-    | 'sidebar.heroSlides'
-    | 'sidebar.categoryImages'
-    | 'sidebar.settings';
+  labelKey: LabelKey;
   match: (p: string) => boolean;
+  badgeKey?: 'orders';
 };
 
 const NAV: NavItem[] = [
@@ -32,25 +33,14 @@ const NAV: NavItem[] = [
     badgeKey: 'orders',
   },
   {
-  },
-  {
     href: '/admin/products',
     labelKey: 'sidebar.products',
     match: (p) => p.startsWith('/admin/products'),
   },
   {
-  },
-  {
     href: '/admin/governorates',
     labelKey: 'sidebar.governorates',
     match: (p) => p.startsWith('/admin/governorates'),
-  },
-  {
-  },
-  {
-    labelKey: 'sidebar.heroSlides',
-  },
-  {
   },
   {
     href: '/admin/settings',
@@ -66,23 +56,19 @@ export function AdminSidebar() {
   const router = useRouter();
   const { locale, setLocale, t } = useAdminI18n();
   const [username, setUsername] = useState<string | null>(null);
-    orders: 0,
-  });
+  const [counts, setCounts] = useState<{ orders: number }>({ orders: 0 });
 
-  // Read the logged-in username from localStorage once on mount.
   useEffect(() => {
     setUsername(getAdminUsername());
   }, []);
 
-  // cheap (single SQL count) so 30s is fine.
   useEffect(() => {
     let cancelled = false;
 
     const tick = async () => {
       try {
-        const [o, l] = await Promise.all([
-          adminApi.orders.unreadCount(),
-        ]);
+        const o = await adminApi.orders.unreadCount();
+        if (!cancelled) setCounts({ orders: o.data.count });
       } catch {
         // Silent — 401s already redirect us out, anything else is noise.
       }
@@ -101,9 +87,6 @@ export function AdminSidebar() {
     router.push('/admin/login');
   };
 
-  // The active-link border lives on the *start* edge in both directions.
-  // Tailwind's RTL-aware utilities take care of swapping border-l for
-  // border-r when dir="rtl" is set on the wrapping <aside>.
   const startBorder = locale === 'ar' ? 'border-r-2' : 'border-l-2';
 
   return (
@@ -113,10 +96,6 @@ export function AdminSidebar() {
       } bg-bg min-h-screen flex flex-col`}
     >
       <div className="px-6 py-6 border-b border-border">
-        {/* Same brand mark as the storefront header — committed to the
-            repo at frontend/public/brand/logo.png so both Cloudflare Pages
-            and the VPS Next.js serve it directly without round-tripping
-            to the API uploads volume. */}
         <Image
           src="/brand/logo.png"
           alt="Deda"
