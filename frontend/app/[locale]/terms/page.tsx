@@ -60,16 +60,17 @@ function ContentAR() {
 
       <Section title="٣. الأسعار والدفع">
         <ul className="list-disc ms-6 space-y-2">
-          <li>جميع الأسعار بالدينار مصرى (جنيه) وتشمل ضريبة القيمة المضافة عند انطباقها.</li>
-          <li>الدفع متاح إلكترونياً عبر KNET وApple Pay وVisa وMastercard وtabby، عبر بوابة Tap الآمنة.</li>
+          <li>جميع الأسعار بالجنيه المصرى وتشمل ضريبة القيمة المضافة عند انطباقها.</li>
+          <li>الدفع عند الاستلام نقداً للمندوب فقط. لا يوجد دفع إلكترونى حالياً.</li>
           <li>يحتفظ الموقع بالحق فى رفض أو إلغاء أى طلب فى حال الاشتباه فى احتيال أو خطأ فى السعر.</li>
         </ul>
       </Section>
 
       <Section title="٤. الشحن والتوصيل">
         <ul className="list-disc ms-6 space-y-2">
-          <li>التوصيل داخل مصر خلال ١ – ٣ أيام عمل من تاريخ تأكيد الطلب.</li>
-          <li>التوصيل الدولى خلال ٥ – ١٠ أيام عمل حسب الدولة.</li>
+          <li>الشحن داخل جمهورية مصر العربية فقط — لا نشحن خارج مصر حالياً.</li>
+          <li>مصاريف الشحن: ٧٠ جنيه للقاهرة والجيزة، ١٠٠ جنيه لباقى المحافظات.</li>
+          <li>مدة التوصيل: ٢ – ٥ أيام عمل من تاريخ تأكيد الطلب.</li>
           <li>قد تتأخر أوقات التوصيل فى الإجازات الرسمية أو الظروف الطارئة.</li>
         </ul>
       </Section>
@@ -121,7 +122,7 @@ function ContentAR() {
       </Section>
 
       <p className="text-xs text-muted pt-6 border-t border-border">
-        آخر تحديث: يونيو ٢٠٢٦
+        آخر تحديث: نوفمبر ٢٠٢٦
       </p>
     </>
   );
@@ -158,10 +159,10 @@ function ContentEN() {
 
       <Section title="3. Pricing & payment">
         <ul className="list-disc ml-6 space-y-2">
-          <li>All prices are in Egyptian Dinar (EGP) and include VAT where applicable.</li>
+          <li>All prices are in Egyptian Pounds (EGP) and include VAT where applicable.</li>
           <li>
-            Payment is accepted electronically via KNET, Apple Pay, Visa,
-            Mastercard, and tabby through the secure Tap gateway.
+            Cash on delivery only — payment is collected in cash by the
+            courier on arrival. No online payment is accepted at this time.
           </li>
           <li>
             We reserve the right to refuse or cancel any order in the event
@@ -172,8 +173,9 @@ function ContentEN() {
 
       <Section title="4. Shipping & delivery">
         <ul className="list-disc ml-6 space-y-2">
-          <li>Delivery within Egypt: 1 – 3 working days after order confirmation.</li>
-          <li>International delivery: 5 – 10 working days depending on the destination.</li>
+          <li>Shipping within the Arab Republic of Egypt only — we do not ship outside Egypt.</li>
+          <li>Shipping fees: 70 EGP for Cairo and Giza, 100 EGP for every other governorate.</li>
+          <li>Delivery time: 2 – 5 working days after order confirmation.</li>
           <li>
             Delivery times may be extended during public holidays or
             unforeseen circumstances.
@@ -229,7 +231,7 @@ function ContentEN() {
       </Section>
 
       <p className="text-xs text-muted pt-6 border-t border-border">
-        Last updated: June 2026
+        Last updated: November 2026
       </p>
     </>
   );

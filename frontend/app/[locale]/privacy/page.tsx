@@ -45,8 +45,8 @@ function ContentAR() {
           <li><strong>بيانات التواصل:</strong> رقم الهاتف والعنوان.</li>
           <li><strong>بيانات الطلب:</strong> تفاصيل المنتجات، الكميات، والمحافظة.</li>
           <li>
-            <strong>بيانات الدفع:</strong> لا نحفظ بيانات بطاقتك الائتمانية —
-            تتم معالجتها بالكامل عبر بوابة Tap الآمنة (PCI-DSS).
+            <strong>بيانات الدفع:</strong> لا نجمع أى بيانات بنكية أو
+            بطاقات ائتمانية — الدفع عند الاستلام نقداً للمندوب فقط.
           </li>
           <li>
             <strong>بيانات التصفح:</strong> عنوان IP، نوع المتصفح، الصفحات
@@ -72,7 +72,6 @@ function ContentAR() {
         </p>
         <ul className="list-disc ms-6 space-y-2 mt-2">
           <li>شركات الشحن (الاسم، الهاتف، العنوان) لتوصيل الطلب فقط.</li>
-          <li>بوابة الدفع Tap لإتمام عملية الشراء.</li>
           <li>الجهات الحكومية إذا طُلب منا قانونياً.</li>
         </ul>
       </Section>
@@ -88,8 +87,8 @@ function ContentAR() {
 
       <Section title="٥. أمان البيانات">
         <p>
-          نستخدم اتصالاً مُشفّراً (HTTPS / SSL) فى جميع الصفحات. بيانات
-          الدفع تمر مباشرة لـTap بدون أن نراها أو نحفظها على خوادمنا.
+          نستخدم اتصالاً مُشفّراً (HTTPS / SSL) فى جميع صفحات الموقع
+          لحماية البيانات الشخصية أثناء إرسالها.
         </p>
       </Section>
 
@@ -122,7 +121,7 @@ function ContentAR() {
       </Section>
 
       <p className="text-xs text-muted pt-6 border-t border-border">
-        آخر تحديث: يونيو ٢٠٢٦
+        آخر تحديث: نوفمبر ٢٠٢٦
       </p>
     </>
   );
@@ -143,8 +142,8 @@ function ContentEN() {
           <li><strong>Contact:</strong> phone number and address.</li>
           <li><strong>Order:</strong> product details, quantities, and governorate.</li>
           <li>
-            <strong>Payment:</strong> we never store credit-card data — it
-            is processed entirely through the secure Tap gateway (PCI-DSS).
+            <strong>Payment:</strong> we do not collect any card or bank
+            data — payment is cash on delivery, collected by the courier.
           </li>
           <li>
             <strong>Browsing:</strong> IP address, browser type, pages
@@ -170,7 +169,6 @@ function ContentEN() {
         </p>
         <ul className="list-disc ml-6 space-y-2 mt-2">
           <li>Courier companies (name, phone, address) — solely to deliver the order.</li>
-          <li>Tap payment gateway — to complete the purchase.</li>
           <li>Government authorities when legally required.</li>
         </ul>
       </Section>
@@ -187,9 +185,8 @@ function ContentEN() {
 
       <Section title="5. Data security">
         <p>
-          The entire site uses encrypted HTTPS / SSL connections. Payment
-          data is sent directly to Tap — we never see or store it on our
-          servers.
+          The entire site uses encrypted HTTPS / SSL connections to
+          protect personal data in transit.
         </p>
       </Section>
 
@@ -221,7 +218,7 @@ function ContentEN() {
       </Section>
 
       <p className="text-xs text-muted pt-6 border-t border-border">
-        Last updated: June 2026
+        Last updated: November 2026
       </p>
     </>
   );

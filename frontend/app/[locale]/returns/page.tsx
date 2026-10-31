@@ -91,12 +91,14 @@ function ContentAR() {
       <Section title="٥. الاسترداد">
         <ul className="list-disc ms-6 space-y-2">
           <li>
-            بعد استلام المنتج وفحصه (٢ – ٥ أيام عمل) نُعيد المبلغ كاملاً
-            بنفس طريقة الدفع الأصلية (KNET / Visa / Mastercard / Apple Pay).
+            بما أن الدفع عند الاستلام نقداً، فالاسترداد يتم نقداً أيضاً
+            عن طريق تحويل بنكى أو محفظة إلكترونية (فودافون كاش / إنستا
+            باى) حسب اختيارك، أو كاش مع المندوب لو كنتِ فى القاهرة
+            الكبرى.
           </li>
           <li>
-            يستغرق ظهور المبلغ فى حسابكِ <strong>٧ – ١٤ يوم عمل</strong>{' '}
-            حسب البنك.
+            بعد استلام المنتج وفحصه (٢ – ٥ أيام عمل) نُحوّل المبلغ كاملاً
+            خلال <strong>٣ – ٥ أيام عمل</strong>.
           </li>
           <li>
             يمكنكِ اختيار <strong>الاستبدال بمنتج آخر</strong> بنفس القيمة
@@ -113,7 +115,7 @@ function ContentAR() {
       </Section>
 
       <p className="text-xs text-muted pt-6 border-t border-border">
-        آخر تحديث: يونيو ٢٠٢٦
+        آخر تحديث: نوفمبر ٢٠٢٦
       </p>
     </>
   );
@@ -181,13 +183,14 @@ function ContentEN() {
       <Section title="5. Refund">
         <ul className="list-disc ml-6 space-y-2">
           <li>
-            After receiving and inspecting the item (2 – 5 working days),
-            we issue a full refund through the original payment method
-            (KNET / Visa / Mastercard / Apple Pay).
+            Since payment is cash on delivery, refunds are issued the same
+            way: bank transfer or e-wallet (Vodafone Cash / InstaPay) of
+            your choice, or cash via the courier if you are inside Greater
+            Cairo.
           </li>
           <li>
-            The refund typically appears in your account within{' '}
-            <strong>7 – 14 working days</strong>, depending on your bank.
+            After receiving and inspecting the item (2 – 5 working days),
+            we send the refund within <strong>3 – 5 working days</strong>.
           </li>
           <li>
             You can choose <strong>an exchange of equal value</strong>{' '}
@@ -205,7 +208,7 @@ function ContentEN() {
       </Section>
 
       <p className="text-xs text-muted pt-6 border-t border-border">
-        Last updated: June 2026
+        Last updated: November 2026
       </p>
     </>
   );
