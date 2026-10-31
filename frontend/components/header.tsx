@@ -82,20 +82,23 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
           </button>
 
           {/* Brand logo — click returns to the home page in the current
-              locale. The source /brand/logo.png is actually a
-              1600x926 JPEG with the DEDA mark centred and heavy black
-              padding on every side (plus partial mirror repeats on the
-              far edges). Rendering it with `object-contain` would show
-              all that padding and squash the mark down to ~40px wide.
-              So we size the container to the mark's own aspect ratio
-              (~1.3) and use `object-cover` to zoom past the padding
-              onto the mark itself. */}
+              locale. The source /brand/logo.png is a 1600x926 JPEG
+              with the DEDA mark centred over a solid black background
+              (plus partial mirror repeats on the far left/right).
+              We scale into the central mark via `object-cover` +
+              transform, and lift the black background off using
+              `mix-blend-mode: screen` — which keeps every pixel
+              lighter than the cream page and drops everything darker,
+              so the gold-and-white DEDA mark reads straight on the
+              page as if it were a transparent PNG. Replace this with
+              a real transparent-background logo file to drop the
+              blend hack. */}
           <Link
             href={localePrefix}
             aria-label={dict.brand}
             className="shrink-0"
           >
-            <div className="relative h-11 md:h-14 w-16 md:w-20 overflow-hidden bg-ink">
+            <div className="relative h-11 md:h-14 w-16 md:w-20 overflow-hidden">
               <Image
                 src="/brand/logo.png"
                 alt={dict.brand}
@@ -105,10 +108,8 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
                 className="object-cover"
                 style={{
                   objectPosition: 'center',
-                  // Scale the image up so the central DEDA mark fills
-                  // the box and the partial mirror repeats on the far
-                  // left/right edges get cropped out entirely.
                   transform: 'scale(1.9)',
+                  mixBlendMode: 'screen',
                 }}
               />
             </div>
