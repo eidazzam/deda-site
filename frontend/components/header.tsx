@@ -58,36 +58,20 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
           below stays pinned to the top. */}
       <AnnouncementBar locale={locale} dict={dict} />
 
-      {/* Full-width brand banner. Fixed-step heights per breakpoint so the
-          composition reads cleanly on mobile; the object-position pins
-          the crop to the LEFT edge of the source (where the DEDA
-          lockup lives) about 45% down the frame — right on the R monogram. */}
-      <Link
-        href={localePrefix}
-        aria-label={dict.brand}
-        className="block w-full bg-ink relative h-52 sm:h-80 md:h-80 lg:h-72 xl:h-80 overflow-hidden"
-      >
-        <Image
-          src="/brand/hero-banner.jpg"
-          alt={dict.brand}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-          style={{ objectPosition: '0% 45%' }}
-        />
-      </Link>
+      {/* The full-width hero banner was retired — it depended on a
+          /brand/hero-banner.jpg that never shipped, so it rendered as a
+          solid black bar in production. The brand mark now lives inline
+          in the sticky nav strip below. */}
 
-      {/* Sticky nav strip — the row that survives scroll. Announcement +
-          banner scroll away above; this stays pinned so the categories
-          and actions cluster are always one thumb away. */}
+      {/* Sticky nav strip — the row that survives scroll. The brand logo
+          sits on the start edge, nav in the middle, actions on the end. */}
       <div className="sticky top-0 z-40 bg-bg/90 backdrop-blur-md border-b border-border">
       <div className="max-w-page mx-auto px-4 md:px-6 lg:px-10">
         {/* Nav + actions row. Logo lives in the banner above, so this row
             is a clean single strip: hamburger on mobile, categories on
             desktop, actions cluster on the far side. */}
-        <div className="flex items-center justify-between h-14 md:h-16 gap-3 lg:gap-5">
-          {/* Hamburger — visible only below lg, where the inline nav is hidden */}
+        <div className="flex items-center justify-between h-16 md:h-20 gap-3 lg:gap-5">
+          {/* Hamburger — visible only below xl, where the inline nav is hidden */}
           <button
             type="button"
             onClick={onMenuClick}
@@ -96,6 +80,24 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
           >
             <MenuIcon className="w-6 h-6" />
           </button>
+
+          {/* Brand logo — click returns to the home page in the current
+              locale. Uses the committed /brand/logo.png (dark-on-cream
+              lockup); scales down on mobile so the row stays compact. */}
+          <Link
+            href={localePrefix}
+            aria-label={dict.brand}
+            className="shrink-0 flex items-center"
+          >
+            <Image
+              src="/brand/logo.png"
+              alt={dict.brand}
+              width={160}
+              height={56}
+              priority
+              className="h-10 md:h-12 w-auto object-contain"
+            />
+          </Link>
 
           <nav className="hidden xl:flex items-center gap-4 xl:gap-7 text-xs xl:text-sm tracking-wide">
             {nav.map((n) => (
