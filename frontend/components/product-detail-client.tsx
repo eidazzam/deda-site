@@ -424,8 +424,8 @@ export function ProductDetailClient({ product, locale, dict }: Props) {
         <div className="mt-10 pt-8 border-t border-border text-xs text-muted space-y-2">
           <p>
             {isAR
-              ? 'توصيل إلى جميع محافظات الكويت خلال ٢-٥ أيام عمل.'
-              : 'Delivery to all Kuwait governorates in 2-5 business days.'}
+              ? 'توصيل إلى جميع محافظات مصر خلال ٢-٥ أيام عمل.'
+              : 'Delivery to all Egypt governorates in 2-5 business days.'}
           </p>
           <p>{dict.paymentNote}</p>
         </div>

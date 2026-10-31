@@ -53,16 +53,8 @@ enum OrderStatus {
   CANCELLED
 }
 
-enum LeadStatus {
-  NEW
-  CONTACTED
-  RESOLVED
-}
-
-enum CouponType {
-  PERCENT
-  FIXED
-}
+// LeadStatus and CouponType enums retired alongside the Lead and
+// Coupon tables they typed. See the 20261101 migration.
 
 // Deda is cash-on-delivery only — these enums stay narrow and leave
 // space to grow later if a card gateway is ever added. PaymentStatus
@@ -104,9 +96,7 @@ model Product {
 
   variants   Variant[]
   images     ProductImage[]
-  bundleLink BundleProduct[]
   orderItems OrderItem[]
-  leads      Lead[]
 
   @@index([category, status])
   @@index([isFeatured])
@@ -167,61 +157,10 @@ model Governorate {
   sortOrder   Int     @default(0)
 }
 
-// International shipping destinations. Kuwait is NOT in this table —
-// it's the implicit "local" path and uses the Governorate table for
-// per-zone fees. Countries here are everywhere else we ship to.
-model Country {
-  id          Int     @id @default(autoincrement())
-  code        String  @unique  // ISO 3166-1 alpha-2: EG, SA, AE...
-  nameEn      String  @unique
-  nameAr      String
-  shippingFee Int     // piastres
-  isActive    Boolean @default(true)
-  sortOrder   Int     @default(0)
-}
-
-model Coupon {
-  code           String     @id
-  type           CouponType
-  value          Int
-  minOrderAmount Int?
-  maxDiscount    Int?
-  expiresAt      DateTime?
-  usageLimit     Int?
-  usageCount     Int        @default(0)
-  isActive       Boolean    @default(true)
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
-}
-
-model Bundle {
-  id            Int      @id @default(autoincrement())
-  slug          String   @unique
-  nameEn        String
-  nameAr        String
-  descriptionEn String
-  descriptionAr String
-  bundlePrice   Int
-  originalPrice Int
-  imageUrl      String?
-  isActive      Boolean  @default(true)
-  sortOrder     Int      @default(0)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  products BundleProduct[]
-}
-
-model BundleProduct {
-  bundleId  Int
-  productId Int
-  sortOrder Int @default(0)
-
-  bundle  Bundle  @relation(fields: [bundleId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@id([bundleId, productId])
-}
+// Country / Coupon / Bundle / BundleProduct models retired — Deda ships
+// Egypt-only (no Country table), doesn't run promo codes (no Coupon),
+// and doesn't group products into deals (no Bundles). The 20261101
+// migration drops the matching tables + CouponType enum from Postgres.
 
 // ---------------------------------------------------------------------------
 // Orders + leads
@@ -232,7 +171,7 @@ model Order {
   customerName    String
   phone1          String
   phone2          String?
-  // ISO country code — "KW" for local Kuwait orders, anything else for
+  // ISO country code — "KW" for local Egypt orders, anything else for
   // international destinations seeded in the Country table.
   countryCode     String         @default("EG")
   // Only set when countryCode == "KW". Null for international orders.
@@ -285,59 +224,9 @@ model OrderItem {
   @@index([orderId])
 }
 
-// Customers who left their info on out-of-stock products. Shown alongside
-// orders in the admin so the owner can reach out manually when stock returns.
-model Lead {
-  id            Int        @id @default(autoincrement())
-  name          String
-  phone         String
-  email         String
-  productId     Int?
-  productSlug   String
-  productNameEn String
-  productNameAr String
-  colorName     String?
-  size          String?
-  status        LeadStatus @default(NEW)
-  adminNotes    String?
-  viewedAt      DateTime?
-  createdAt     DateTime   @default(now())
-
-  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
-
-  @@index([status, createdAt])
-}
-
-
-// ---------------------------------------------------------------------------
-// Homepage category cards — one row per Category enum value. The card
-// names, slugs, and ordering all stay in the frontend (tied to the
-// route map + i18n dictionary); the admin only flips the cover image.
-// A missing row → frontend falls back to the hardcoded default image.
-// ---------------------------------------------------------------------------
-model CategoryCardImage {
-  category  Category @id
-  url       String
-  updatedAt DateTime @updatedAt
-}
-
-// ---------------------------------------------------------------------------
-// Homepage hero slider — admin-managed list of images that rotate at the
-// top of the storefront. The slider component itself (interval, easing,
-// dots) stays in the frontend; only the image set is editable.
-// ---------------------------------------------------------------------------
-model HeroSlide {
-  id        Int      @id @default(autoincrement())
-  url       String
-  altEn     String?
-  altAr     String?
-  isActive  Boolean  @default(true)
-  sortOrder Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([isActive, sortOrder])
-}
+// Lead / CategoryCardImage / HeroSlide models retired — Deda doesn't
+// run a back-in-stock queue, doesn't surface a per-category grid, and
+// uses a static hero. The 20261101 migration drops those tables.
 
 // ---------------------------------------------------------------------------
 // Site-wide settings — a single row keyed on id=1. Holds the social

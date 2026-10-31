@@ -1,7 +1,7 @@
 /**
  * Seed script — populates a fresh database with:
- *   - 6 Kuwaiti governorates and their shipping fees (in piastres — 1 EGP = 1000 piastres)
- *   - A starter catalog of abaya products across the 6 Kuwaiti categories
+ *   - 6 Egyptian governorates and their shipping fees (in piastres — 1 EGP = 1000 piastres)
+ *   - A starter catalog of abaya products across the 6 Egyptian categories
  *     (Coloured, Black, Snap, Embroidered, Overhead, Kids) with colour
  *     variants and standard abaya size lists (52–62 for adults, 28–32
  *     for kids)
@@ -137,9 +137,9 @@ const PRODUCTS: SeedProduct[] = [
     nameEn: 'Desert Dawn Abaya',
     nameAr: 'عباية فجر الصحراء',
     descriptionEn:
-      'A warm coloured everyday abaya. Light fabric, breathable for Kuwait afternoons.',
+      'A warm coloured everyday abaya. Light fabric, breathable for Egypt afternoons.',
     descriptionAr:
-      'عباية ملوّنة دافئة للارتداء اليومي. خامة خفيفة تتنفّس فى أجواء الكويت.',
+      'عباية ملوّنة دافئة للارتداء اليومي. خامة خفيفة تتنفّس فى أجواء مصر.',
     basePrice: 58000,
     category: Category.COLOURED,
     isFeatured: true,

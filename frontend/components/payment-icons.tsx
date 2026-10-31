@@ -88,7 +88,7 @@ export function KnetBadge({ className }: BadgeProps) {
 }
 
 export function DeemaBadge({ className }: BadgeProps) {
-  // Deema wordmark (Kuwait BNPL). Shipped at /public/brand/deema.png.
+  // Deema wordmark (Egypt BNPL). Shipped at /public/brand/deema.png.
   return (
     <span className={`${wrapperClass} ${className ?? ''} p-1`} aria-label="Deema">
       <Image

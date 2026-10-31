@@ -60,7 +60,7 @@ function ContentAR() {
 
       <Section title="٣. الأسعار والدفع">
         <ul className="list-disc ms-6 space-y-2">
-          <li>جميع الأسعار بالدينار الكويتى (جنيه) وتشمل ضريبة القيمة المضافة عند انطباقها.</li>
+          <li>جميع الأسعار بالدينار مصرى (جنيه) وتشمل ضريبة القيمة المضافة عند انطباقها.</li>
           <li>الدفع متاح إلكترونياً عبر KNET وApple Pay وVisa وMastercard وtabby، عبر بوابة Tap الآمنة.</li>
           <li>يحتفظ الموقع بالحق فى رفض أو إلغاء أى طلب فى حال الاشتباه فى احتيال أو خطأ فى السعر.</li>
         </ul>
@@ -68,7 +68,7 @@ function ContentAR() {
 
       <Section title="٤. الشحن والتوصيل">
         <ul className="list-disc ms-6 space-y-2">
-          <li>التوصيل داخل الكويت خلال ١ – ٣ أيام عمل من تاريخ تأكيد الطلب.</li>
+          <li>التوصيل داخل مصر خلال ١ – ٣ أيام عمل من تاريخ تأكيد الطلب.</li>
           <li>التوصيل الدولى خلال ٥ – ١٠ أيام عمل حسب الدولة.</li>
           <li>قد تتأخر أوقات التوصيل فى الإجازات الرسمية أو الظروف الطارئة.</li>
         </ul>
@@ -108,7 +108,7 @@ function ContentAR() {
 
       <Section title="٩. القانون المُطبَّق">
         <p>
-          تخضع هذه الشروط لأحكام القانون الكويتى، وتختص المحاكم الكويتية
+          تخضع هذه الشروط لأحكام القانون مصرى، وتختص المحاكم المصرية
           بالفصل فى أى نزاع.
         </p>
       </Section>
@@ -158,7 +158,7 @@ function ContentEN() {
 
       <Section title="3. Pricing & payment">
         <ul className="list-disc ml-6 space-y-2">
-          <li>All prices are in Kuwaiti Dinar (EGP) and include VAT where applicable.</li>
+          <li>All prices are in Egyptian Dinar (EGP) and include VAT where applicable.</li>
           <li>
             Payment is accepted electronically via KNET, Apple Pay, Visa,
             Mastercard, and tabby through the secure Tap gateway.
@@ -172,7 +172,7 @@ function ContentEN() {
 
       <Section title="4. Shipping & delivery">
         <ul className="list-disc ml-6 space-y-2">
-          <li>Delivery within Kuwait: 1 – 3 working days after order confirmation.</li>
+          <li>Delivery within Egypt: 1 – 3 working days after order confirmation.</li>
           <li>International delivery: 5 – 10 working days depending on the destination.</li>
           <li>
             Delivery times may be extended during public holidays or
@@ -216,7 +216,7 @@ function ContentEN() {
 
       <Section title="9. Governing law">
         <p>
-          These terms are governed by the laws of Kuwait. The Kuwaiti
+          These terms are governed by the laws of Egypt. The Egyptian
           courts have exclusive jurisdiction over any dispute.
         </p>
       </Section>

@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 import type { Locale } from '@/lib/i18n/config';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 
-import { KuwaitFlag } from './kuwait-flag';
+import { EgyptFlag } from './egypt-flag';
 
 /**
  * Top strip above the header. Rotates through three short messages every
  * `ROTATION_MS` with a brief fade-and-rise animation:
  *
- *   1. Brand identity  — 🇰🇼 Kuwait Abayas
+ *   1. Brand identity  — 🇰🇼 Deda Women's Wear
  *   2. Craft line      — ✧ Elegant and distinctive abayas
  *   3. Purchase nudge  — ★ Reserve your Deda abaya today
  *
@@ -29,7 +29,7 @@ export function AnnouncementBar({
 }) {
   const isAR = locale === 'ar';
   const items = [
-    { key: 'brand', icon: <KuwaitFlag className="w-5 h-auto shrink-0" />, text: dict.kuwaitAbayas },
+    { key: 'brand', icon: <EgyptFlag className="w-5 h-auto shrink-0" />, text: dict.egyptAbayas },
     { key: 'local', icon: <SparkleIcon />, text: dict.freeShippingLocal },
     { key: 'intl', icon: <StarIcon />, text: dict.freeShippingIntl },
   ];

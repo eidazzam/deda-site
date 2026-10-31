@@ -1,6 +1,6 @@
 /**
  * Mock storefront — mirrors `backend/prisma/seed.ts` so the Cloudflare Pages
- * site can render the full Kuwait abaya catalog before the real backend is
+ * site can render the full Egypt abaya catalog before the real backend is
  * deployed to the VPS. Activated by setting `NEXT_PUBLIC_USE_MOCK=true` on
  * the Pages project; `lib/api/client.ts` short-circuits every method here
  * when that flag is on.
@@ -107,9 +107,9 @@ const MOCK_PRODUCTS: MockProduct[] = [
     nameEn: 'Desert Dawn Abaya',
     nameAr: 'عباية فجر الصحراء',
     descriptionEn:
-      'A warm coloured everyday abaya. Light fabric, breathable for Kuwait afternoons.',
+      'A warm coloured everyday abaya. Light fabric, breathable for Egypt afternoons.',
     descriptionAr:
-      'عباية ملوّنة دافئة للارتداء اليومي. خامة خفيفة تتنفّس فى أجواء الكويت.',
+      'عباية ملوّنة دافئة للارتداء اليومي. خامة خفيفة تتنفّس فى أجواء مصر.',
     basePrice: 58000,
     discount: null,
     category: 'COLOURED',
@@ -601,18 +601,18 @@ export function mockCreateOrder(input: CreateOrderInput): CreatedOrder {
     if (!p) continue;
     subtotal += (p.discount ?? p.basePrice) * item.quantity;
   }
-  // Mirror the backend: Kuwait uses governorate fees + 30 EGP free
+  // Mirror the backend: Egypt uses governorate fees + 30 EGP free
   // threshold, everywhere else uses a flat country fee + 100 EGP threshold.
-  const isKuwait = (input.countryCode ?? 'KW') === 'KW';
+  const isEgypt = (input.countryCode ?? 'KW') === 'KW';
   let baseShippingFee = 2000;
-  if (isKuwait) {
+  if (isEgypt) {
     const gov = MOCK_GOVERNORATES.find((g) => g.nameEn === input.governorateName);
     baseShippingFee = gov?.shippingFee ?? 2000;
   } else {
     const country = MOCK_COUNTRIES.find((c) => c.code === input.countryCode);
     baseShippingFee = country?.shippingFee ?? 7000;
   }
-  const freeThreshold = isKuwait ? 30_000 : 100_000;
+  const freeThreshold = isEgypt ? 30_000 : 100_000;
   const shippingFee = subtotal >= freeThreshold ? 0 : baseShippingFee;
   let discount = 0;
   if (input.couponCode && input.couponCode.trim().toUpperCase() === 'DEDA10') {

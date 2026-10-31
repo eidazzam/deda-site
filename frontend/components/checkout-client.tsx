@@ -41,14 +41,14 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
   const [appliedCode, setAppliedCode] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const isKuwait = countryCode === 'KW';
-  const gov = isKuwait ? governorates.find((g) => g.nameEn === govName) ?? null : null;
-  const country = !isKuwait ? countries.find((c) => c.code === countryCode) ?? null : null;
+  const isEgypt = countryCode === 'KW';
+  const gov = isEgypt ? governorates.find((g) => g.nameEn === govName) ?? null : null;
+  const country = !isEgypt ? countries.find((c) => c.code === countryCode) ?? null : null;
 
   // Free-shipping promo has been retired — shipping is always billed
   // at the destination's rate.
-  const destinationSelected = isKuwait ? gov !== null : country !== null;
-  const baseShippingFee = isKuwait ? (gov?.shippingFee ?? 0) : (country?.shippingFee ?? 0);
+  const destinationSelected = isEgypt ? gov !== null : country !== null;
+  const baseShippingFee = isEgypt ? (gov?.shippingFee ?? 0) : (country?.shippingFee ?? 0);
   const isFreeShipping = false;
   const shipping = baseShippingFee;
   const discount = couponDiscount ?? 0;
@@ -103,7 +103,7 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
         phone1: phone1.trim(),
         phone2: phone2.trim() ? phone2.trim() : null,
         countryCode,
-        governorateName: isKuwait ? gov!.nameEn : null,
+        governorateName: isEgypt ? gov!.nameEn : null,
         address: address.trim(),
         notes: notes.trim() ? notes.trim() : null,
         couponCode: appliedCode,
@@ -194,7 +194,7 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
                 className={inputCls}
                 required
               >
-                <option value="KW">{isAR ? 'الكويت' : 'Kuwait'}</option>
+                <option value="KW">{isAR ? 'مصر' : 'Egypt'}</option>
                 {countries.map((c) => (
                   <option key={c.code} value={c.code}>
                     {isAR ? c.nameAr : c.nameEn} ({formatPrice(c.shippingFee, locale)} {dict.egp})
@@ -202,7 +202,7 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
                 ))}
               </select>
             </Field>
-            {isKuwait ? (
+            {isEgypt ? (
               <Field label={dict.governorate} required full>
                 <select
                   value={govName}

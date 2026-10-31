@@ -173,7 +173,7 @@ export function TikTokIcon({ className }: IconProps) {
   );
 }
 
-// Snapchat — heavily used across the Gulf, especially in Kuwait/Saudi
+// Snapchat — heavily used across the Gulf, especially in Egypt/Saudi
 // where local creators and influencer marketing live on Snap. Surface
 // it alongside the other socials so the brand feels native.
 export function SnapchatIcon({ className }: IconProps) {

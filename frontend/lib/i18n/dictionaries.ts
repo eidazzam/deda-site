@@ -1,13 +1,13 @@
 import type { Locale } from './config';
 
-// Strings used across the storefront. Rewritten for Deda — Kuwaiti
+// Strings used across the storefront. Rewritten for Deda — Egyptian
 // luxury abayas, Bilingual-First Minimal direction. Tone is restrained
 // and quietly confident; copy reads well in both AR and EN side by side.
 export const dictionaries = {
   en: {
     brand: 'Deda',
     home: 'Home',
-    kuwaitAbayas: 'Kuwait Abayas',
+    egyptAbayas: 'Deda Women's Wear',
     freeShippingLocal: 'Elegant and distinctive abayas',
     freeShippingIntl: 'Reserve your Deda abaya today',
     customSize: 'Custom size',
@@ -61,7 +61,7 @@ export const dictionaries = {
     contactInfo: 'Contact information',
     orderSummary: 'Order summary',
     placeOrder: 'Place order',
-    paymentNote: 'Secure payment · Delivery across Kuwait',
+    paymentNote: 'Secure payment · Delivery across Egypt',
     confirmTitle: 'Your order is on its way',
     confirmSub: 'We will reach out shortly to confirm. Thank you for choosing Deda.',
     backHome: 'Back to home',
@@ -108,10 +108,10 @@ export const dictionaries = {
     aboutEyebrow: 'About Deda',
     aboutTitle: 'A quiet line of abayas, made with care.',
     aboutLead:
-      'Deda is a Kuwaiti house of modern abayas — restrained in line, generous in finish. We design pieces that meet daily life with quiet confidence and stay close to the women who wear them.',
+      'Deda is a Egyptian house of modern abayas — restrained in line, generous in finish. We design pieces that meet daily life with quiet confidence and stay close to the women who wear them.',
     aboutCraftHeading: 'Craft',
     aboutCraftBody:
-      'Every Deda piece is cut and finished in small ateliers across the Gulf. Fabrics are chosen for the way they fall, the way they breathe in Kuwaiti weather, and the way they wear after a hundred reaches and a hundred prayers. Stitching, lining, and closures are inspected by hand before a piece leaves us.',
+      'Every Deda piece is cut and finished in small ateliers across the Gulf. Fabrics are chosen for the way they fall, the way they breathe in Egyptian weather, and the way they wear after a hundred reaches and a hundred prayers. Stitching, lining, and closures are inspected by hand before a piece leaves us.',
     aboutValuesHeading: 'What we hold to',
     aboutValueOneTitle: 'Restrained design',
     aboutValueOneBody:
@@ -129,7 +129,7 @@ export const dictionaries = {
   ar: {
     brand: 'ديدا',
     home: 'الرئيسية',
-    kuwaitAbayas: 'عبايات الكويت',
+    egyptAbayas: 'ديدا للملابس النسائية',
     freeShippingLocal: 'عبايات راقية ومختلفة',
     freeShippingIntl: 'احجزي عبايتك من ديدا',
     customSize: 'مقاس خاص',
@@ -229,10 +229,10 @@ export const dictionaries = {
     aboutEyebrow: 'عن ديدا',
     aboutTitle: 'خط هادئ من العبايات، يُصنع بعناية.',
     aboutLead:
-      'ديدا دار كويتية للعبايات الحديثة — متّزنة في خطوطها، سخيّة في تشطيبها. نصمّم قطعاً تليق بحياتك اليومية وتبقى قريبة من المرأة التي ترتديها.',
+      'ديدا دار مصرية للعبايات الحديثة — متّزنة في خطوطها، سخيّة في تشطيبها. نصمّم قطعاً تليق بحياتك اليومية وتبقى قريبة من المرأة التي ترتديها.',
     aboutCraftHeading: 'حِرفة',
     aboutCraftBody:
-      'كل قطعة من ديدا تُفصَّل وتُجهَّز في ورش صغيرة على امتداد الخليج. نختار الأقمشة لطريقة انسيابها، ولأنها تتنفّس مع طقس الكويت، ولثباتها بعد مئة حركة ومئة سجود. نفحص الخياطة والبطانة والإغلاقات يداً يداً قبل خروج القطعة.',
+      'كل قطعة من ديدا تُفصَّل وتُجهَّز في ورش صغيرة على امتداد الخليج. نختار الأقمشة لطريقة انسيابها، ولأنها تتنفّس مع طقس مصر، ولثباتها بعد مئة حركة ومئة سجود. نفحص الخياطة والبطانة والإغلاقات يداً يداً قبل خروج القطعة.',
     aboutValuesHeading: 'ما نحرص عليه',
     aboutValueOneTitle: 'تصميم متّزن',
     aboutValueOneBody:

@@ -4,12 +4,12 @@ import { z } from 'zod';
 
 import { prisma } from '../lib/prisma.js';
 import { badRequest } from '../lib/errors.js';
-import { unitPriceOf, validateCoupon } from '../lib/pricing.js';
+import { unitPriceOf } from '../lib/pricing.js';
 import { formatOrderNumber } from '../lib/order-number.js';
 
 // Free shipping kicks in once the cart subtotal reaches these thresholds.
 // Stored in piastres to match every other money field in the codebase.
-const FREE_SHIPPING_LOCAL_PIASTRES = 30_000;   // Kuwait orders → 30 EGP
+const FREE_SHIPPING_LOCAL_PIASTRES = 30_000;   // Egypt orders → 30 EGP
 const FREE_SHIPPING_INTL_PIASTRES  = 100_000;  // International   → 100 EGP
 const EGYPT_CODE = 'EG';
 
@@ -40,7 +40,7 @@ const createOrderSchema = z.object({
   customerName: z.string().trim().min(2).max(100),
   phone1: z.string().trim().min(8).max(20),
   phone2: z.string().trim().min(8).max(20).optional().nullable(),
-  // ISO-2 country code. Defaults to Kuwait when the client doesn't send
+  // ISO-2 country code. Defaults to Egypt when the client doesn't send
   // one — keeps older builds of the storefront working during rollout.
   countryCode: z.string().trim().toUpperCase().length(2).default(EGYPT_CODE),
   // Required only when countryCode === KW; validated inside the handler.
@@ -135,7 +135,7 @@ export const orderRoutes: FastifyPluginAsync = async (app) => {
       }
 
       // ----- 3. Destination + base shipping fee --------------------------
-      // Two branches: Kuwait uses the Governorate table; everywhere else
+      // Two branches: Egypt uses the Governorate table; everywhere else
       // uses the Country table with a single flat per-country fee.
       let baseShippingFee = 0;
       let governorateName: string | null = null;
@@ -144,7 +144,7 @@ export const orderRoutes: FastifyPluginAsync = async (app) => {
         if (!input.governorateName) {
           throw badRequest(
             'GOVERNORATE_REQUIRED',
-            'Governorate is required for Kuwait orders',
+            'Governorate is required for Egypt orders',
           );
         }
         const gov = await tx.governorate.findUnique({
@@ -165,27 +165,14 @@ export const orderRoutes: FastifyPluginAsync = async (app) => {
         baseShippingFee = country.shippingFee;
       }
 
-      // ----- 4. Coupon (optional) ---------------------------------------
-      let discount = 0;
-      let appliedCouponCode: string | null = null;
-      if (input.couponCode) {
-        const result = await validateCoupon(tx, input.couponCode, subtotal);
-        if (!result.valid) {
-          throw badRequest(
-            `COUPON_${result.reason.replace('-', '_').toUpperCase()}`,
-            'Coupon could not be applied',
-          );
-        }
-        discount = result.discount;
-        appliedCouponCode = result.coupon.code;
-      }
-
-      // Free-shipping promo retired — shipping is always billed at the
-      // destination's rate. Threshold constants are kept above so the
-      // logic can be restored quickly if the promo returns.
+      // Coupons retired — the Coupon table is gone, discount is always
+      // zero. Shipping is billed flat per governorate (no free-shipping
+      // threshold either); the stored FREE_SHIPPING_* constants are
+      // kept for grep-ability if the promo ever returns.
       void FREE_SHIPPING_LOCAL_PIASTRES;
       void FREE_SHIPPING_INTL_PIASTRES;
       void EGYPT_CODE;
+      const discount = 0;
       const shippingFee = baseShippingFee;
       const total = subtotal + shippingFee - discount;
 
@@ -203,7 +190,7 @@ export const orderRoutes: FastifyPluginAsync = async (app) => {
           shippingFee,
           discount,
           total,
-          couponCode: appliedCouponCode,
+          couponCode: null,
           // Deda is cash-on-delivery only — payment is collected by the
           // courier on arrival, so there's never a parallel Payment row.
           paymentMethod: PaymentMethod.COD,
@@ -212,13 +199,6 @@ export const orderRoutes: FastifyPluginAsync = async (app) => {
         },
         include: { items: true },
       });
-
-      if (appliedCouponCode) {
-        await tx.coupon.update({
-          where: { code: appliedCouponCode },
-          data: { usageCount: { increment: 1 } },
-        });
-      }
 
       return created;
     });

@@ -72,7 +72,7 @@ export default function AdminGovernoratesPage() {
         <div className="text-[10px] tracking-widest uppercase text-muted mb-2">{t('common.admin')}</div>
         <h1 className="font-display text-4xl">{t('governorates.title')}</h1>
         <p className="text-sm text-muted mt-2">
-          Shipping fees per Kuwaiti governorate. Toggle off to remove from
+          Shipping fees per Egyptian governorate. Toggle off to remove from
           the checkout dropdown.
         </p>
       </div>

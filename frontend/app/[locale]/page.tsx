@@ -30,8 +30,8 @@ export async function generateMetadata({
   return buildMetadata({
     locale: locale as Locale,
     title: isAR
-      ? 'ديدا — عبايات فاخرة من الكويت'
-      : 'Deda — Luxury Kuwaiti Abayas',
+      ? 'ديدا — عبايات فاخرة من مصر'
+      : 'Deda — Luxury Egyptian Abayas',
     pathFromLocaleRoot: '',
   });
 }
@@ -112,9 +112,9 @@ export default async function HomePage({
     headlineEn: "Every piece carries a maker's hand.",
     headlineAr: 'كل قطعة تحمل أثر .',
     bodyEn:
-      'We work with small ateliers from Kuwait across the Gulf, choose considered fabrics, and measure success by the details only the wearer notices.',
+      'We work with small ateliers from Egypt across the Gulf, choose considered fabrics, and measure success by the details only the wearer notices.',
     bodyAr:
-      'نعمل مع ورش صغيرة من الكويت إلى الخليج، نختار خامات راقية ونقيس النجاح بتفاصيل لا يراها أحد إلا من تلبسها.',
+      'نعمل مع ورش صغيرة من مصر إلى الخليج، نختار خامات راقية ونقيس النجاح بتفاصيل لا يراها أحد إلا من تلبسها.',
     imageUrl: EDITORIAL_IMAGE,
   };
   try {

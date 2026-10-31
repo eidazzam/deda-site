@@ -374,7 +374,7 @@ const EN: Dict = {
   'orderDetail.payment': 'Payment',
 
   'invoice.title': 'Invoice',
-  'invoice.brandTagline': 'Kuwait abayas',
+  'invoice.brandTagline': 'Egypt abayas',
   'invoice.billTo': 'Bill to',
   'invoice.shipTo': 'Ship to',
   'invoice.paymentMethod': 'Payment method',
@@ -636,7 +636,7 @@ const AR: Dict = {
   'orderDetail.payment': 'الدفع',
 
   'invoice.title': 'فاتورة',
-  'invoice.brandTagline': 'عبايات الكويت',
+  'invoice.brandTagline': 'ديدا للملابس النسائية',
   'invoice.billTo': 'العميل',
   'invoice.shipTo': 'عنوان التوصيل',
   'invoice.paymentMethod': 'طريقة الدفع',
@@ -822,7 +822,7 @@ const STORAGE_KEY = 'deda-admin-locale';
 
 export function AdminI18nProvider({ children }: { children: ReactNode }) {
   // Default to Arabic so a fresh login matches the storefront's
-  // Kuwait-first audience. Persisted on every change.
+  // Egypt-first audience. Persisted on every change.
   const [locale, setLocaleState] = useState<AdminLocale>('ar');
 
   // Read the persisted choice on mount. We can't initialise the state

@@ -23,8 +23,8 @@ export async function generateMetadata({
     locale: locale as Locale,
     title: dict.about,
     description: isAR
-      ? 'دار كويتية للعبايات الحديثة — صناعة هادئة، تفاصيل دقيقة، ومقاسات تليق بكِ.'
-      : "Kuwait's quiet abaya house — restrained design, careful craft, sizing made for you.",
+      ? 'دار مصرية للعبايات الحديثة — صناعة هادئة، تفاصيل دقيقة، ومقاسات تليق بكِ.'
+      : "Egypt's quiet abaya house — restrained design, careful craft, sizing made for you.",
     pathFromLocaleRoot: '/about',
   });
 }

@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import {
   FacebookIcon,
   InstagramIcon,
-  SnapchatIcon,
   TikTokIcon,
   WhatsAppIcon,
 } from './icon';
@@ -50,17 +49,22 @@ export function Footer({
     };
   }, []);
 
+  // Baked-in Deda contact defaults so the footer still renders a full
+  // socials row before the admin fills siteConfig in (or if the
+  // browser-side fetch quietly fails). Admin overrides take priority.
+  const DEDA_WHATSAPP = '+201200724809';
+  const DEDA_FACEBOOK = 'https://www.facebook.com/dwomenswear/';
+
   // wa.me wants the number without the leading + and without spaces/dashes.
-  const whatsappHref = config?.whatsappNumber
-    ? `https://wa.me/${config.whatsappNumber.replace(/[^0-9]/g, '')}`
-    : null;
+  const whatsappRaw = config?.whatsappNumber ?? DEDA_WHATSAPP;
+  const whatsappHref = `https://wa.me/${whatsappRaw.replace(/[^0-9]/g, '')}`;
 
   const socials: Array<{
     href: string;
     label: string;
     icon: React.ComponentType<{ className?: string }>;
   }> = [
-    whatsappHref && {
+    {
       href: whatsappHref,
       label: 'WhatsApp',
       icon: WhatsAppIcon,
@@ -70,20 +74,13 @@ export function Footer({
       label: 'Instagram',
       icon: InstagramIcon,
     },
-    // Snapchat ranks alongside Instagram in the Gulf — surface it before
-    // TikTok/Facebook so the order reads native to the market.
-    config?.snapchatUrl && {
-      href: config.snapchatUrl,
-      label: 'Snapchat',
-      icon: SnapchatIcon,
-    },
     config?.tiktokUrl && {
       href: config.tiktokUrl,
       label: 'TikTok',
       icon: TikTokIcon,
     },
-    config?.facebookUrl && {
-      href: config.facebookUrl,
+    {
+      href: config?.facebookUrl ?? DEDA_FACEBOOK,
       label: 'Facebook',
       icon: FacebookIcon,
     },
@@ -100,8 +97,8 @@ export function Footer({
           <div className="font-display text-3xl mb-3">{dict.brand}</div>
           <p className="text-sm text-muted leading-relaxed">
             {isAR
-              ? 'عبايات حديثة بحرفية متّزنة، من الكويت.'
-              : 'Modern abayas with restrained craft, from Kuwait.'}
+              ? 'عبايات حديثة بحرفية متّزنة، من مصر.'
+              : 'Modern abayas with restrained craft, from Egypt.'}
           </p>
         </div>
 
@@ -177,8 +174,8 @@ export function Footer({
           </div>
           <p className="text-sm text-muted leading-relaxed mb-4">
             {isAR
-              ? 'توصيل إلى جميع محافظات الكويت وإلى كل الوطن العربى. دفع آمن.'
-              : 'Delivery across Kuwait. Secure payment.'}
+              ? 'توصيل إلى جميع محافظات مصر وإلى كل الوطن العربى. دفع آمن.'
+              : 'Delivery across Egypt. Secure payment.'}
           </p>
           {socials.length > 0 ? (
             <div className="flex items-center gap-4">

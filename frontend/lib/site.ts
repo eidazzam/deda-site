@@ -6,8 +6,8 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3
 export const SITE_NAME = 'Deda';
 
 export const SITE_DESCRIPTION = {
-  en: 'Deda — luxury Kuwaiti abayas. Bilingual elegance, restrained craft, quietly powerful pieces.',
-  ar: 'ديدا — عبايات فاخرة من الكويت. أناقة هادئة بحرفية رفيعة، قطع تعبّر عن حضورك.',
+  en: 'Deda — luxury Egyptian abayas. Bilingual elegance, restrained craft, quietly powerful pieces.',
+  ar: 'ديدا — عبايات فاخرة من مصر. أناقة هادئة بحرفية رفيعة، قطع تعبّر عن حضورك.',
 };
 
 // Default OG image — committed alongside the brand logo so social

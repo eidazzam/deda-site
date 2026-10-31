@@ -41,7 +41,7 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
   const [name, setName] = useState('');
   const [phone1, setPhone1] = useState('');
   const [phone2, setPhone2] = useState('');
-  // Country defaults to Kuwait — most visitors. Switching to anything else
+  // Country defaults to Egypt — most visitors. Switching to anything else
   // hides the governorate dropdown and uses the country's flat fee instead.
   const [countryCode, setCountryCode] = useState('EG');
   const [govName, setGovName] = useState('');
@@ -98,21 +98,21 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
     });
   }, [open]);
 
-  const isKuwait = countryCode === 'KW';
+  const isEgypt = countryCode === 'KW';
   const gov = useMemo(
-    () => (isKuwait ? governorates?.find((g) => g.nameEn === govName) ?? null : null),
-    [governorates, govName, isKuwait],
+    () => (isEgypt ? governorates?.find((g) => g.nameEn === govName) ?? null : null),
+    [governorates, govName, isEgypt],
   );
   const country = useMemo(
-    () => (!isKuwait ? countries?.find((c) => c.code === countryCode) ?? null : null),
-    [countries, countryCode, isKuwait],
+    () => (!isEgypt ? countries?.find((c) => c.code === countryCode) ?? null : null),
+    [countries, countryCode, isEgypt],
   );
 
   // Free-shipping promo has been retired — shipping is always billed at
   // the destination's rate. Keeping the placeholders named the same so
   // the summary row below still renders unchanged.
-  const destinationSelected = isKuwait ? gov !== null : country !== null;
-  const baseShippingFee = isKuwait ? (gov?.shippingFee ?? 0) : (country?.shippingFee ?? 0);
+  const destinationSelected = isEgypt ? gov !== null : country !== null;
+  const baseShippingFee = isEgypt ? (gov?.shippingFee ?? 0) : (country?.shippingFee ?? 0);
   const isFreeShipping = false;
   const shipping = baseShippingFee;
   const discount = couponDiscount ?? 0;
@@ -124,10 +124,10 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
     const missing: string[] = [];
     if (name.trim().length < 2) missing.push(dict.name);
     if (phone1.trim().length < 8) missing.push(dict.phone1);
-    if (isKuwait && govName.length === 0) missing.push(dict.governorate);
+    if (isEgypt && govName.length === 0) missing.push(dict.governorate);
     if (address.trim().length < 5) missing.push(dict.address);
     return missing;
-  }, [name, phone1, govName, address, dict, isKuwait]);
+  }, [name, phone1, govName, address, dict, isEgypt]);
 
   const canSubmit = missingFields.length === 0 && items.length > 0 && !submitting;
 
@@ -161,7 +161,7 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
         phone1: phone1.trim(),
         phone2: phone2.trim() ? phone2.trim() : null,
         countryCode,
-        governorateName: isKuwait ? gov!.nameEn : null,
+        governorateName: isEgypt ? gov!.nameEn : null,
         address: address.trim(),
         notes: notes.trim() ? notes.trim() : null,
         couponCode: appliedCode,
@@ -400,7 +400,7 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
                       className={inputCls}
                     >
                       <option value="KW">
-                        {isAR ? 'الكويت' : 'Kuwait'}
+                        {isAR ? 'مصر' : 'Egypt'}
                       </option>
                       {countries?.map((c) => (
                         <option key={c.code} value={c.code}>
@@ -408,7 +408,7 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
                         </option>
                       ))}
                     </select>
-                    {isKuwait ? (
+                    {isEgypt ? (
                       <select
                         value={govName}
                         onChange={(e) => setGovName(e.target.value)}

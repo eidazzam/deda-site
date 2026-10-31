@@ -22,10 +22,12 @@ const config: Config = {
         border: '#e8e4dc',      // hairline dividers
         'border-strong': '#d4cec0', // stronger dividers
         muted: '#5c5c5c',       // legacy alias → ink-soft
-        // Gold used sparingly — CTAs and small accents only.
-        accent: '#c9a87c',
-        'accent-dark': '#8b6f47',  // hover state
-        'accent-faint': '#ede0c9', // soft gold badge background
+        // DEDA brand gold — more saturated than Rozana's warm tan so it
+        // pops against the black header + hero. Used sparingly for CTAs,
+        // discount prices, and the limited-time chip.
+        accent: '#c9a961',
+        'accent-dark': '#9c7f42',  // hover state
+        'accent-faint': '#f0e4c4', // soft gold badge background
         // Muted status colors — Gulf restraint, no bright reds/greens.
         red: '#c54a4a',
         green: '#5a8a5a',

@@ -108,7 +108,7 @@ export type Governorate = {
   shippingFee: number;
 };
 
-// International destinations. Kuwait is NOT in this list — it's the
+// International destinations. Egypt is NOT in this list — it's the
 // implicit local path that drives the governorate dropdown instead.
 export type Country = {
   code: string;
@@ -154,7 +154,7 @@ export type CreateOrderInput = {
   customerName: string;
   phone1: string;
   phone2?: string | null;
-  // ISO-2 country code — "KW" for local Kuwait orders. Defaults server-side
+  // ISO-2 country code — "KW" for local Egypt orders. Defaults server-side
   // when missing so old clients keep working during rollout.
   countryCode?: string;
   // Only required when countryCode === "KW".

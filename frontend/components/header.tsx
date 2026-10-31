@@ -53,7 +53,7 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
 
   return (
     <header className="bg-bg border-b border-border">
-      {/* Top strip — rotates between the Kuwait identity line and the two
+      {/* Top strip — rotates between the Egypt identity line and the two
           shipping promos. Scrolls away with the banner; only the nav row
           below stays pinned to the top. */}
       <AnnouncementBar locale={locale} dict={dict} />
