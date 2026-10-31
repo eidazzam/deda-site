@@ -7,7 +7,7 @@ export const dictionaries = {
   en: {
     brand: 'Deda',
     home: 'Home',
-    egyptAbayas: 'Deda Women's Wear',
+    egyptAbayas: "Deda Women's Wear",
     freeShippingLocal: 'Elegant and distinctive abayas',
     freeShippingIntl: 'Reserve your Deda abaya today',
     customSize: 'Custom size',
