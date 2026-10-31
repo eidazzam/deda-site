@@ -9,7 +9,6 @@ import {
   TikTokIcon,
   WhatsAppIcon,
 } from './icon';
-import { PaymentBadges } from './payment-icons';
 
 import { api } from '@/lib/api/client';
 import type { SiteConfig } from '@/lib/api/types';
@@ -225,17 +224,9 @@ export function Footer({
       </div>
 
       <div className="border-t border-border/60">
-        <div className="max-w-page mx-auto px-6 lg:px-10 py-5 flex flex-col items-center gap-3 md:flex-row md:justify-between">
-          <div className="flex flex-col items-center md:items-start gap-1.5">
-            <span className="text-[10px] tracking-widest uppercase text-muted">
-              {isAR ? 'وسائل الدفع المقبولة' : 'We accept'}
-            </span>
-            <PaymentBadges />
-          </div>
-          <div className="text-[11px] tracking-widest uppercase text-muted text-center md:text-end">
-            © {new Date().getFullYear()} {dict.brand} ·{' '}
-            {isAR ? 'كل الحقوق محفوظة' : 'All rights reserved'}
-          </div>
+        <div className="max-w-page mx-auto px-6 lg:px-10 py-5 text-[11px] tracking-widest uppercase text-muted text-center">
+          © {new Date().getFullYear()} {dict.brand} ·{' '}
+          {isAR ? 'كل الحقوق محفوظة' : 'All rights reserved'}
         </div>
       </div>
     </footer>
