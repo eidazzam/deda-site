@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { adminApi, AdminApiError } from '@/lib/admin/api';
+import { useAdminI18n } from '@/lib/admin/i18n';
 import type {
   AdminOrderDetail,
   PaymentMethod,
@@ -43,6 +44,7 @@ function paymentStatusLabel(s: PaymentStatus): string {
 }
 
 export default function AdminOrderDetailPage() {
+  const { t } = useAdminI18n();
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const id = Number(params.id);
@@ -268,7 +270,7 @@ export default function AdminOrderDetailPage() {
 
           <div className="border border-border p-5">
             <div className="text-[10px] tracking-widest uppercase text-muted mb-3">
-              Status
+              {t('orderDetail.status')}
             </div>
             <div className="grid grid-cols-1 gap-1.5">
               {STATUS_OPTIONS.map((s) => (
@@ -276,13 +278,13 @@ export default function AdminOrderDetailPage() {
                   key={s}
                   onClick={() => updateStatus(s)}
                   disabled={savingStatus}
-                  className={`text-left text-xs tracking-widest uppercase px-3 py-2 border transition-colors ${
+                  className={`text-start text-xs tracking-widest px-3 py-2 border transition-colors ${
                     order.status === s
                       ? 'bg-ink text-bg border-ink'
                       : 'border-border hover:border-ink'
                   } disabled:opacity-50`}
                 >
-                  {s.toLowerCase()}
+                  {t(`orders.status.${s.toLowerCase()}` as Parameters<typeof t>[0])}
                 </button>
               ))}
             </div>

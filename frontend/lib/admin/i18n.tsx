@@ -101,6 +101,7 @@ type Dict = {
   'orderDetail.placedAt': string;
   'orderDetail.printInvoice': string;
   'orderDetail.payment': string;
+  'orderDetail.status': string;
 
   // Invoice / printable views
   'invoice.title': string;
@@ -372,6 +373,7 @@ const EN: Dict = {
   'orderDetail.placedAt': 'Placed at',
   'orderDetail.printInvoice': 'Print invoice',
   'orderDetail.payment': 'Payment',
+  'orderDetail.status': 'Status',
 
   'invoice.title': 'Invoice',
   'invoice.brandTagline': 'Egypt abayas',
@@ -615,9 +617,9 @@ const AR: Dict = {
   'orders.confirmDelete': 'حذف الطلب نهائياً؟ لا يمكن التراجع.',
   'orders.deleted': 'تم الحذف',
   'orders.status.pending': 'قيد الانتظار',
-  'orders.status.confirmed': 'مؤكد',
+  'orders.status.confirmed': 'تم الاستلام',
   'orders.status.shipped': 'تم الشحن',
-  'orders.status.delivered': 'تم التسليم',
+  'orders.status.delivered': 'تم تسليم الاوردر',
   'orders.status.cancelled': 'ملغى',
 
   'orderDetail.customer': 'العميل',
@@ -634,6 +636,7 @@ const AR: Dict = {
   'orderDetail.placedAt': 'تاريخ الطلب',
   'orderDetail.printInvoice': 'طباعة الفاتورة',
   'orderDetail.payment': 'الدفع',
+  'orderDetail.status': 'حالة الطلب',
 
   'invoice.title': 'فاتورة',
   'invoice.brandTagline': 'ديدا للملابس النسائية',
