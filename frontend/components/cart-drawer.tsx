@@ -51,11 +51,6 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
   // Deda is cash-on-delivery only — no radio, no state.
   const paymentMethod: CheckoutPaymentMethod = 'COD';
 
-  const [coupon, setCoupon] = useState('');
-  const [couponDiscount, setCouponDiscount] = useState<number | null>(null);
-  const [appliedCode, setAppliedCode] = useState<string | null>(null);
-  const [couponMessage, setCouponMessage] = useState<string | null>(null);
-
   // ---- server data ----------------------------------------------------------
   // Lazy-load the governorate + country lists the first time the drawer
   // opens, then cache inside the component until navigation.
@@ -115,8 +110,7 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
   const baseShippingFee = isEgypt ? (gov?.shippingFee ?? 0) : (country?.shippingFee ?? 0);
   const isFreeShipping = false;
   const shipping = baseShippingFee;
-  const discount = couponDiscount ?? 0;
-  const total = Math.max(0, subtotal + shipping - discount);
+  const total = Math.max(0, subtotal + shipping);
 
   // List the still-missing pieces so we can surface them under the
   // submit button rather than just greying it out silently.
@@ -131,26 +125,6 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
 
   const canSubmit = missingFields.length === 0 && items.length > 0 && !submitting;
 
-  const onApplyCoupon = async () => {
-    const code = coupon.trim();
-    if (!code) return;
-    try {
-      const res = await api.coupons.validate(code, subtotal);
-      setCouponDiscount(res.discount);
-      setAppliedCode(res.code);
-      setCouponMessage(
-        isAR
-          ? `وفّرت ${formatPrice(res.discount, locale)} جنيه`
-          : `You saved ${formatPrice(res.discount, locale)} EGP`,
-      );
-    } catch (err) {
-      const msg = err instanceof ApiError ? err.message : 'Failed';
-      setCouponDiscount(null);
-      setAppliedCode(null);
-      setCouponMessage(msg);
-    }
-  };
-
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!canSubmit || !destinationSelected) return;
@@ -164,7 +138,7 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
         governorateName: isEgypt ? gov!.nameEn : null,
         address: address.trim(),
         notes: notes.trim() ? notes.trim() : null,
-        couponCode: appliedCode,
+        couponCode: null,
         paymentMethod,
         items: items.map((it) => ({
           productSlug: it.productSlug,
@@ -322,40 +296,6 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
                     })}
                   </ul>
 
-                  {/* Coupon */}
-                  <div className="pt-4 border-t border-border space-y-2">
-                    <div className="text-[10px] tracking-widest uppercase text-muted">
-                      {dict.coupon}
-                    </div>
-                    <div className="flex gap-2">
-                      <input
-                        value={coupon}
-                        onChange={(e) => {
-                          setCoupon(e.target.value.toUpperCase());
-                          setCouponMessage(null);
-                        }}
-                        placeholder=""
-                        className="flex-1 bg-bg border border-border px-3 py-2 text-sm focus:border-ink outline-none"
-                      />
-                      <button
-                        type="button"
-                        onClick={onApplyCoupon}
-                        className="px-4 bg-ink text-bg text-[10px] tracking-widest uppercase hover:bg-accent transition-colors"
-                      >
-                        {dict.apply}
-                      </button>
-                    </div>
-                    {couponMessage ? (
-                      <div
-                        className={`text-[11px] ${
-                          couponDiscount ? 'text-accent' : 'text-muted'
-                        }`}
-                      >
-                        {couponMessage}
-                      </div>
-                    ) : null}
-                  </div>
-
                   {/* Contact form */}
                   <div className="pt-4 border-t border-border space-y-3">
                     <div className="text-[10px] tracking-widest uppercase text-muted">
@@ -478,18 +418,6 @@ export function CartDrawer({ open, onClose, locale, dict }: Props) {
                           : '—'}
                       </span>
                     </div>
-                    {discount > 0 ? (
-                      <div
-                        className={`flex justify-between text-accent ${
-                          isAR ? 'flex-row-reverse' : ''
-                        }`}
-                      >
-                        <span>{dict.discount}</span>
-                        <span>
-                          −{formatPrice(discount, locale)} {dict.egp}
-                        </span>
-                      </div>
-                    ) : null}
                     <div
                       className={`flex justify-between font-medium text-base pt-2 border-t border-border ${
                         isAR ? 'flex-row-reverse' : ''

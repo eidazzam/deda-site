@@ -35,10 +35,6 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
   const [notes, setNotes] = useState('');
   // Deda is cash-on-delivery only — no radio, no state.
   const paymentMethod: CheckoutPaymentMethod = 'COD';
-  const [coupon, setCoupon] = useState('');
-  const [couponDiscount, setCouponDiscount] = useState<number | null>(null);
-  const [couponMessage, setCouponMessage] = useState<string | null>(null);
-  const [appliedCode, setAppliedCode] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const isEgypt = countryCode === 'EG';
@@ -51,8 +47,7 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
   const baseShippingFee = isEgypt ? (gov?.shippingFee ?? 0) : (country?.shippingFee ?? 0);
   const isFreeShipping = false;
   const shipping = baseShippingFee;
-  const discount = couponDiscount ?? 0;
-  const total = Math.max(0, subtotal + shipping - discount);
+  const total = Math.max(0, subtotal + shipping);
 
   // Fire the marketing event once when this page first becomes
   // useful — i.e. there are items in the cart. Only fires per mount.
@@ -73,26 +68,6 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
     items.length > 0 &&
     !submitting;
 
-  const onApplyCoupon = async () => {
-    const code = coupon.trim();
-    if (!code) return;
-    try {
-      const res = await api.coupons.validate(code, subtotal);
-      setCouponDiscount(res.discount);
-      setAppliedCode(res.code);
-      setCouponMessage(
-        isAR
-          ? `وفّرت ${formatPrice(res.discount, locale)} جنيه`
-          : `You saved ${formatPrice(res.discount, locale)} EGP`,
-      );
-    } catch (err) {
-      const msg = err instanceof ApiError ? err.message : 'Failed';
-      setCouponDiscount(null);
-      setAppliedCode(null);
-      setCouponMessage(msg);
-    }
-  };
-
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!canSubmit || !destinationSelected) return;
@@ -106,7 +81,7 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
         governorateName: isEgypt ? gov!.nameEn : null,
         address: address.trim(),
         notes: notes.trim() ? notes.trim() : null,
-        couponCode: appliedCode,
+        couponCode: null,
         paymentMethod,
         items: items.map((it) => ({
           productSlug: it.productSlug,
@@ -297,38 +272,6 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
           })}
         </ul>
 
-        {/* Coupon */}
-        <div className="py-4 border-t border-border space-y-2">
-          <div className="text-[11px] tracking-widest uppercase">{dict.coupon}</div>
-          <div className="flex gap-2">
-            <input
-              value={coupon}
-              onChange={(e) => {
-                setCoupon(e.target.value.toUpperCase());
-                setCouponMessage(null);
-              }}
-              placeholder="BA10"
-              className="flex-1 bg-bg border border-border px-3 py-2 text-sm focus:border-ink outline-none"
-            />
-            <button
-              type="button"
-              onClick={onApplyCoupon}
-              className="px-4 bg-ink text-bg text-xs tracking-widest uppercase hover:bg-accent transition-colors"
-            >
-              {dict.apply}
-            </button>
-          </div>
-          {couponMessage ? (
-            <div
-              className={`text-[11px] ${
-                couponDiscount ? 'text-accent' : 'text-muted'
-              }`}
-            >
-              {couponMessage}
-            </div>
-          ) : null}
-        </div>
-
         <div className="space-y-2.5 py-4 border-t border-border text-sm">
           <div className={`flex justify-between ${isAR ? 'flex-row-reverse' : ''}`}>
             <span className="text-muted">{dict.subtotal}</span>
@@ -350,18 +293,6 @@ export function CheckoutClient({ locale, dict, governorates, countries }: Props)
                 : '—'}
             </span>
           </div>
-          {discount > 0 ? (
-            <div
-              className={`flex justify-between text-accent ${
-                isAR ? 'flex-row-reverse' : ''
-              }`}
-            >
-              <span>{dict.discount}</span>
-              <span>
-                −{formatPrice(discount, locale)} {dict.egp}
-              </span>
-            </div>
-          ) : null}
         </div>
 
         <div
