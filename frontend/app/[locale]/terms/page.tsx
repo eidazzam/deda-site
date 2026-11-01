@@ -49,7 +49,6 @@ function ContentAR() {
 
       <Section title="٢. شروط الاستخدام">
         <ul className="list-disc ms-6 space-y-2">
-          <li>يجب أن يكون عمرك ١٨ سنة فأكثر لإجراء أى عملية شراء.</li>
           <li>
             تتعهد بتقديم بيانات صحيحة (الاسم، العنوان، رقم الهاتف) وقت
             الطلب. أى بيانات غير صحيحة قد تؤدى لإلغاء الطلب.
@@ -139,7 +138,6 @@ function ContentEN() {
 
       <Section title="2. Use of the site">
         <ul className="list-disc ml-6 space-y-2">
-          <li>You must be 18 years or older to place an order.</li>
           <li>
             You agree to provide accurate information (name, address,
             phone number) at checkout. Inaccurate data may result in
