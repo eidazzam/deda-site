@@ -60,7 +60,7 @@ function ContentAR() {
 
       <Section title="٣. الأسعار والدفع">
         <ul className="list-disc ms-6 space-y-2">
-          <li>جميع الأسعار بالجنيه المصرى وتشمل ضريبة القيمة المضافة عند انطباقها.</li>
+          <li>جميع الأسعار بالجنيه المصرى.</li>
           <li>الدفع عند الاستلام نقداً للمندوب فقط. لا يوجد دفع إلكترونى حالياً.</li>
           <li>يحتفظ الموقع بالحق فى رفض أو إلغاء أى طلب فى حال الاشتباه فى احتيال أو خطأ فى السعر.</li>
         </ul>
@@ -99,22 +99,14 @@ function ContentAR() {
         </p>
       </Section>
 
-      <Section title="٨. حدود المسؤولية">
-        <p>
-          ديدا غير مسؤولة عن أى ضرر غير مباشر ناتج عن استخدام الموقع، بما
-          فى ذلك انقطاع الخدمة أو فقدان البيانات. مسؤوليتنا محدودة بقيمة
-          الطلب المدفوع.
-        </p>
-      </Section>
-
-      <Section title="٩. القانون المُطبَّق">
+      <Section title="٨. القانون المُطبَّق">
         <p>
           تخضع هذه الشروط لأحكام القانون مصرى، وتختص المحاكم المصرية
           بالفصل فى أى نزاع.
         </p>
       </Section>
 
-      <Section title="١٠. التواصل">
+      <Section title="٩. التواصل">
         <p>
           لأى استفسار حول هذه الشروط يرجى التواصل معنا عبر الواتساب أو
           الانستجرام (الروابط فى الأسفل).
@@ -159,7 +151,7 @@ function ContentEN() {
 
       <Section title="3. Pricing & payment">
         <ul className="list-disc ml-6 space-y-2">
-          <li>All prices are in Egyptian Pounds (EGP) and include VAT where applicable.</li>
+          <li>All prices are in Egyptian Pounds (EGP).</li>
           <li>
             Cash on delivery only — payment is collected in cash by the
             courier on arrival. No online payment is accepted at this time.
@@ -208,22 +200,14 @@ function ContentEN() {
         </p>
       </Section>
 
-      <Section title="8. Limitation of liability">
-        <p>
-          Deda is not liable for any indirect damages arising from use
-          of the site, including service downtime or data loss. Our
-          liability is limited to the value of the order paid.
-        </p>
-      </Section>
-
-      <Section title="9. Governing law">
+      <Section title="8. Governing law">
         <p>
           These terms are governed by the laws of Egypt. The Egyptian
           courts have exclusive jurisdiction over any dispute.
         </p>
       </Section>
 
-      <Section title="10. Contact">
+      <Section title="9. Contact">
         <p>
           For any question about these terms, please reach us via WhatsApp
           or Instagram (links in the footer).
