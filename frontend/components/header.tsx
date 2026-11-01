@@ -73,7 +73,7 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
         {/* Nav + actions row. Logo lives in the banner above, so this row
             is a clean single strip: hamburger on mobile, categories on
             desktop, actions cluster on the far side. */}
-        <div className="flex items-center justify-between h-16 md:h-20 gap-3 lg:gap-5">
+        <div className="flex items-center justify-between h-20 md:h-24 gap-3 lg:gap-5">
           {/* Hamburger — visible only below xl, where the inline nav is hidden */}
           <button
             type="button"
@@ -100,7 +100,7 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
               width={657}
               height={380}
               priority
-              className="h-12 md:h-16 w-auto object-contain"
+              className="h-16 md:h-20 w-auto object-contain"
             />
           </Link>
 
