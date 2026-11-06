@@ -24,7 +24,7 @@ export function BrandLogo({ className, compact = false }: Props) {
         x="140"
         y={compact ? '60' : '50'}
         textAnchor="middle"
-        fill="#1a1a1a"
+        fill="currentColor"
         style={{
           fontFamily: 'var(--font-ar-display), system-ui, sans-serif',
           fontSize: '44px',
