@@ -10,19 +10,13 @@
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-ar: 'Cairo', system-ui, sans-serif;
   --font-ar-display: 'El Messiri', 'Cairo', system-ui, sans-serif;
-  /* Theme vars that mirror the Tailwind palette — exposed as CSS
-     variables so inline styles (toasts, dynamic widgets) can stay in
-     sync with the dark + gold theme. */
-  --bg: #0d0d0d;
-  --ink: #c9a961;
-  --accent: #e8c678;
 }
 
 @layer base {
   html,
   body {
-    background: #0d0d0d;
-    color: #c9a961;
+    background: #faf7f2;
+    color: #1a1a1a;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* optimizeLegibility tells the browser to enable ligatures and

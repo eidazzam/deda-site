@@ -92,10 +92,10 @@ export function AdminSidebar() {
   return (
     <aside
       className={`w-60 shrink-0 ${
-        locale === 'ar' ? 'border-l border-border' : 'border-r border-border'
-      } bg-bg text-ink min-h-screen flex flex-col`}
+        locale === 'ar' ? 'border-l border-ink' : 'border-r border-ink'
+      } bg-ink text-bg min-h-screen flex flex-col`}
     >
-      <div className="px-6 py-6 border-b border-border">
+      <div className="px-6 py-6 border-b border-bg/15">
         <Image
           src="/brand/logo.png"
           alt="Deda"
@@ -105,13 +105,13 @@ export function AdminSidebar() {
           className="h-40 w-auto object-contain"
         />
         <div className="flex items-center justify-between mt-3">
-          <div className="text-[10px] tracking-widest uppercase text-ink/60">
+          <div className="text-[10px] tracking-widest uppercase text-bg/60">
             {t('common.admin')}
           </div>
           <button
             type="button"
             onClick={() => setLocale(locale === 'ar' ? 'en' : 'ar')}
-            className="flex items-center gap-1.5 text-[10px] tracking-widest uppercase text-ink/60 hover:text-ink transition-colors"
+            className="flex items-center gap-1.5 text-[10px] tracking-widest uppercase text-bg/60 hover:text-bg transition-colors"
             aria-label="Toggle language"
           >
             <GlobeIcon className="w-3.5 h-3.5" />
@@ -130,13 +130,13 @@ export function AdminSidebar() {
               href={n.href}
               className={`flex items-center justify-between px-6 py-3 text-sm transition-colors ${startBorder} ${
                 active
-                  ? 'border-accent bg-ink/10 text-ink font-medium'
-                  : 'border-transparent text-ink/60 hover:text-ink hover:bg-ink/5'
+                  ? 'border-accent bg-bg/10 text-bg font-medium'
+                  : 'border-transparent text-bg/60 hover:text-bg hover:bg-bg/5'
               }`}
             >
               <span>{t(n.labelKey)}</span>
               {badge > 0 ? (
-                <span className="bg-accent text-bg text-[10px] min-w-[18px] h-[18px] px-1.5 rounded-full grid place-items-center font-medium">
+                <span className="bg-accent text-ink text-[10px] min-w-[18px] h-[18px] px-1.5 rounded-full grid place-items-center font-medium">
                   {badge}
                 </span>
               ) : null}
@@ -145,10 +145,10 @@ export function AdminSidebar() {
         })}
       </nav>
 
-      <div className="px-6 py-4 border-t border-border space-y-2 text-xs">
+      <div className="px-6 py-4 border-t border-bg/15 space-y-2 text-xs">
         {username ? (
-          <div className="text-ink/60">
-            {t('sidebar.signedInAs')} <span className="text-ink">{username}</span>
+          <div className="text-bg/60">
+            {t('sidebar.signedInAs')} <span className="text-bg">{username}</span>
           </div>
         ) : null}
         <button

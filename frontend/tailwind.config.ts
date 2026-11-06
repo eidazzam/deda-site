@@ -8,29 +8,29 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Dark palette — black-first surface, gold ink, brighter gold
-        // for CTAs. Tokens keep their semantic role (bg = surface, ink =
-        // text on surface) so component class names stay stable; the
-        // values just flipped light→dark and black→gold.
-        bg: '#0d0d0d',          // page surface — near-pure black
-        'bg-card': '#1a1a1a',   // product cards + elevated surfaces
-        'bg-sand': '#262626',   // section dividers, secondary panels
-        ink: '#c9a961',         // primary text — brand gold
-        'ink-soft': '#9c7f42',  // secondary text — dimmer gold
-        'ink-mute': '#6f5a30',  // metadata, captions — even dimmer
-        subtle: '#262626',      // legacy alias → bg-sand
-        border: '#3a2f1a',      // hairline dividers — very dim gold
-        'border-strong': '#5a4a2a', // stronger dividers
-        muted: '#9c7f42',       // legacy alias → ink-soft
-        // Brighter gold reserved for CTAs + badges so they outshine the
-        // body text (which is also gold). `accent-dark` is the body gold,
-        // so hover states tone CTAs down toward the text colour.
-        accent: '#e8c678',
-        'accent-dark': '#c9a961',  // hover state
-        'accent-faint': '#26200f', // soft gold-tinted dark badge bg
-        // Status colors stay muted against the dark surface.
-        red: '#e07a7a',
-        green: '#7fb069',
+        // Bilingual-First Minimal — warm cream surface, soft black ink,
+        // restrained gold accent. Tokens keep their semantic role (bg =
+        // surface, ink = text on surface) so component class names stay
+        // stable.
+        bg: '#faf7f2',          // page surface — warm cream, not pure white
+        'bg-card': '#ffffff',   // product cards and elevated surfaces
+        'bg-sand': '#f3ede2',   // section dividers, secondary panels
+        ink: '#1a1a1a',         // primary text — soft black, not pure
+        'ink-soft': '#5c5c5c',  // secondary text
+        'ink-mute': '#8a857d',  // metadata, captions
+        subtle: '#f3ede2',      // legacy alias → bg-sand
+        border: '#e8e4dc',      // hairline dividers
+        'border-strong': '#d4cec0', // stronger dividers
+        muted: '#5c5c5c',       // legacy alias → ink-soft
+        // DEDA brand gold — more saturated than Rozana's warm tan so it
+        // pops against the black header + hero. Used sparingly for CTAs,
+        // discount prices, and the limited-time chip.
+        accent: '#c9a961',
+        'accent-dark': '#9c7f42',  // hover state
+        'accent-faint': '#f0e4c4', // soft gold badge background
+        // Muted status colors — Gulf restraint, no bright reds/greens.
+        red: '#c54a4a',
+        green: '#5a8a5a',
       },
       fontFamily: {
         // Inter for both display + body in Latin context. El Messiri takes

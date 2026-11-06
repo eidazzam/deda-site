@@ -65,10 +65,10 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
 
       {/* Sticky nav strip — the row that survives scroll. The brand logo
           sits on the start edge, nav in the middle, actions on the end.
-          Matches the page black (bg-bg) so the gold-on-dark DEDA mark
-          reads at full strength; the ink text colour already defaults
-          to gold against the dark surface. */}
-      <div className="sticky top-0 z-40 bg-bg text-ink border-b border-border">
+          Painted in `bg-ink` so the gold-on-dark DEDA mark reads at
+          full strength against the strip; text + icons default to the
+          cream `text-bg` so everything else stays legible on black. */}
+      <div className="sticky top-0 z-40 bg-ink text-bg border-b border-ink">
       <div className="max-w-page mx-auto px-4 md:px-6 lg:px-10">
         {/* Nav + actions row. Logo lives in the banner above, so this row
             is a clean single strip: hamburger on mobile, categories on
@@ -122,7 +122,7 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
               <SearchIcon
                 className={`absolute ${
                   isAR ? 'right-3' : 'left-3'
-                } w-4 h-4 text-ink/60 pointer-events-none`}
+                } w-4 h-4 text-bg/60 pointer-events-none`}
               />
               <input
                 type="text"
@@ -138,9 +138,9 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
                   }
                 }}
                 placeholder={dict.search}
-                className={`w-full bg-ink/10 text-ink placeholder:text-ink/50 ${
+                className={`w-full bg-bg/10 text-bg placeholder:text-bg/50 ${
                   isAR ? 'pr-9 pl-3' : 'pl-9 pr-3'
-                } py-2 text-sm border border-ink/15 focus:border-accent focus:bg-ink/20 transition-all rounded-sm outline-none`}
+                } py-2 text-sm border border-bg/15 focus:border-accent focus:bg-bg/20 transition-all rounded-sm outline-none`}
               />
             </div>
 
@@ -200,7 +200,7 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
             <SearchIcon
               className={`absolute top-1/2 -translate-y-1/2 ${
                 isAR ? 'right-3' : 'left-3'
-              } w-4 h-4 text-ink/60 pointer-events-none`}
+              } w-4 h-4 text-bg/60 pointer-events-none`}
             />
             <input
               type="text"
@@ -214,9 +214,9 @@ export function Header({ locale, dict, onCartClick, onMenuClick }: HeaderProps) 
                 }
               }}
               placeholder={dict.search}
-              className={`w-full bg-ink/10 text-ink placeholder:text-ink/50 ${
+              className={`w-full bg-bg/10 text-bg placeholder:text-bg/50 ${
                 isAR ? 'pr-9 pl-3' : 'pl-9 pr-3'
-              } py-2 text-sm border border-ink/15 focus:border-accent focus:bg-ink/20 transition-all rounded-sm outline-none`}
+              } py-2 text-sm border border-bg/15 focus:border-accent focus:bg-bg/20 transition-all rounded-sm outline-none`}
             />
           </div>
         </div>
